@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Portofolio Merki Aryanto</title>
+    <!-- Library pendukung kompresi PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #030508; color: #ffffff; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .admin-wrapper { max-width: 850px; width: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 35px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); margin-bottom: 80px; }
+        h1 { font-size: 1.8rem; margin-bottom: 8px; color: #60a5fa; text-align: center; }
+        .subtitle { text-align: center; font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; }
+        
+        .reset-container { text-align: center; margin-bottom: 25px; }
+        .btn-reset { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+        .btn-reset:hover { background: rgba(239, 68, 68, 0.4); color: #fff; }
+
+        .storage-box { background: rgba(30, 41, 59, 0.8); border: 1px solid rgba(96, 165, 250, 0.3); border-radius: 12px; padding: 18px; margin-bottom: 25px; }
+        .storage-header { display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600; color: #cbd5e1; margin-bottom: 8px; }
+        .storage-bar-bg { width: 100%; height: 10px; background: rgba(15, 23, 42, 0.9); border-radius: 5px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .storage-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.4s ease; }
+        .storage-info-text { font-size: 0.78rem; color: #94a3b8; margin-top: 8px; text-align: right; }
+
+        .section-box { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 22px; margin-bottom: 25px; }
+        .section-box h3 { font-size: 1.15rem; color: #93c5fd; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+        .input-group { margin-bottom: 14px; }
+        label { display: block; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 5px; font-weight: 600; }
+        input[type="text"], textarea, input[type="file"] { width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: #ffffff; font-size: 0.95rem; }
+        textarea { resize: vertical; height: 80px; }
+        input:focus, textarea:focus { outline: none; border-color: #60a5fa; }
+        .item-card-admin { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .preview-thumb { max-height: 90px; border-radius: 6px; margin-top: 8px; display: none; border: 1px solid rgba(96, 165, 250, 0.4); }
+        .btn { padding: 9px 18px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: all 0.2s ease; }
+        .btn-blue { background: #2563eb; color: #fff; }
+        .btn-blue:hover { background: #1d4ed8; }
+        .btn-red { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); margin-top: 8px; }
+        .btn-red:hover { background: rgba(239, 68, 68, 0.4); }
+        .floating-bar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 12px; z-index: 100; }
+        .btn-save { padding: 14px 28px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 700; font-size: 1rem; border-radius: 50px; box-shadow: 0 5px 20px rgba(16, 185, 129, 0.5); cursor: pointer; border: none; }
+        .btn-view { padding: 14px 24px; background: rgba(59, 130, 246, 0.9); color: white; font-weight: 600; font-size: 0.95rem; border-radius: 50px; text-decoration: none; box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4); }
+    </style>
+</head>
+<body>
+<!-- Tombol Akses Cepat Google Sheets Rekruter -->
+<div class="storage-box" style="border-left: 4px solid #10b981; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; max-width: 850px; width: 100%; margin-bottom: 25px;">
+    <div>
+        <div style="font-size: 0.95rem; font-weight: 700; color: #10b981; margin-bottom: 4px;">🕵️‍♂️ Fitur Pelacak Rekruter Aktif</div>
+        <div style="font-size: 0.82rem; color: #94a3b8;">Setiap rekruter yang membuka web publikmu akan otomatis tercatat.</div>
+    </div>
+    <a href="https://script.google.com/macros/s/AKfycbyT_uxl8chmiwH3BvPSe7weSwDySgeQoE4ZzXrIPt5XVcTuFjO44dDIAlFLcXRe9fDC/exec" target="_blank" class="btn btn-blue" style="background: #0f9d58; text-decoration: none;">📊 Buka Sheets Rekruter</a>
+</div>
+
+    <div class="admin-wrapper">
+        <h1>Panel Admin Portofolio</h1>
+        <p class="subtitle">Kelola profil, file CV PDF, dan portofoliomu.</p>
+
+        <div class="reset-container">
+            <button class="btn-reset" onclick="resetAllData()">🗑️ Kosongkan / Reset Semua Data Lama</button>
+        </div>
+
+        <div class="storage-box">
+            <div class="storage-header">
+                <span>📊 Kapasitas Penyimpanan Browser (LocalStorage)</span>
+                <span id="storage-percentage">0%</span>
+            </div>
+            <div class="storage-bar-bg">
+                <div class="storage-bar-fill" id="storage-bar-fill"></div>
+            </div>
+            <div class="storage-info-text" id="storage-info-text">Terpakai: 0 KB dari ± 5 MB (5,120 KB)</div>
+        </div>
+
+        <!-- 1. PROFIL -->
+        <div class="section-box">
+            <h3>1. Profil Utama</h3>
+            <div class="input-group"><label>Nama Lengkap</label><input type="text" id="p-name" placeholder=""></div>
+            <div class="input-group"><label>Deskripsi / Bio Singkat</label><textarea id="p-desc" placeholder=""></textarea></div>
+            <div class="input-group">
+                <label>Foto Profil (Upload Gambar atau Paste URL)</label>
+                <input type="file" accept="image/*" onchange="processImageUpload(this, 'p-photo', 'prev-p-photo')">
+                <input type="text" id="p-photo" value="" placeholder="Atau paste URL foto di sini..." style="margin-top: 8px;" oninput="updateStorageMeter()">
+                <img id="prev-p-photo" class="preview-thumb">
+            </div>
+            <div class="input-group"><label>No WhatsApp (628...)</label><input type="text" id="p-wa" placeholder=""></div>
+            <div class="input-group"><label>Email</label><input type="text" id="p-email" placeholder=""></div>
+            <div class="input-group"><label>LinkedIn URL</label><input type="text" id="p-linkedin" placeholder=""></div>
+        </div>
+
+        <!-- 2. UPLOAD FILE CV RESMI -->
+        <div class="section-box">
+            <h3>2. Official CV Document (PDF)</h3>
+            <div class="input-group">
+                <label>Upload File CV PDF (Bisa dilihat langsung & didownload pengunjung)</label>
+                <input type="file" accept=".pdf" onchange="encodeFileAsURL(this, 'p-cv-file')">
+                <input type="text" id="p-cv-file" value="" placeholder="Atau paste URL file PDF CV di sini..." style="margin-top: 8px;" oninput="updateStorageMeter()">
+            </div>
+        </div>
+
+        <!-- 3. RIWAYAT PENDIDIKAN -->
+        <div class="section-box">
+            <h3>3. Riwayat Pendidikan & Sekolah <button class="btn btn-blue" onclick="addEdu()">+ Tambah Sekolah</button></h3>
+            <div id="edu-container"></div>
+        </div>
+
+        <!-- 4. SOFT SKILLS -->
+        <div class="section-box">
+            <h3>4. Soft Skills <button class="btn btn-blue" onclick="addSoft()">+ Tambah</button></h3>
+            <div id="soft-container"></div>
+        </div>
+
+        <!-- 5. HARD SKILLS -->
+        <div class="section-box">
+            <h3>5. Hard Skills <button class="btn btn-blue" onclick="addHard()">+ Tambah</button></h3>
+            <div id="hard-container"></div>
+        </div>
+
+        <!-- 6. PENGALAMAN -->
+        <div class="section-box">
+            <h3>6. Pengalaman Kerja <button class="btn btn-blue" onclick="addExp()">+ Tambah Pengalaman</button></h3>
+            <div id="exp-container"></div>
+        </div>
+
+        <!-- 7. MY PROJECTS -->
+        <div class="section-box">
+            <h3>7. My Projects <button class="btn btn-blue" onclick="addProj()">+ Tambah Project</button></h3>
+            <div id="proj-container"></div>
+        </div>
+
+        <!-- 8. SERTIFIKAT -->
+        <div class="section-box">
+            <h3>8. Certificates & Credentials <button class="btn btn-blue" onclick="addCert()">+ Tambah Sertifikat</button></h3>
+            <div id="cert-container"></div>
+        </div>
+
+        <!-- 9. GALERI FOTO -->
+        <div class="section-box">
+            <h3>9. Gallery & Documentation <button class="btn btn-blue" onclick="addGal()">+ Tambah Foto Galeri</button></h3>
+            <div id="gal-container"></div>
+        </div>
+    </div>
+
+    <div class="floating-bar">
+        <a href="public.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+        <button class="btn-save" onclick="saveAllData()">Simpan & Perbarui</button>
+    </div>
+
+    <script>
+        let emptyData = {
+            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", cvFile: "" },
+            education: [],
+            softSkills: [],
+            hardSkills: [],
+            experiences: [],
+            projects: [],
+            certificates: [],
+            gallery: []
+        };
+
+        window.onload = function() {
+            let saved = localStorage.getItem('portfolio_data');
+            let data = saved ? JSON.parse(saved) : emptyData;
+
+            document.getElementById('p-name').value = data.profile.name || "";
+            document.getElementById('p-desc').value = data.profile.desc || "";
+            document.getElementById('p-photo').value = data.profile.photo || "";
+            if (data.profile.photo) {
+                let pImg = document.getElementById('prev-p-photo');
+                pImg.src = data.profile.photo;
+                pImg.style.display = 'block';
+            }
+            document.getElementById('p-wa').value = data.profile.wa || "";
+            document.getElementById('p-email').value = data.profile.email || "";
+            document.getElementById('p-linkedin').value = data.profile.linkedin || "";
+            document.getElementById('p-cv-file').value = data.profile.cvFile || "";
+
+            renderEducationAdmin(data.education || []);
+            renderList('soft-container', data.softSkills || [], ['title', 'desc']);
+            renderList('hard-container', data.hardSkills || [], ['title', 'desc']);
+            renderExperiencesAdmin(data.experiences || []);
+            renderProjectsAdmin(data.projects || []);
+            renderCertsAdmin(data.certificates || []);
+            renderGalleryAdmin(data.gallery || []);
+
+            updateStorageMeter();
+        }
+
+        function resetAllData() {
+            if (confirm('Yakin ingin mengosongkan semua data portofolio dari memori?')) {
+                localStorage.removeItem('portfolio_data');
+                location.reload();
+            }
+        }
+
+        function processImageUpload(element, targetInputId, previewImgId) {
+            let file = element.files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let img = new Image();
+                img.onload = function() {
+                    let canvas = document.createElement('canvas');
+                    let MAX_WIDTH = 800;
+                    let scaleSize = MAX_WIDTH / img.width;
+                    if (scaleSize > 1) scaleSize = 1;
+
+                    canvas.width = img.width * scaleSize;
+                    canvas.height = img.height * scaleSize;
+
+                    let ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    let compressedDataUrl = canvas.toDataURL('image/jpeg', 0.65);
+                    document.getElementById(targetInputId).value = compressedDataUrl;
+
+                    if (previewImgId) {
+                        let prevEl = document.getElementById(previewImgId);
+                        if (prevEl) {
+                            prevEl.src = compressedDataUrl;
+                            prevEl.style.display = 'block';
+                        }
+                    }
+                    updateStorageMeter();
+                    alert('Sukses! Gambar "' + file.name + '" berhasil dikompresi.');
+                };
+                img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        async function encodeFileAsURL(element, targetInputId) {
+            let file = element.files[0];
+            if (!file) return;
+            
+            if (file.type.startsWith('image/')) {
+                processImageUpload(element, targetInputId, null);
+                return;
+            }
+
+            if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+                try {
+                    alert('Sedang mengompresi dokumen PDF...');
+                    let arrayBuffer = await file.arrayBuffer();
+                    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                    const compressedPdfBytes = await pdfDoc.save({ useObjectStreams: true });
+                    
+                    let blob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
+                    let reader = new FileReader();
+                    reader.onloadend = function() {
+                        document.getElementById(targetInputId).value = reader.result;
+                        updateStorageMeter();
+                        alert('Sukses! Dokumen PDF "' + file.name + '" berhasil dikompresi.');
+                    };
+                    reader.readAsDataURL(blob);
+                    return;
+                } catch (err) {
+                    console.error(err);
+                }
+            }
+
+            let reader = new FileReader();
+            reader.onloadend = function() {
+                document.getElementById(targetInputId).value = reader.result;
+                updateStorageMeter();
+                alert('Sukses! Berkas "' + file.name + '" berhasil dimuat.');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function updateStorageMeter() {
+            try {
+                let currentData = loadCurrentData();
+                let jsonString = JSON.stringify(currentData);
+                let bytesUsed = new Blob([jsonString]).size;
+                let kbUsed = (bytesUsed / 1024).toFixed(1);
+                let mbUsed = (bytesUsed / (1024 * 1024)).toFixed(2);
+
+                let maxKb = 5120;
+                let percentage = ((kbUsed / maxKb) * 100).toFixed(1);
+                if (percentage > 100) percentage = 100;
+
+                let fillBar = document.getElementById('storage-bar-fill');
+                let percentText = document.getElementById('storage-percentage');
+                let infoText = document.getElementById('storage-info-text');
+
+                fillBar.style.width = percentage + '%';
+                percentText.innerText = percentage + '% terpakai';
+                
+                if (kbUsed < 1024) {
+                    infoText.innerText = `Terpakai: ${kbUsed} KB dari ± 5 MB (5,120 KB)`;
+                } else {
+                    infoText.innerText = `Terpakai: ${mbUsed} MB dari ± 5 MB (5,120 KB)`;
+                }
+
+                if (percentage > 85) {
+                    fillBar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+                } else {
+                    fillBar.style.background = 'linear-gradient(90deg, #3b82f6, #10b981)';
+                }
+            } catch(e) {
+                console.error(e);
+            }
+        }
+
+        function renderList(containerId, items, fields) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            items.forEach((item, idx) => {
+                let html = `<div class="item-card-admin" data-index="${idx}">`;
+                fields.forEach(f => {
+                    html += `<div class="input-group"><label>${f.toUpperCase()}</label><input type="text" class="field-${f}" value="${item[f] || ''}" oninput="updateStorageMeter()"></div>`;
+                });
+                html += `<button class="btn btn-red" onclick="removeItem('${containerId}', ${idx})">Hapus Item Ini</button></div>`;
+                container.innerHTML += html;
+            });
+        }
+
+        function renderExperiencesAdmin(experiences) {
+            const container = document.getElementById('exp-container');
+            container.innerHTML = '';
+            experiences.forEach((exp, idx) => {
+                container.innerHTML += `
+                    <div class="item-card-admin">
+                        <div class="input-group"><label>POSISI / JABATAN</label><input type="text" class="field-title" value="${exp.title || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-badge" value="${exp.badge || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${exp.company || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc" oninput="updateStorageMeter()">${exp.desc || ''}</textarea></div>
+                        <button class="btn btn-red" onclick="removeExp(${idx})">Hapus Pengalaman Ini</button>
+                    </div>`;
+            });
+        }
+
+        function renderEducationAdmin(education) {
+            const container = document.getElementById('edu-container');
+            container.innerHTML = '';
+            education.forEach((edu, idx) => {
+                let hasImg = edu.img && edu.img.trim() !== "";
+                container.innerHTML += `
+                    <div class="item-card-admin">
+                        <div class="input-group"><label>NAMA SEKOLAH / KAMPUS</label><input type="text" class="field-title" value="${edu.title || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-period" value="${edu.period || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>JENJANG</label><input type="text" class="field-badge" value="${edu.badge || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${edu.desc || ''}</textarea></div>
+                        <div class="input-group">
+                            <label>FOTO SEKOLAH (Upload Gambar atau Paste URL)</label>
+                            <input type="file" accept="image/*" onchange="processImageUpload(this, 'edu-img-${idx}', 'prev-edu-${idx}')" style="margin-bottom:6px;">
+                            <input type="text" id="edu-img-${idx}" class="field-img" value="${edu.img || ''}" placeholder="URL foto..." oninput="updateStorageMeter()">
+                            <img id="prev-edu-${idx}" src="${hasImg ? edu.img : ''}" class="preview-thumb" style="display:${hasImg ? 'block' : 'none'};">
+                        </div>
+                        <button class="btn btn-red" onclick="removeEdu(${idx})">Hapus Riwayat Ini</button>
+                    </div>`;
+            });
+        }
+
+        function renderGalleryAdmin(gallery) {
+            const container = document.getElementById('gal-container');
+            container.innerHTML = '';
+            gallery.forEach((g, idx) => {
+                let hasImg = g.img && g.img.trim() !== "";
+                container.innerHTML += `
+                    <div class="item-card-admin">
+                        <div class="input-group"><label>KETERANGAN FOTO</label><input type="text" class="field-caption" value="${g.caption || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group">
+                            <label>FOTO GALERI (Upload Gambar atau Link URL Cloud/Google Drive)</label>
+                            <input type="file" accept="image/*" onchange="processImageUpload(this, 'gal-img-${idx}', 'prev-gal-${idx}')" style="margin-bottom:6px;">
+                            <input type="text" id="gal-img-${idx}" class="field-img" value="${g.img || ''}" placeholder="Atau paste link gambar/Google Drive di sini..." oninput="updateStorageMeter()">
+                            <img id="prev-gal-${idx}" src="${hasImg ? g.img : ''}" class="preview-thumb" style="display:${hasImg ? 'block' : 'none'};">
+                        </div>
+                        <button class="btn btn-red" onclick="removeGal(${idx})">Hapus Foto Ini</button>
+                    </div>`;
+            });
+        }
+
+        function renderProjectsAdmin(projects) {
+            const container = document.getElementById('proj-container');
+            container.innerHTML = '';
+            projects.forEach((p, idx) => {
+                container.innerHTML += `
+                    <div class="item-card-admin">
+                        <div class="input-group"><label>KATEGORI</label><input type="text" class="field-category" value="${p.category || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>JUDUL PROJECT</label><input type="text" class="field-title" value="${p.title || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${p.desc || ''}</textarea></div>
+                        <div class="input-group">
+                            <label>BERKAS ATAU LINK URL</label>
+                            <input type="file" accept="*/*" onchange="encodeFileAsURL(this, 'proj-link-${idx}')" style="margin-bottom:6px;">
+                            <input type="text" id="proj-link-${idx}" class="field-link" value="${p.link || ''}" placeholder="URL..." oninput="updateStorageMeter()">
+                        </div>
+                        <button class="btn btn-red" onclick="removeProj(${idx})">Hapus Project Ini</button>
+                    </div>`;
+            });
+        }
+
+        function renderCertsAdmin(certs) {
+            const container = document.getElementById('cert-container');
+            container.innerHTML = '';
+            certs.forEach((c, idx) => {
+                container.innerHTML += `
+                    <div class="item-card-admin">
+                        <div class="input-group"><label>PENERBIT / LEMBAGA</label><input type="text" class="field-issuer" value="${c.issuer || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>NAMA SERTIFIKAT</label><input type="text" class="field-title" value="${c.title || ''}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${c.desc || ''}</textarea></div>
+                        <div class="input-group">
+                            <label>BERKAS BUKTI ATAU LINK URL</label>
+                            <input type="file" accept="*/*" onchange="encodeFileAsURL(this, 'cert-link-${idx}')" style="margin-bottom:6px;">
+                            <input type="text" id="cert-link-${idx}" class="field-link" value="${c.link || ''}" placeholder="URL..." oninput="updateStorageMeter()">
+                        </div>
+                        <button class="btn btn-red" onclick="removeCert(${idx})">Hapus Sertifikat Ini</button>
+                    </div>`;
+            });
+        }
+
+        function getDataFromDOM(containerId, fields) {
+            const container = document.getElementById(containerId);
+            const cards = container.querySelectorAll('.item-card-admin');
+            let list = [];
+            cards.forEach(card => {
+                let obj = {};
+                fields.forEach(f => { obj[f] = card.querySelector(`.field-${f}`).value; });
+                list.push(obj);
+            });
+            return list;
+        }
+
+        function getExperiencesFromDOM() {
+            let cards = document.querySelectorAll('#exp-container .item-card-admin');
+            let list = [];
+            cards.forEach(card => {
+                list.push({
+                    title: card.querySelector('.field-title').value,
+                    badge: card.querySelector('.field-badge').value,
+                    company: card.querySelector('.field-company').value,
+                    desc: card.querySelector('.field-desc').value
+                });
+            });
+            return list;
+        }
+
+        function getEducationFromDOM() {
+            let cards = document.querySelectorAll('#edu-container .item-card-admin');
+            let list = [];
+            cards.forEach((card, idx) => {
+                list.push({
+                    title: card.querySelector('.field-title').value,
+                    period: card.querySelector('.field-period').value,
+                    badge: card.querySelector('.field-badge').value,
+                    desc: card.querySelector('.field-desc').value,
+                    img: card.querySelector(`#edu-img-${idx}`).value
+                });
+            });
+            return list;
+        }
+
+        function getGalleryFromDOM() {
+            let cards = document.querySelectorAll('#gal-container .item-card-admin');
+            let list = [];
+            cards.forEach((card, idx) => {
+                list.push({
+                    caption: card.querySelector('.field-caption').value,
+                    img: card.querySelector(`#gal-img-${idx}`).value
+                });
+            });
+            return list;
+        }
+
+        function getProjectsFromDOM() {
+            let cards = document.querySelectorAll('#proj-container .item-card-admin');
+            let list = [];
+            cards.forEach((card, idx) => {
+                list.push({
+                    category: card.querySelector('.field-category').value,
+                    title: card.querySelector('.field-title').value,
+                    desc: card.querySelector('.field-desc').value,
+                    link: card.querySelector(`#proj-link-${idx}`).value
+                });
+            });
+            return list;
+        }
+
+        function getCertsFromDOM() {
+            let cards = document.querySelectorAll('#cert-container .item-card-admin');
+            let list = [];
+            cards.forEach((card, idx) => {
+                list.push({
+                    issuer: card.querySelector('.field-issuer').value,
+                    title: card.querySelector('.field-title').value,
+                    desc: card.querySelector('.field-desc').value,
+                    link: card.querySelector(`#cert-link-${idx}`).value
+                });
+            });
+            return list;
+        }
+
+        function addEdu() { let d = loadCurrentData(); d.education.push({title:"", period:"", badge:"", desc:"", img:""}); saveTemp(d); renderEducationAdmin(d.education); updateStorageMeter(); }
+        function addSoft() { let d = loadCurrentData(); d.softSkills.push({title:"", desc:""}); saveTemp(d); renderList('soft-container', d.softSkills, ['title', 'desc']); updateStorageMeter(); }
+        function addHard() { let d = loadCurrentData(); d.hardSkills.push({title:"", desc:""}); saveTemp(d); renderList('hard-container', d.hardSkills, ['title', 'desc']); updateStorageMeter(); }
+        function addExp() { let d = loadCurrentData(); d.experiences.push({title:"", badge:"", company:"", desc:""}); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
+        function addProj() { let d = loadCurrentData(); d.projects.push({category:"", title:"", desc:"", link:""}); saveTemp(d); renderProjectsAdmin(d.projects); updateStorageMeter(); }
+        function addCert() { let d = loadCurrentData(); d.certificates.push({issuer:"", title:"", desc:"", link:""}); saveTemp(d); renderCertsAdmin(d.certificates); updateStorageMeter(); }
+        function addGal() { let d = loadCurrentData(); d.gallery.push({caption:"", img:""}); saveTemp(d); renderGalleryAdmin(d.gallery); updateStorageMeter(); }
+
+        function removeItem(containerId, idx) {
+            let d = loadCurrentData();
+            if(containerId==='soft-container') { d.softSkills.splice(idx,1); saveTemp(d); renderList('soft-container', d.softSkills, ['title', 'desc']); }
+            if(containerId==='hard-container') { d.hardSkills.splice(idx,1); saveTemp(d); renderList('hard-container', d.hardSkills, ['title', 'desc']); }
+            updateStorageMeter();
+        }
+        function removeEdu(idx) { let d = loadCurrentData(); d.education.splice(idx, 1); saveTemp(d); renderEducationAdmin(d.education); updateStorageMeter(); }
+        function removeExp(idx) { let d = loadCurrentData(); d.experiences.splice(idx, 1); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
+        function removeProj(idx) { let d = loadCurrentData(); d.projects.splice(idx, 1); saveTemp(d); renderProjectsAdmin(d.projects); updateStorageMeter(); }
+        function removeCert(idx) { let d = loadCurrentData(); d.certificates.splice(idx, 1); saveTemp(d); renderCertsAdmin(d.certificates); updateStorageMeter(); }
+        function removeGal(idx) { let d = loadCurrentData(); d.gallery.splice(idx, 1); saveTemp(d); renderGalleryAdmin(d.gallery); updateStorageMeter(); }
+
+        function loadCurrentData() {
+            return {
+                profile: { 
+                    name: document.getElementById('p-name') ? document.getElementById('p-name').value : "", 
+                    desc: document.getElementById('p-desc') ? document.getElementById('p-desc').value : "", 
+                    photo: document.getElementById('p-photo') ? document.getElementById('p-photo').value : "", 
+                    wa: document.getElementById('p-wa') ? document.getElementById('p-wa').value : "", 
+                    email: document.getElementById('p-email') ? document.getElementById('p-email').value : "", 
+                    linkedin: document.getElementById('p-linkedin') ? document.getElementById('p-linkedin').value : "",
+                    cvFile: document.getElementById('p-cv-file') ? document.getElementById('p-cv-file').value : ""
+                },
+                education: getEducationFromDOM(),
+                softSkills: getDataFromDOM('soft-container', ['title', 'desc']),
+                hardSkills: getDataFromDOM('hard-container', ['title', 'desc']),
+                experiences: getExperiencesFromDOM(),
+                projects: getProjectsFromDOM(),
+                certificates: getCertsFromDOM(),
+                gallery: getGalleryFromDOM()
+            };
+        }
+
+        function saveTemp(data) {
+            try {
+                localStorage.setItem('portfolio_data', JSON.stringify(data));
+            } catch (e) {
+                alert('Peringatan: Memori penyimpanan browser penuh!');
+            }
+        }
+
+        function saveAllData() {
+            try {
+                let finalData = loadCurrentData();
+                localStorage.setItem('portfolio_data', JSON.stringify(finalData));
+                updateStorageMeter();
+                alert('Berhasil Disimpan! Data portofolio diperbarui.');
+            } catch (e) {
+                alert('Gagal menyimpan karena ukuran data melebihi 5 MB.');
+            }
+        }
+    </script>
+</body>
+</html>
