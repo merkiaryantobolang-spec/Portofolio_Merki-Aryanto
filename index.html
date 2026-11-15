@@ -407,7 +407,7 @@
                         <div style="font-size: 3rem; margin-bottom: 12px;">📄</div>
                         <h4 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">Curriculum Vitae - Merki Aryanto</h4>
                         <p style="color:#cbd5e1; font-size:0.9rem; margin-bottom:20px;">Klik tombol di bawah untuk melihat langsung dokumen PDF secara penuh atau mengunduhnya.</p>
-                        ${hasFile ? `<button onclick="openFileSafely('${cvFileLink}', 'Curriculum Vitae Resmi')" class="project-link">${btn.text}</button>` : `<p style="color:#94a3b8; font-size:0.88rem;"><em>File CV resmi belum di-upload melalui panel index.</em></p>`}
+                        ${hasFile ? `<button onclick="openFileSafely('${cvFileLink}', 'Curriculum Vitae Resmi')" class="project-link">${btn.text}</button>` : `<p style="color:#94a3b8; font-size:0.88rem;"><em>File CV resmi belum di-upload melalui panel admin.</em></p>`}
                     </div>`;
             }
 
@@ -533,7 +533,7 @@
   // ==========================================
   // PELACAK PENGUNJUNG OTOMATIS KE GOOGLE SHEETS (VERSI 5 BERSIH)
   // ==========================================
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyT_uxl8chmiwH3BvPSe7weSwDySgeQoE4ZzXrIPt5XVcTuFjO44dDIAlFLcXRe9fDC/exec";
+  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz9sZO9EbOYL0zH4bMnFsbnJ2tx5JBx8rkmw-TMCLSp8EITVDuRDiRDYbTgZhhjviG8/exec";
 
   async function trackVisitor() {
     try {
@@ -586,7 +586,7 @@
 
     } catch (error) {
   console.error("Gagal melacak pengunjung:", error);
-    }
+}
   }
 
   window.addEventListener("load", trackVisitor);
