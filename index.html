@@ -466,10 +466,17 @@
 
             try {
                 const res = await fetch(SCRIPT_URL + "?action=getPortfolio");
-                const cloudData = await res.json();
-                if (cloudData && cloudData.profile) {
-                    data = cloudData;
-                    localStorage.setItem('portfolio_data', JSON.stringify(data));
+                
+                // Pastikan respons server sukses sebelum dibaca sebagai JSON
+                if (res.ok) {
+                    const textData = await res.text();
+                    if (textData && textData.trim() !== "") {
+                        let cloudData = JSON.parse(textData);
+                        if (cloudData && cloudData.profile) {
+                            data = cloudData;
+                            localStorage.setItem('portfolio_data', JSON.stringify(data));
+                        }
+                    }
                 }
             } catch (e) {
                 console.log("Menggunakan data cadangan lokal:", e);
