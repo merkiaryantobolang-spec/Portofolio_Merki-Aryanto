@@ -242,7 +242,6 @@
             </div>
         </div>
 
-        <!-- Halaman CV Tanpa Teks Panjang, Langsung Tampil PDF -->
         <div id="cv-screen" class="page-section scrollable-card">
             <h2 class="section-title">Curriculum Vitae</h2>
             <p class="showcase-sub">Dokumen Curriculum Vitae Resmi</p>
@@ -397,7 +396,6 @@
                 dots.innerHTML += `<span class="dot ${idx===0?'active':''}" onclick="goToSchool(${idx})"></span>`;
             });
 
-            // Render Halaman CV tanpa teks, langsung tombol PDF viewer
             let cvContainer = document.getElementById('pub-cv-container');
             if(cvContainer) {
                 let cvFileLink = data.profile.cvFile ? data.profile.cvFile : "#";
@@ -459,6 +457,7 @@
             }).join('');
         }
 
+        // Pemuatan data anti-gagal dengan fallback aman jika dibuka lokal ataupun online
         window.onload = async function() {
             const startBtn = document.getElementById('btn-start');
             let saved = localStorage.getItem('portfolio_data');
@@ -466,16 +465,12 @@
 
             try {
                 const res = await fetch(SCRIPT_URL + "?action=getPortfolio");
-                
-                // Pastikan respons server sukses sebelum dibaca sebagai JSON
                 if (res.ok) {
-                    const textData = await res.text();
-                    if (textData && textData.trim() !== "") {
-                        let cloudData = JSON.parse(textData);
-                        if (cloudData && cloudData.profile) {
-                            data = cloudData;
-                            localStorage.setItem('portfolio_data', JSON.stringify(data));
-                        }
+                    const cloudData = await res.json();
+                    // Jika data cloud valid dan memiliki profil
+                    if (cloudData && cloudData.profile) {
+                        data = cloudData;
+                        localStorage.setItem('portfolio_data', JSON.stringify(data));
                     }
                 }
             } catch (e) {
@@ -560,70 +555,56 @@
         animate();
     </script>
     <script>
-  // ==========================================
-  // PELACAK PENGUNJUNG OTOMATIS KE GOOGLE SHEETS
-  // ==========================================
-  async function trackVisitor() {
-    try {
-      // 1. Waktu Kunjungan (Waktu Lokal Indonesia)
-      const now = new Date();
-      const options = { timeZone: 'Asia/Jakarta', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
-      const waktuString = new Intl.DateTimeFormat('id-ID', options).format(now);
+      async function trackVisitor() {
+        try {
+          const now = new Date();
+          const options = { timeZone: 'Asia/Jakarta', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
+          const waktuString = new Intl.DateTimeFormat('id-ID', options).format(now);
 
-      // 2. Deteksi Perangkat
-      let perangkat = "Desktop / Laptop";
-      if (/Android/i.test(navigator.userAgent)) {
-        perangkat = "HP Android";
-      } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-        perangkat = "iPhone / iOS";
+          let perangkat = "Desktop / Laptop";
+          if (/Android/i.test(navigator.userAgent)) {
+            perangkat = "HP Android";
+          } else if (/iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+            perangkat = "iPhone / iOS";
+          }
+
+          let browser = "Browser Lainnya";
+          if (navigator.userAgent.indexOf("Chrome") !== -1 && navigator.userAgent.indexOf("Edg") === -1) {
+            browser = "Google Chrome";
+          } else if (navigator.userAgent.indexOf("Safari") !== -1 && navigator.userAgent.indexOf("Chrome") === -1) {
+            browser = "Apple Safari";
+          } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
+            browser = "Mozilla Firefox";
+          } else if (navigator.userAgent.indexOf("Edg") !== -1) {
+            browser = "Microsoft Edge";
+          }
+
+          let lokasiStr = "Tidak terdeteksi";
+          try {
+            const responseIp = await fetch('https://ipapi.co/json/');
+            const ipData = await responseIp.json();
+            if (ipData && ipData.city) {
+              lokasiStr = `${ipData.city}, ${ipData.region}, ${ipData.country_name}`;
+            }
+          } catch (err) {}
+
+          const payload = {
+            waktu: waktuString,
+            perangkat: perangkat,
+            browser: browser,
+            lokasi: lokasiStr
+          };
+
+          await fetch(SCRIPT_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+        } catch (error) {}
       }
 
-      // 3. Deteksi Browser
-      let browser = "Browser Lainnya";
-      if (navigator.userAgent.indexOf("Chrome") !== -1 && navigator.userAgent.indexOf("Edg") === -1) {
-        browser = "Google Chrome";
-      } else if (navigator.userAgent.indexOf("Safari") !== -1 && navigator.userAgent.indexOf("Chrome") === -1) {
-        browser = "Apple Safari";
-      } else if (navigator.userAgent.indexOf("Firefox") !== -1) {
-        browser = "Mozilla Firefox";
-      } else if (navigator.userAgent.indexOf("Edg") !== -1) {
-        browser = "Microsoft Edge";
-      }
-
-      // 4. Deteksi Lokasi Kota via ipapi.co
-      let lokasiStr = "Tidak terdeteksi";
-      try {
-        const responseIp = await fetch('https://ipapi.co/json/');
-        const ipData = await responseIp.json();
-        if (ipData && ipData.city) {
-          lokasiStr = `${ipData.city}, ${ipData.region}, ${ipData.country_name}`;
-        }
-      } catch (err) {
-        console.log("Gagal ambil lokasi IP:", err);
-      }
-
-      // 5. Kirim data secara background (no-cors)
-      const payload = {
-        waktu: waktuString,
-        perangkat: perangkat,
-        browser: browser,
-        lokasi: lokasiStr
-      };
-
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-    } catch (error) {
-      console.error("Gagal melacak pengunjung:", error);
-    }
-  }
-
-  // Jalankan pelacakan otomatis saat halaman publik selesai dimuat
-  window.addEventListener("load", trackVisitor);
-</script>
+      window.addEventListener("load", trackVisitor);
+    </script>
 </body>
 </html>
