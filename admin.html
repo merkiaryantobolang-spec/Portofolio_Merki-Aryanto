@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Admin - Portofolio Merki Aryanto</title>
-    <!-- Library pendukung kompresi PDF (versi bersih tanpa peringatan source map) -->
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -145,7 +144,7 @@
     </div>
 
     <div class="floating-bar">
-        <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+        <a href="public.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
         <button class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
     </div>
 
@@ -168,7 +167,7 @@
             let data = saved ? JSON.parse(saved) : emptyData;
 
             try {
-                const res = await fetch(SCRIPT_URL + "?action=getPortfolio");
+                const res = await fetch(SCRIPT_URL + "?action=getPortfolio&t=" + new Date().getTime());
                 if (res.ok) {
                     const cloudData = await res.json();
                     if (cloudData && cloudData.profile) {
@@ -176,9 +175,7 @@
                         localStorage.setItem('portfolio_data', JSON.stringify(data));
                     }
                 }
-            } catch (e) {
-                console.info("Info: Memuat dari memori lokal sementara.");
-            }
+            } catch (e) {}
 
             document.getElementById('p-name').value = data.profile.name || "";
             document.getElementById('p-desc').value = data.profile.desc || "";
@@ -209,15 +206,8 @@
             if (confirm('Yakin ingin mengosongkan semua data portofolio dari memori & cloud?')) {
                 localStorage.removeItem('portfolio_data');
                 try {
-                    await fetch(SCRIPT_URL, {
-                        method: "POST",
-                        mode: "no-cors",
-                        headers: { "Content-Type": "text/plain;charset=utf-8" },
-                        body: JSON.stringify({
-                            action: "savePortfolio",
-                            data: emptyData
-                        })
-                    });
+                    const urlReset = SCRIPT_URL + "?action=savePortfolio&data=" + encodeURIComponent(JSON.stringify(emptyData));
+                    await fetch(urlReset);
                 } catch (e) {}
                 location.reload();
             }
@@ -233,20 +223,31 @@
                 localStorage.setItem('portfolio_data', JSON.stringify(finalData));
                 updateStorageMeter();
 
-                // Menggunakan mode no-cors dengan text/plain agar selalu berhasil menembus Google Apps Script
-                await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: "savePortfolio",
-                        data: finalData
-                    })
-                });
+                const jsonStr = JSON.stringify(finalData);
+                if (jsonStr.length < 7000) {
+                    const urlSimpan = SCRIPT_URL + "?action=savePortfolio&data=" + encodeURIComponent(jsonStr);
+                    const response = await fetch(urlSimpan);
+                    const result = await response.json();
 
-                alert('Berhasil Disimpan! Data portofolio diperbarui di browser & Google Sheets (sehingga bisa dilihat orang lain).');
+                    if (result.status === "saved") {
+                        alert('✅ Berhasil Disimpan! Data portofolio diperbarui di browser & Google Sheets (sehingga bisa dilihat orang lain).');
+                    } else {
+                        throw new Error(result.message || "Gagal menyimpan di Google Sheets.");
+                    }
+                } else {
+                    await fetch(SCRIPT_URL, {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
+                        body: JSON.stringify({
+                            action: "savePortfolio",
+                            data: finalData
+                        })
+                    });
+                    alert('✅ Berhasil Disimpan! Data & berkas besar dikirim ke Google Sheets.');
+                }
             } catch (e) {
-                alert('Gagal mengirim ke server: ' + e.message);
+                alert('❌ Gagal menyimpan ke Google Sheets: ' + e.message);
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Simpan & Perbarui";
@@ -315,12 +316,9 @@
                     };
                     reader.readAsDataURL(blob);
                     return;
-                } catch (err) {
-                    console.error(err);
-                }
+                } catch (err) {}
             }
 
-            // Tetap mendukung upload semua jenis file (Word, Excel, ZIP, Video, dll)
             let reader = new FileReader();
             reader.onloadend = function() {
                 document.getElementById(targetInputId).value = reader.result;
@@ -360,9 +358,7 @@
                 } else {
                     fillBar.style.background = 'linear-gradient(90deg, #3b82f6, #10b981)';
                 }
-            } catch(e) {
-                console.error(e);
-            }
+            } catch(e) {}
         }
 
         function renderList(containerId, items, fields) {
@@ -444,7 +440,7 @@
                         <div class="input-group"><label>JUDUL PROJECT</label><input type="text" class="field-title" value="${p.title || ''}" oninput="updateStorageMeter()"></div>
                         <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${p.desc || ''}</textarea></div>
                         <div class="input-group">
-                            <label>BERKAS ATAU LINK URL (Semua Jenis File)</label>
+                            <label>BERKAS ATAU LINK URL</label>
                             <input type="file" accept="*/*" onchange="encodeFileAsURL(this, 'proj-link-${idx}')" style="margin-bottom:6px;">
                             <input type="text" id="proj-link-${idx}" class="field-link" value="${p.link || ''}" placeholder="URL..." oninput="updateStorageMeter()">
                         </div>
@@ -463,7 +459,7 @@
                         <div class="input-group"><label>NAMA SERTIFIKAT</label><input type="text" class="field-title" value="${c.title || ''}" oninput="updateStorageMeter()"></div>
                         <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${c.desc || ''}</textarea></div>
                         <div class="input-group">
-                            <label>BERKAS BUKTI ATAU LINK URL (Semua Jenis File)</label>
+                            <label>BERKAS BUKTI ATAU LINK URL</label>
                             <input type="file" accept="*/*" onchange="encodeFileAsURL(this, 'cert-link-${idx}')" style="margin-bottom:6px;">
                             <input type="text" id="cert-link-${idx}" class="field-link" value="${c.link || ''}" placeholder="URL..." oninput="updateStorageMeter()">
                         </div>
