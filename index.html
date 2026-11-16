@@ -457,24 +457,23 @@
             }).join('');
         }
 
-        // Pemuatan data anti-gagal dengan fallback aman jika dibuka lokal ataupun online
         window.onload = async function() {
             const startBtn = document.getElementById('btn-start');
             let saved = localStorage.getItem('portfolio_data');
             let data = saved ? JSON.parse(saved) : defaultData;
 
             try {
-                const res = await fetch(SCRIPT_URL + "?action=getPortfolio");
+                // Memaksa browser menarik data paling baru dari Google Sheets tanpa menggunakan cache lama
+                const res = await fetch(SCRIPT_URL + "?action=getPortfolio&t=" + new Date().getTime());
                 if (res.ok) {
                     const cloudData = await res.json();
-                    // Jika data cloud valid dan memiliki profil
                     if (cloudData && cloudData.profile) {
                         data = cloudData;
                         localStorage.setItem('portfolio_data', JSON.stringify(data));
                     }
                 }
             } catch (e) {
-                console.log("Menggunakan data cadangan lokal:", e);
+                console.info("Info: Menggunakan data cadangan lokal.");
             }
 
             renderAllPortfolio(data);
@@ -598,7 +597,7 @@
           await fetch(SCRIPT_URL, {
             method: "POST",
             mode: "no-cors",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
             body: JSON.stringify(payload)
           });
         } catch (error) {}
