@@ -463,7 +463,6 @@
             let data = saved ? JSON.parse(saved) : defaultData;
 
             try {
-                // Memaksa browser menarik data paling baru dari Google Sheets tanpa menggunakan cache lama
                 const res = await fetch(SCRIPT_URL + "?action=getPortfolio&t=" + new Date().getTime());
                 if (res.ok) {
                     const cloudData = await res.json();
@@ -472,9 +471,7 @@
                         localStorage.setItem('portfolio_data', JSON.stringify(data));
                     }
                 }
-            } catch (e) {
-                console.info("Info: Menggunakan data cadangan lokal.");
-            }
+            } catch (e) {}
 
             renderAllPortfolio(data);
             startBtn.disabled = false;
