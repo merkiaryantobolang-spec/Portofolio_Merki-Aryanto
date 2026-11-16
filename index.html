@@ -52,6 +52,7 @@
             background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 50%, #93c5fd 100%); border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 50px; cursor: pointer; box-shadow: 0 0 25px rgba(59, 130, 246, 0.5);
         }
         .btn-start:hover { transform: scale(1.06); }
+        .btn-start:disabled { opacity: 0.65; cursor: wait; transform: none; }
 
         #jumpscare-screen { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(3, 5, 8, 0.95); z-index: 999; justify-content: center; align-items: center; }
         .crash-text {
@@ -207,7 +208,7 @@
 
     <div class="content-wrapper" id="main-wrapper">
         <div id="start-screen">
-            <button class="btn-start" onclick="startPortfolio()">START</button>
+            <button class="btn-start" id="btn-start" onclick="startPortfolio()" disabled>MEMUAT...</button>
         </div>
 
         <div id="home-screen" style="display: none;">
@@ -241,6 +242,7 @@
             </div>
         </div>
 
+        <!-- Halaman CV Tanpa Teks Panjang, Langsung Tampil PDF -->
         <div id="cv-screen" class="page-section scrollable-card">
             <h2 class="section-title">Curriculum Vitae</h2>
             <p class="showcase-sub">Dokumen Curriculum Vitae Resmi</p>
@@ -286,6 +288,8 @@
     </div>
 
     <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBP4P7U8VwqyP74QopwvnboZ-_IlvtlNnZaNyT-P-2Sz8LTPqODczGxX9KNofFXhDP/exec";
+
         const defaultData = {
             profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", cvFile: "" },
             education: [],
@@ -360,10 +364,7 @@
             modal.style.display = 'none';
         }
 
-        window.onload = function() {
-            let saved = localStorage.getItem('portfolio_data');
-            let data = saved ? JSON.parse(saved) : defaultData;
-
+        function renderAllPortfolio(data) {
             document.getElementById('crash-name').innerText = data.profile.name || "Merki Aryanto";
             document.getElementById('pub-name').innerText = data.profile.name || "Merki Aryanto";
             document.getElementById('pub-desc').innerHTML = data.profile.desc || "";
@@ -396,6 +397,7 @@
                 dots.innerHTML += `<span class="dot ${idx===0?'active':''}" onclick="goToSchool(${idx})"></span>`;
             });
 
+            // Render Halaman CV tanpa teks, langsung tombol PDF viewer
             let cvContainer = document.getElementById('pub-cv-container');
             if(cvContainer) {
                 let cvFileLink = data.profile.cvFile ? data.profile.cvFile : "#";
@@ -455,6 +457,27 @@
                         <div class="gallery-caption">${g.caption}</div>
                     </div>`;
             }).join('');
+        }
+
+        window.onload = async function() {
+            const startBtn = document.getElementById('btn-start');
+            let saved = localStorage.getItem('portfolio_data');
+            let data = saved ? JSON.parse(saved) : defaultData;
+
+            try {
+                const res = await fetch(SCRIPT_URL + "?action=getPortfolio");
+                const cloudData = await res.json();
+                if (cloudData && cloudData.profile) {
+                    data = cloudData;
+                    localStorage.setItem('portfolio_data', JSON.stringify(data));
+                }
+            } catch (e) {
+                console.log("Menggunakan data cadangan lokal:", e);
+            }
+
+            renderAllPortfolio(data);
+            startBtn.disabled = false;
+            startBtn.innerText = "START";
         };
 
         function startPortfolio() {
@@ -531,16 +554,16 @@
     </script>
     <script>
   // ==========================================
-  // PELACAK PENGUNJUNG OTOMATIS KE GOOGLE SHEETS (VERSI 5 BERSIH)
+  // PELACAK PENGUNJUNG OTOMATIS KE GOOGLE SHEETS
   // ==========================================
-  const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBP4P7U8VwqyP74QopwvnboZ-_IlvtlNnZaNyT-P-2Sz8LTPqODczGxX9KNofFXhDP/exec";
-
   async function trackVisitor() {
     try {
+      // 1. Waktu Kunjungan (Waktu Lokal Indonesia)
       const now = new Date();
       const options = { timeZone: 'Asia/Jakarta', hour12: false, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' };
       const waktuString = new Intl.DateTimeFormat('id-ID', options).format(now);
 
+      // 2. Deteksi Perangkat
       let perangkat = "Desktop / Laptop";
       if (/Android/i.test(navigator.userAgent)) {
         perangkat = "HP Android";
@@ -548,6 +571,7 @@
         perangkat = "iPhone / iOS";
       }
 
+      // 3. Deteksi Browser
       let browser = "Browser Lainnya";
       if (navigator.userAgent.indexOf("Chrome") !== -1 && navigator.userAgent.indexOf("Edg") === -1) {
         browser = "Google Chrome";
@@ -559,6 +583,7 @@
         browser = "Microsoft Edge";
       }
 
+      // 4. Deteksi Lokasi Kota via ipapi.co
       let lokasiStr = "Tidak terdeteksi";
       try {
         const responseIp = await fetch('https://ipapi.co/json/');
@@ -570,6 +595,7 @@
         console.log("Gagal ambil lokasi IP:", err);
       }
 
+      // 5. Kirim data secara background (no-cors)
       const payload = {
         waktu: waktuString,
         perangkat: perangkat,
@@ -585,10 +611,11 @@
       });
 
     } catch (error) {
-  console.error("Gagal melacak pengunjung:", error);
-}
+      console.error("Gagal melacak pengunjung:", error);
+    }
   }
 
+  // Jalankan pelacakan otomatis saat halaman publik selesai dimuat
   window.addEventListener("load", trackVisitor);
 </script>
 </body>
