@@ -144,7 +144,7 @@
     </div>
 
     <div class="floating-bar">
-        <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+        <a href="public.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
         <button class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
     </div>
 
@@ -162,84 +162,228 @@
             gallery: []
         };
 
+        // Menyamakan struktur data agar data lama tetap bisa dibaca.
+        function normalizePortfolio(data) {
+            const source = (data && typeof data === 'object') ? data : {};
+            return {
+                profile: { ...emptyData.profile, ...(source.profile || {}) },
+                education: Array.isArray(source.education) ? source.education : [],
+                softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
+                hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
+                experiences: Array.isArray(source.experiences) ? source.experiences : [],
+                projects: Array.isArray(source.projects) ? source.projects : [],
+                certificates: Array.isArray(source.certificates) ? source.certificates : [],
+                gallery: Array.isArray(source.gallery) ? source.gallery : []
+            };
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function setCloudMessage(message, color) {
+            const status = document.getElementById('cloud-status');
+            if (!status) return;
+            status.textContent = message;
+            if (color) status.style.color = color;
+            status.style.display = 'flex';
+        }
+
+        // Mengambil data Google Sheets menggunakan JSONP.
+        // JSONP menghindari kendala CORS yang dapat membuat fetch() gagal
+        // saat membaca respons Google Apps Script dari domain GitHub Pages.
+        function readPortfolioFromCloud() {
+            return new Promise((resolve, reject) => {
+                const callbackName = '__portfolioCallback_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+                const script = document.createElement('script');
+                let finished = false;
+
+                const cleanup = () => {
+                    if (finished) return;
+                    finished = true;
+                    clearTimeout(timeoutId);
+                    script.onerror = null;
+                    if (script.parentNode) script.parentNode.removeChild(script);
+                    try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+                };
+
+                const timeoutId = setTimeout(() => {
+                    cleanup();
+                    reject(new Error('Waktu akses Google Apps Script habis. Periksa deployment dan koneksi internet.'));
+                }, 20000);
+
+                window[callbackName] = function(result) {
+                    cleanup();
+                    if (result && result.profile) {
+                        resolve(normalizePortfolio(result));
+                    } else if (result && result.status === 'empty') {
+                        resolve(normalizePortfolio(emptyData));
+                    } else {
+                        reject(new Error((result && result.message) || 'Respons Google Sheets tidak dikenali.'));
+                    }
+                };
+
+                script.onerror = function() {
+                    cleanup();
+                    reject(new Error('Google Apps Script tidak dapat dimuat. Periksa URL Web App, akses Anyone, dan deployment versi terbaru.'));
+                };
+
+                script.src = SCRIPT_URL
+                    + '?action=getPortfolio'
+                    + '&callback=' + encodeURIComponent(callbackName)
+                    + '&t=' + Date.now();
+
+                document.head.appendChild(script);
+            });
+        }
+
+        // POST memakai no-cors sehingga respons POST tidak bisa dibaca browser.
+        // Setelah POST, data diverifikasi kembali melalui pembacaan JSONP.
+        async function sendPortfolioAndVerify(data) {
+            await fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'savePortfolio',
+                    data: data
+                })
+            });
+
+            const expected = JSON.stringify(normalizePortfolio(data));
+            let lastError = null;
+
+            for (let attempt = 0; attempt < 12; attempt++) {
+                await delay(attempt === 0 ? 600 : 700);
+                try {
+                    const savedData = await readPortfolioFromCloud();
+                    if (JSON.stringify(savedData) === expected) {
+                        return true;
+                    }
+                } catch (error) {
+                    lastError = error;
+                }
+            }
+
+            if (lastError) {
+                throw new Error('Permintaan sudah dikirim, tetapi data cloud belum dapat dibaca ulang. ' + lastError.message);
+            }
+            throw new Error('Data yang tersimpan di cloud belum sama dengan data yang dikirim. Periksa deployment dan tab DataPortofolio.');
+        }
+
         window.onload = async function() {
-            let saved = localStorage.getItem('portfolio_data');
-            let data = saved ? JSON.parse(saved) : emptyData;
+            let data = normalizePortfolio(emptyData);
+            let cloudLoaded = false;
+
+            setCloudMessage('⏳ Menyinkronkan data dengan Google Sheets...', '#60a5fa');
 
             try {
-                const res = await fetch(SCRIPT_URL + "?action=getPortfolio&t=" + new Date().getTime());
-                if (res.ok) {
-                    const cloudData = await res.json();
-                    if (cloudData && cloudData.profile) {
-                        data = cloudData;
-                        localStorage.setItem('portfolio_data', JSON.stringify(data));
-                    }
+                // Utamakan data cloud agar perangkat lain membaca data yang sama.
+                data = await readPortfolioFromCloud();
+                cloudLoaded = true;
+                try {
+                    localStorage.setItem('portfolio_data', JSON.stringify(data));
+                } catch (storageError) {
+                    console.warn('Data cloud berhasil dibaca, tetapi cache browser tidak dapat diperbarui:', storageError);
                 }
-            } catch (e) {}
+                setCloudMessage('✅ Data portofolio berhasil dimuat dari Google Sheets.', '#10b981');
+            } catch (cloudError) {
+                // LocalStorage hanya menjadi cadangan ketika cloud tidak dapat diakses.
+                try {
+                    const saved = localStorage.getItem('portfolio_data');
+                    if (saved) data = normalizePortfolio(JSON.parse(saved));
+                } catch (localError) {
+                    console.warn('Data lokal tidak dapat dibaca:', localError);
+                }
+                setCloudMessage('⚠️ Google Sheets belum dapat diakses. Menampilkan data cadangan browser. ' + cloudError.message, '#fbbf24');
+                console.error('Gagal memuat data cloud:', cloudError);
+            }
 
-            document.getElementById('p-name').value = data.profile.name || "";
-            document.getElementById('p-desc').value = data.profile.desc || "";
-            document.getElementById('p-photo').value = data.profile.photo || "";
+            document.getElementById('p-name').value = data.profile.name || '';
+            document.getElementById('p-desc').value = data.profile.desc || '';
+            document.getElementById('p-photo').value = data.profile.photo || '';
             if (data.profile.photo) {
-                let pImg = document.getElementById('prev-p-photo');
+                const pImg = document.getElementById('prev-p-photo');
                 pImg.src = data.profile.photo;
                 pImg.style.display = 'block';
             }
-            document.getElementById('p-wa').value = data.profile.wa || "";
-            document.getElementById('p-email').value = data.profile.email || "";
-            document.getElementById('p-linkedin').value = data.profile.linkedin || "";
-            document.getElementById('p-cv-file').value = data.profile.cvFile || "";
+            document.getElementById('p-wa').value = data.profile.wa || '';
+            document.getElementById('p-email').value = data.profile.email || '';
+            document.getElementById('p-linkedin').value = data.profile.linkedin || '';
+            document.getElementById('p-cv-file').value = data.profile.cvFile || '';
 
-            renderEducationAdmin(data.education || []);
-            renderList('soft-container', data.softSkills || [], ['title', 'desc']);
-            renderList('hard-container', data.hardSkills || [], ['title', 'desc']);
-            renderExperiencesAdmin(data.experiences || []);
-            renderProjectsAdmin(data.projects || []);
-            renderCertsAdmin(data.certificates || []);
-            renderGalleryAdmin(data.gallery || []);
+            renderEducationAdmin(data.education);
+            renderList('soft-container', data.softSkills, ['title', 'desc']);
+            renderList('hard-container', data.hardSkills, ['title', 'desc']);
+            renderExperiencesAdmin(data.experiences);
+            renderProjectsAdmin(data.projects);
+            renderCertsAdmin(data.certificates);
+            renderGalleryAdmin(data.gallery);
 
             updateStorageMeter();
-            document.getElementById('cloud-status').style.display = 'none';
-        }
+
+            // Pesan sukses singkat; pesan error diberi waktu lebih lama agar terbaca.
+            setTimeout(function() {
+                const status = document.getElementById('cloud-status');
+                if (status) status.style.display = 'none';
+            }, cloudLoaded ? 900 : 4500);
+        };
 
         async function resetAllData() {
-            if (confirm('Yakin ingin mengosongkan semua data portofolio dari memori & cloud?')) {
-                localStorage.removeItem('portfolio_data');
-                try {
-                    const urlReset = SCRIPT_URL + "?action=savePortfolio&data=" + encodeURIComponent(JSON.stringify(emptyData));
-                    await fetch(urlReset);
-                } catch (e) {}
+            if (!confirm('Yakin ingin mengosongkan semua data portofolio dari memori & cloud?')) return;
+
+            try {
+                setCloudMessage('⏳ Mengosongkan data portofolio di Google Sheets...', '#60a5fa');
+                await sendPortfolioAndVerify(normalizePortfolio(emptyData));
+                localStorage.setItem('portfolio_data', JSON.stringify(emptyData));
+                alert('✅ Semua data portofolio berhasil dikosongkan dari cloud.');
                 location.reload();
+            } catch (error) {
+                console.error('Reset gagal:', error);
+                setCloudMessage('⚠️ Pengosongan data belum terverifikasi.', '#fbbf24');
+                alert('❌ Data belum berhasil dikosongkan di Google Sheets. ' + error.message);
+                setTimeout(function() {
+                    const status = document.getElementById('cloud-status');
+                    if (status) status.style.display = 'none';
+                }, 4500);
             }
         }
 
         async function saveAllData() {
             const btn = document.getElementById('btn-save-main');
+            const originalText = btn.innerText;
             btn.disabled = true;
-            btn.innerText = "⏳ Menyimpan ke Cloud...";
+            btn.innerText = '⏳ Menyimpan & memeriksa cloud...';
 
             try {
-                let finalData = loadCurrentData();
-                localStorage.setItem('portfolio_data', JSON.stringify(finalData));
+                const finalData = normalizePortfolio(loadCurrentData());
+
+                // Simpan cache lokal sebagai cadangan pada browser admin.
+                try {
+                    localStorage.setItem('portfolio_data', JSON.stringify(finalData));
+                } catch (storageError) {
+                    console.warn('Cache lokal tidak dapat disimpan:', storageError);
+                }
+
                 updateStorageMeter();
+                setCloudMessage('⏳ Mengirim data dan memverifikasi penyimpanan Google Sheets...', '#60a5fa');
 
-                // Selalu gunakan POST + mode: "no-cors" agar kebal blokir CORS & redirect Google
-                await fetch(SCRIPT_URL, {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({
-                        action: "savePortfolio",
-                        data: finalData
-                    })
-                });
+                // Tidak menganggap POST berhasil sebelum data dapat dibaca kembali dari cloud.
+                await sendPortfolioAndVerify(finalData);
 
-                alert('✅ Berhasil Disimpan! Silakan cek tab DataPortofolio di Google Sheets (tunggu 2-3 detik lalu refresh Sheets).');
-            } catch (e) {
-                alert('❌ Gagal menyimpan ke Google Sheets: ' + e.message);
+                setCloudMessage('✅ Data berhasil disimpan dan diverifikasi di Google Sheets.', '#10b981');
+                alert('✅ Berhasil! Data portofolio sudah tersimpan dan berhasil dibaca ulang dari Google Sheets. Sekarang halaman Public dapat mengambil data cloud yang sama.');
+            } catch (error) {
+                console.error('Penyimpanan cloud gagal atau belum terverifikasi:', error);
+                setCloudMessage('⚠️ Penyimpanan cloud belum terverifikasi. Periksa koneksi/deployment.', '#fbbf24');
+                alert('⚠️ Data belum dapat dipastikan tersimpan di Google Sheets. ' + error.message + '\n\nData mungkin masih tersimpan sebagai cadangan di browser ini. Jangan mengandalkan data lokal untuk pengunjung lain sebelum penyimpanan cloud berhasil.');
             } finally {
                 btn.disabled = false;
-                btn.innerText = "Simpan & Perbarui";
+                btn.innerText = originalText;
+                setTimeout(function() {
+                    const status = document.getElementById('cloud-status');
+                    if (status) status.style.display = 'none';
+                }, 4500);
             }
         }
 
