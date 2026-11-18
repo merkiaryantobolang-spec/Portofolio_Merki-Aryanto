@@ -162,11 +162,63 @@
         .modal-close:hover { background: rgba(239, 68, 68, 0.6); color: #fff; }
         .modal-body { flex: 1; width: 100%; height: 100%; background: #030508; display: flex; justify-content: center; align-items: center; overflow: auto; padding: 20px; }
         .modal-body iframe, .modal-body img, .modal-body video { width: 100%; height: 100%; object-fit: contain; border: none; background: #1e293b; border-radius: 10px; }
+
+
+        .expandable-preview { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:4; overflow:hidden; }
+        .read-more-btn { display:inline-flex; margin-top:8px; padding:6px 12px; border:1px solid rgba(147,197,253,.4); border-radius:20px; background:rgba(37,99,235,.2); color:#bfdbfe; font-weight:650; font-size:.82rem; cursor:pointer; }
+        .description-modal { display:none; position:fixed; inset:0; z-index:1200; padding:16px; background:rgba(2,6,23,.82); backdrop-filter:blur(8px); align-items:center; justify-content:center; }
+        .description-modal.show { display:flex; }
+        .description-modal-box { width:min(680px,100%); max-height:min(78vh,760px); display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(147,197,253,.35); border-radius:18px; background:#0f172a; box-shadow:0 24px 70px rgba(0,0,0,.6); }
+        .description-modal-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid rgba(255,255,255,.12); }
+        .description-modal-head h3 { color:#dbeafe; font-size:1.05rem; }
+        .description-modal-head button { width:36px; height:36px; border:0; border-radius:10px; background:rgba(239,68,68,.18); color:#fff; font-size:1.1rem; cursor:pointer; }
+        .description-modal-body { padding:20px; overflow-y:auto; overscroll-behavior:contain; color:#e2e8f0; line-height:1.75; white-space:normal; overflow-wrap:anywhere; }
+        body.modal-open { overflow:hidden; }
+        .card-description { color:#cbd5e1; font-size:.9rem; line-height:1.6; }
+        @media(max-width:700px) { .description-modal { padding:10px; } .description-modal-box { max-height:78dvh; border-radius:15px; } .description-modal-body { padding:16px; } }
+
+        /* Kartu pengalaman kerja mandiri: tidak memakai carousel pendidikan */
+        .exp-card-modern { display:grid; grid-template-columns:minmax(220px, 34%) minmax(0,1fr); gap:22px; align-items:start; }
+        .exp-photo-button { display:block; width:100%; height:220px; padding:0; border:1px solid rgba(147,197,253,.35); border-radius:12px; overflow:hidden; background:#0f172a; cursor:zoom-in; }
+        .exp-photo { display:block; width:100%; height:100%; object-fit:cover; }
+        .exp-content { min-width:0; }
+        .exp-description { color:#dbeafe; font-size:.94rem; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere; }
+        .exp-file-link { margin-top:16px; }
+        @media (max-width: 700px) {
+            .content-wrapper { padding:76px 12px 30px; }
+            .page-section, .profile-sheet, .education-sheet { padding:20px 15px; border-radius:16px; width:100%; }
+            .section-title { font-size:1.55rem; -webkit-text-fill-color:#bfdbfe; color:#bfdbfe; background:none; }
+            .showcase-sub, .section-description { color:#cbd5e1; font-size:.9rem; line-height:1.65; }
+            .scrollable-card { max-height:calc(100dvh - 92px); overflow-y:auto; overscroll-behavior:contain; }
+            #navbar-container { top:12px; left:12px; z-index:1100; }
+            .hamburger-btn { width:46px; height:46px; }
+            .dropdown-menu { width:min(260px, calc(100vw - 24px)); }
+            .skill-cards-grid, .projects-grid, .certificates-grid, .gallery-grid { grid-template-columns:minmax(0,1fr); gap:12px; }
+            .exp-card, .skill-detail-card, .project-card, .cert-card { padding:16px; }
+            .exp-card-modern { grid-template-columns:minmax(0,1fr); gap:14px; }
+            .exp-photo-button { height:190px; }
+            .exp-header h3 { font-size:1.05rem; }
+            .exp-description { font-size:.9rem; line-height:1.65; }
+            .school-img-box { height:190px; }
+            .school-info { padding:16px; }
+            .profile-photo-frame { width:135px; height:190px; }
+            .modal-content-box { width:100%; height:calc(100dvh - 20px); border-radius:14px; }
+            .modal-body { padding:10px; }
+            .project-link, .contact-btn, .switch-skill-btn { min-height:42px; }
+            body { overflow-x:hidden; }
+        }
     </style>
 </head>
 <body>
 
     <canvas id="network-canvas"></canvas>
+
+    <div id="description-modal" class="description-modal" aria-hidden="true" onclick="if(event.target===this) closeDescriptionModal()">
+        <div class="description-modal-box" role="dialog" aria-modal="true" aria-labelledby="description-modal-title">
+            <div class="description-modal-head"><h3 id="description-modal-title">Deskripsi Lengkap</h3><button type="button" aria-label="Tutup" onclick="closeDescriptionModal()">✕</button></div>
+            <div id="description-modal-body" class="description-modal-body"></div>
+        </div>
+    </div>
 
     <div id="media-modal">
         <div class="modal-content-box">
@@ -407,10 +459,37 @@
             modal.style.display = 'none';
         }
 
+        function expandableText(value, label) {
+            const content = value || '';
+            const plain = content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').trim();
+            if (plain.length <= 190) return `<div class="expandable-text">${content}</div>`;
+            return `<div class="expandable-text"><div class="expandable-preview">${content}</div><button type="button" class="read-more-btn" data-label="${encodeURIComponent(label || 'Deskripsi Lengkap')}" data-fulltext="${encodeURIComponent(content)}" onclick="openDescriptionModal(this)">Lihat Lainnya</button></div>`;
+        }
+
+        function openDescriptionModal(button) {
+            const modal = document.getElementById('description-modal');
+            document.getElementById('description-modal-title').textContent = decodeURIComponent(button.dataset.label || 'Deskripsi Lengkap');
+            document.getElementById('description-modal-body').innerHTML = decodeURIComponent(button.dataset.fulltext || '');
+            modal.classList.add('show');
+            document.body.classList.add('modal-open');
+            history.pushState({descriptionModal:true}, '');
+        }
+
+        function closeDescriptionModal(fromHistory=false) {
+            const modal = document.getElementById('description-modal');
+            if (!modal || !modal.classList.contains('show')) return;
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            if (!fromHistory && history.state && history.state.descriptionModal) history.back();
+        }
+
+        window.addEventListener('popstate', () => closeDescriptionModal(true));
+        document.addEventListener('keydown', event => { if (event.key === 'Escape') closeDescriptionModal(); });
+
         function renderAllPortfolio(data) {
             document.getElementById('crash-name').innerText = data.profile.name || "Merki Aryanto";
             document.getElementById('pub-name').innerText = data.profile.name || "Merki Aryanto";
-            document.getElementById('pub-desc').innerHTML = data.profile.desc || "";
+            document.getElementById('pub-desc').innerHTML = expandableText(data.profile.desc || '', 'Tentang Saya');
             
             const photoImg = document.getElementById('pub-photo');
             const photoPlaceholder = document.getElementById('pub-photo-placeholder');
@@ -435,7 +514,7 @@
                 track.innerHTML += `
                     <div class="school-card">
                         <div class="school-img-box"><img src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${edu.title}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
-                        <div class="school-info"><h4>${edu.title}</h4><span class="school-period">${edu.period}</span><p>${edu.desc}</p></div>
+                        <div class="school-info"><h4>${edu.title}</h4><span class="school-period">${edu.period}</span><div class="school-description">${expandableText(edu.desc, `Deskripsi ${edu.title || 'Pendidikan'}`)}</div></div>
                     </div>`;
                 dots.innerHTML += `<span class="dot ${idx===0?'active':''}" onclick="goToSchool(${idx})"></span>`;
             });
@@ -455,15 +534,19 @@
                     </div>`;
             }
 
-            document.getElementById('pub-soft-container').innerHTML = (data.softSkills || []).map(s => `<div class="skill-detail-card"><h4>${s.title}</h4><p>${s.desc}</p></div>`).join('');
-            document.getElementById('pub-hard-container').innerHTML = (data.hardSkills || []).map(h => `<div class="skill-detail-card"><h4>${h.title}</h4><p>${h.desc}</p></div>`).join('');
+            document.getElementById('pub-soft-container').innerHTML = (data.softSkills || []).map(s => `<div class="skill-detail-card"><h4>${s.title}</h4><div>${expandableText(s.desc, `Soft Skill: ${s.title || ''}`)}</div></div>`).join('');
+            document.getElementById('pub-hard-container').innerHTML = (data.hardSkills || []).map(h => `<div class="skill-detail-card"><h4>${h.title}</h4><div>${expandableText(h.desc, `Hard Skill: ${h.title || ''}`)}</div></div>`).join('');
 
-            document.getElementById('pub-exp-container').innerHTML = (data.experiences || []).map(e => `
-                <div class="exp-card">
-                    <div class="exp-header"><h3>${e.title}</h3><span class="exp-badge">${e.badge}</span></div>
-                    <div class="exp-company">${e.company}</div>
-                    <p style="color:#cbd5e1; font-size:0.92rem; line-height:1.6;">${e.desc}</p>
-                </div>`).join('');
+            document.getElementById('pub-exp-container').innerHTML = (data.experiences || []).map((e, idx) => `
+                <article class="exp-card exp-card-modern">
+                    ${e.img ? `<button class="exp-photo-button" type="button" onclick="openFileSafely('${convertCloudImageUrl(e.img)}', 'Dokumentasi ${e.company || 'Pengalaman Kerja'}')"><img class="exp-photo" src="${convertCloudImageUrl(e.img)}" alt="Dokumentasi ${e.company || 'Pengalaman Kerja'}" onerror="this.parentElement.style.display='none'"></button>` : ''}
+                    <div class="exp-content">
+                        <div class="exp-header"><h3>${e.title || ''}</h3>${e.badge ? `<span class="exp-badge">${e.badge}</span>` : ''}</div>
+                        <div class="exp-company">${e.company || ''}</div>
+                        <div class="exp-description">${expandableText(e.desc, `Pengalaman: ${e.company || e.title || 'Kerja'}`)}</div>
+                        ${e.file ? `<button class="project-link exp-file-link" type="button" onclick="openFileSafely('${e.file}', '${(e.fileName || 'Berkas Pendukung').replace(/'/g, "\'")}')">📎 ${e.fileName || 'Lihat Berkas Pendukung'} ↗</button>` : ''}
+                    </div>
+                </article>`).join('');
 
             document.getElementById('pub-proj-container').innerHTML = (data.projects || []).map(p => {
                 let btn = getSmartButton(p.link);
@@ -472,7 +555,7 @@
                         <div>
                             <div style="font-size:0.75rem; color:#60a5fa; font-weight:700; margin-bottom:6px; text-transform:uppercase;">${p.category}</div>
                             <h4 style="color:#fff; margin-bottom:8px; font-size:1.1rem;">${p.title}</h4>
-                            <p style="color:#cbd5e1; font-size:0.9rem; line-height:1.55;">${p.desc}</p>
+                            <div class="card-description">${expandableText(p.desc, `Proyek: ${p.title || ''}`)}</div>
                         </div>
                         <button onclick="openFileSafely('${p.link}', '${p.title}')" class="project-link">${btn.text}</button>
                     </div>`;
@@ -485,7 +568,7 @@
                         <div>
                             <div style="font-size:0.75rem; color:#60a5fa; font-weight:700; margin-bottom:6px; text-transform:uppercase;">${c.issuer}</div>
                             <h4 style="color:#fff; margin-bottom:8px; font-size:1.1rem;">${c.title}</h4>
-                            <p style="color:#cbd5e1; font-size:0.88rem; line-height:1.55;">${c.desc}</p>
+                            <div class="card-description">${expandableText(c.desc, `Sertifikat: ${c.title || ''}`)}</div>
                         </div>
                         <button onclick="openFileSafely('${c.link}', '${c.title}')" class="project-link">${btn.text}</button>
                     </div>`;
@@ -606,6 +689,43 @@
         animate();
     </script>
     <script>
+      // Kirim log pengunjung menggunakan form tersembunyi agar tidak memerlukan CORS.
+      function postVisitorWithoutCors(payload) {
+        const frameName = 'visitorPostFrame_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+        const iframe = document.createElement('iframe');
+        iframe.name = frameName;
+        iframe.style.display = 'none';
+        iframe.setAttribute('aria-hidden', 'true');
+
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = SCRIPT_URL;
+        form.target = frameName;
+        form.enctype = 'application/x-www-form-urlencoded';
+        form.acceptCharset = 'UTF-8';
+        form.style.display = 'none';
+
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'payload';
+        input.value = JSON.stringify(payload);
+        form.appendChild(input);
+
+        document.body.appendChild(iframe);
+        document.body.appendChild(form);
+        try {
+          form.submit();
+          setTimeout(() => {
+            if (form.parentNode) form.parentNode.removeChild(form);
+            if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+          }, 20000);
+        } catch (error) {
+          console.warn('Log pengunjung tidak dapat dikirim:', error);
+          if (form.parentNode) form.parentNode.removeChild(form);
+          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+        }
+      }
+
       async function trackVisitor() {
         try {
           const now = new Date();
@@ -646,12 +766,7 @@
             lokasi: lokasiStr
           };
 
-          await fetch(SCRIPT_URL, {
-            method: "POST",
-            mode: "no-cors",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(payload)
-          });
+          postVisitorWithoutCors(payload);
         } catch (error) {}
       }
 
