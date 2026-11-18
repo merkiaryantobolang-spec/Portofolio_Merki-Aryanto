@@ -41,6 +41,18 @@
         .btn-save:disabled { opacity: 0.6; cursor: wait; }
         .btn-view { padding: 14px 24px; background: rgba(59, 130, 246, 0.9); color: white; font-weight: 600; font-size: 0.95rem; border-radius: 50px; text-decoration: none; box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4); }
         #cloud-status { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 5, 8, 0.85); z-index: 999; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; color: #60a5fa; font-weight: 600; }
+
+        @media (max-width: 700px) {
+            body { padding: 14px 10px 100px; }
+            .admin-wrapper { padding: 18px 14px; border-radius: 15px; margin-bottom: 35px; }
+            .section-box { padding: 15px 12px; }
+            .section-box h3 { align-items: flex-start; gap: 10px; flex-wrap: wrap; font-size: 1rem; }
+            .btn { min-height: 42px; }
+            .floating-bar { left: 10px; right: 10px; bottom: 10px; gap: 8px; }
+            .floating-bar > * { flex: 1; text-align: center; padding: 12px 8px; font-size: .85rem; }
+            .storage-box { padding: 13px; }
+            input[type="text"], textarea, input[type="file"] { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
@@ -144,7 +156,7 @@
     </div>
 
     <div class="floating-bar">
-        <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+        <a href="public.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
         <button class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
     </div>
 
@@ -237,24 +249,61 @@
             });
         }
 
-        // POST memakai no-cors sehingga respons POST tidak bisa dibaca browser.
-        // Setelah POST, data diverifikasi kembali melalui pembacaan JSONP.
+        // Mengirim data melalui form HTML tersembunyi ke Apps Script.
+        // Cara ini tidak membaca respons POST sehingga tidak terkena CORS.
+        // Data kemudian diverifikasi dengan JSONP melalui readPortfolioFromCloud().
+        function postPayloadWithoutCors(payload) {
+            return new Promise((resolve, reject) => {
+                const frameName = 'gasPostFrame_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+                const iframe = document.createElement('iframe');
+                iframe.name = frameName;
+                iframe.style.display = 'none';
+                iframe.setAttribute('aria-hidden', 'true');
+
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = SCRIPT_URL;
+                form.target = frameName;
+                form.enctype = 'application/x-www-form-urlencoded';
+                form.acceptCharset = 'UTF-8';
+                form.style.display = 'none';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'payload';
+                input.value = JSON.stringify(payload);
+                form.appendChild(input);
+
+                document.body.appendChild(iframe);
+                document.body.appendChild(form);
+
+                try {
+                    form.submit();
+                    // Jangan buru-buru menghapus iframe; Apps Script mungkin perlu waktu memproses data.
+                    setTimeout(() => {
+                        if (form.parentNode) form.parentNode.removeChild(form);
+                        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                    }, 45000);
+                    setTimeout(resolve, 900);
+                } catch (error) {
+                    if (form.parentNode) form.parentNode.removeChild(form);
+                    if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                    reject(error);
+                }
+            });
+        }
+
         async function sendPortfolioAndVerify(data) {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({
-                    action: 'savePortfolio',
-                    data: data
-                })
+            await postPayloadWithoutCors({
+                action: 'savePortfolio',
+                data: data
             });
 
             const expected = JSON.stringify(normalizePortfolio(data));
             let lastError = null;
 
-            for (let attempt = 0; attempt < 12; attempt++) {
-                await delay(attempt === 0 ? 600 : 700);
+            for (let attempt = 0; attempt < 18; attempt++) {
+                await delay(attempt === 0 ? 500 : 900);
                 try {
                     const savedData = await readPortfolioFromCloud();
                     if (JSON.stringify(savedData) === expected) {
@@ -266,9 +315,9 @@
             }
 
             if (lastError) {
-                throw new Error('Permintaan sudah dikirim, tetapi data cloud belum dapat dibaca ulang. ' + lastError.message);
+                throw new Error('Data sudah dikirim, tetapi belum dapat diverifikasi dari Google Sheets. ' + lastError.message);
             }
-            throw new Error('Data yang tersimpan di cloud belum sama dengan data yang dikirim. Periksa deployment dan tab DataPortofolio.');
+            throw new Error('Data cloud belum sama dengan data yang dikirim. Periksa deployment dan tab DataPortofolio.');
         }
 
         window.onload = async function() {
@@ -517,6 +566,19 @@
                         <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-badge" value="${exp.badge || ''}" oninput="updateStorageMeter()"></div>
                         <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${exp.company || ''}" oninput="updateStorageMeter()"></div>
                         <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc" oninput="updateStorageMeter()">${exp.desc || ''}</textarea></div>
+                        <div class="input-group">
+                            <label>FOTO PERUSAHAAN / DOKUMENTASI KERJA</label>
+                            <input type="file" accept="image/*" onchange="processImageUpload(this, 'exp-img-${idx}', 'prev-exp-${idx}')" style="margin-bottom:6px;">
+                            <input type="text" id="exp-img-${idx}" class="field-img" value="${exp.img || ''}" placeholder="Atau tempel URL foto..." oninput="updateStorageMeter()">
+                            <img id="prev-exp-${idx}" src="${exp.img || ''}" class="preview-thumb" style="display:${exp.img ? 'block' : 'none'};">
+                        </div>
+                        <div class="input-group">
+                            <label>BERKAS PENDUKUNG (PDF/DOC/DLL) ATAU LINK</label>
+                            <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,image/*" onchange="encodeFileAsURL(this, 'exp-file-${idx}')" style="margin-bottom:6px;">
+                            <input type="text" id="exp-file-${idx}" class="field-file" value="${exp.file || ''}" placeholder="Upload berkas atau tempel link Google Drive/website..." oninput="updateStorageMeter()">
+                            <input type="text" class="field-file-name" value="${exp.fileName || ''}" placeholder="Nama berkas (contoh: Sertifikat Magang)" style="margin-top:6px" oninput="updateStorageMeter()">
+                            <small style="display:block;color:#94a3b8;margin-top:6px;line-height:1.5">Untuk dokumen besar, lebih aman unggah ke Google Drive lalu tempel tautan berbagi di atas. Pastikan akses tautan diatur agar dapat dilihat pengunjung.</small>
+                        </div>
                         <button class="btn btn-red" onclick="removeExp(${idx})">Hapus Pengalaman Ini</button>
                     </div>`;
             });
@@ -621,7 +683,10 @@
                     title: card.querySelector('.field-title').value,
                     badge: card.querySelector('.field-badge').value,
                     company: card.querySelector('.field-company').value,
-                    desc: card.querySelector('.field-desc').value
+                    desc: card.querySelector('.field-desc').value,
+                    img: card.querySelector('.field-img').value,
+                    file: card.querySelector('.field-file').value,
+                    fileName: card.querySelector('.field-file-name').value
                 });
             });
             return list;
@@ -685,7 +750,7 @@
         function addEdu() { let d = loadCurrentData(); d.education.push({title:"", period:"", badge:"", desc:"", img:""}); saveTemp(d); renderEducationAdmin(d.education); updateStorageMeter(); }
         function addSoft() { let d = loadCurrentData(); d.softSkills.push({title:"", desc:""}); saveTemp(d); renderList('soft-container', d.softSkills, ['title', 'desc']); updateStorageMeter(); }
         function addHard() { let d = loadCurrentData(); d.hardSkills.push({title:"", desc:""}); saveTemp(d); renderList('hard-container', d.hardSkills, ['title', 'desc']); updateStorageMeter(); }
-        function addExp() { let d = loadCurrentData(); d.experiences.push({title:"", badge:"", company:"", desc:""}); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
+        function addExp() { let d = loadCurrentData(); d.experiences.push({title:"", badge:"", company:"", desc:"", img:"", file:"", fileName:""}); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
         function addProj() { let d = loadCurrentData(); d.projects.push({category:"", title:"", desc:"", link:""}); saveTemp(d); renderProjectsAdmin(d.projects); updateStorageMeter(); }
         function addCert() { let d = loadCurrentData(); d.certificates.push({issuer:"", title:"", desc:"", link:""}); saveTemp(d); renderCertsAdmin(d.certificates); updateStorageMeter(); }
         function addGal() { let d = loadCurrentData(); d.gallery.push({caption:"", img:""}); saveTemp(d); renderGalleryAdmin(d.gallery); updateStorageMeter(); }
