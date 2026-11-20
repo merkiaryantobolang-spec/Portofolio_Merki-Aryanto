@@ -91,6 +91,9 @@
 
         .section-description { font-size: 1rem; line-height: 1.7; color: #e2e8f0; margin-bottom: 24px; text-align: center; }
         .contact-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        .contact-badges .contact-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+        .custom-link-row { background:rgba(15,23,42,.78); border:1px solid rgba(96,165,250,.22); border-radius:10px; padding:14px; margin:10px 0; }
+
         .contact-btn { padding: 10px 18px; font-size: 0.9rem; font-weight: 600; color: #ffffff; text-decoration: none; background: rgba(30, 58, 138, 0.5); border: 1px solid rgba(147, 197, 253, 0.4); border-radius: 30px; }
 
         /* Carousel Sekolah */
@@ -381,7 +384,7 @@
                 window[callbackName] = function(result) {
                     cleanup();
                     if (result && (result.profile || result.status === 'empty')) {
-                        resolve(result);
+                        resolve(result.status === 'empty' ? normalizePublicPortfolio(defaultData) : normalizePublicPortfolio(result));
                     } else {
                         reject(new Error((result && result.message) || 'Data dari Google Sheets tidak dikenali.'));
                     }
@@ -401,7 +404,7 @@
         }
 
         const defaultData = {
-            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", cvFile: "" },
+            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
             education: [],
             softSkills: [],
             hardSkills: [],
@@ -410,6 +413,60 @@
             certificates: [],
             gallery: []
         };
+
+        function normalizePublicPortfolio(input) {
+            const source = input && typeof input === 'object' ? input : {};
+            const profile = { ...defaultData.profile, ...(source.profile || {}) };
+            profile.customLinks = Array.isArray(profile.customLinks) ? profile.customLinks
+                : (Array.isArray(profile.socialLinks) ? profile.socialLinks
+                : (Array.isArray(source.customLinks) ? source.customLinks : []));
+            return {
+                ...source,
+                profile,
+                education: Array.isArray(source.education) ? source.education : [],
+                softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
+                hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
+                experiences: Array.isArray(source.experiences) ? source.experiences : [],
+                projects: Array.isArray(source.projects) ? source.projects : [],
+                certificates: Array.isArray(source.certificates) ? source.certificates : [],
+                gallery: Array.isArray(source.gallery) ? source.gallery : []
+            };
+        }
+
+        // Helper CV didefinisikan di script utama agar tersedia sebelum render awal/cache.
+        // URL CV yang diberikan pemilik menjadi fallback jika kolom cvFile di Sheets kosong.
+        const DEFAULT_CV_URL = "https://drive.google.com/file/d/1cxKIu-Y84bMZedKeqmcZdX-rEbiE14tk/view?usp=drive_link";
+        function escapeHtmlEarly(value) {
+            return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[ch]));
+        }
+        function extractDriveIdEarly(rawUrl) {
+            const raw = String(rawUrl || "").trim();
+            if (!raw) return "";
+            try {
+                const u = new URL(raw);
+                if (/^(drive|docs)\.google\.com$/i.test(u.hostname) || u.hostname.endsWith(".drive.google.com") || u.hostname.endsWith(".docs.google.com")) {
+                    const match = u.pathname.match(/\/(?:file|document|spreadsheets|presentation)\/d\/([a-zA-Z0-9_-]+)/);
+                    return (match && match[1]) || u.searchParams.get("id") || "";
+                }
+            } catch (e) {}
+            const match = raw.match(/(?:\/d\/|[?&]id=)([a-zA-Z0-9_-]+)/);
+            return match ? match[1] : "";
+        }
+        function getPdfEmbedUrl(rawUrl) {
+            const raw = String(rawUrl || "").trim();
+            if (!raw) return "";
+            if (/^data:application\/pdf/i.test(raw)) return raw;
+            const id = extractDriveIdEarly(raw);
+            return id ? `https://drive.google.com/file/d/${encodeURIComponent(id)}/preview` : raw;
+        }
+        function getPdfDownloadUrl(rawUrl) {
+            const raw = String(rawUrl || "").trim();
+            if (!raw) return "#";
+            if (/^data:application\/pdf/i.test(raw)) return raw;
+            const id = extractDriveIdEarly(raw);
+            // Endpoint download Drive yang mengirim berkas asli, bukan thumbnail/preview.
+            return id ? `https://drive.usercontent.google.com/download?id=${encodeURIComponent(id)}&export=download&confirm=t` : raw;
+        }
 
         function convertCloudImageUrl(url) {
             if (!url) return "";
@@ -536,8 +593,8 @@
 
             let cvContainer = document.getElementById('pub-cv-container');
             if(cvContainer) {
-                let cvFileLink = data.profile.cvFile ? data.profile.cvFile : "#";
-                let hasFile = data.profile.cvFile && data.profile.cvFile.trim() !== "";
+                let cvFileLink = (data.profile.cvFile && String(data.profile.cvFile).trim()) ? String(data.profile.cvFile).trim() : DEFAULT_CV_URL;
+                let hasFile = Boolean(cvFileLink && cvFileLink !== "#");
                 let btn = getSmartButton(cvFileLink);
                 
                 const cvEmbedUrl = hasFile ? getPdfEmbedUrl(cvFileLink) : '';
@@ -549,7 +606,7 @@
                         </div>
                         ${hasFile ? `
                             <div class="cv-preview-shell" aria-label="Pratinjau Curriculum Vitae">
-                                <iframe class="cv-pdf-frame" src="${esc(cvEmbedUrl)}" title="Curriculum Vitae Resmi - Merki Aryanto" loading="eager" allow="autoplay; fullscreen" scrolling="yes" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                                <iframe class="cv-pdf-frame" src="${escapeHtmlEarly(cvEmbedUrl)}" title="Curriculum Vitae Resmi - Merki Aryanto" loading="eager" allow="autoplay; fullscreen" scrolling="yes" referrerpolicy="no-referrer-when-downgrade"></iframe>
                             </div>
                             <div class="cv-document-actions">
                                 <button type="button" onclick="openPdfDocument('${encodeURIComponent(cvFileLink)}','Curriculum Vitae Resmi')" class="project-link">🔎 Buka Tampilan Besar</button>
@@ -619,7 +676,7 @@
             // Tampilkan cache lokal (jika ada) atau data kosong secepat mungkin.
             try {
                 const saved = localStorage.getItem('portfolio_data');
-                if (saved) initialData = JSON.parse(saved);
+                if (saved) initialData = normalizePublicPortfolio(JSON.parse(saved));
             } catch (localError) {
                 console.warn('Cache lokal tidak dapat dibaca:', localError);
             }
@@ -640,6 +697,7 @@
 
             readPortfolioFromCloudPublic().then(cloudData => {
                 if (cloudData && cloudData.profile) {
+                    cloudData = normalizePublicPortfolio(cloudData);
                     try {
                         localStorage.setItem('portfolio_data', JSON.stringify(cloudData));
                     } catch (storageError) {
@@ -896,11 +954,27 @@
    modal.style.display='flex';document.body.style.overflow='hidden';
  };
  const oldClose=window.closeModal;window.closeModal=function(){const m=document.getElementById('media-modal'),c=document.getElementById('modal-viewer-container');if(c)c.innerHTML='';if(m)m.style.display='none';document.body.style.overflow='';};
+ function safeContactHref(value){
+   const raw=String(value||'').trim();if(!raw)return '';
+   if(/^(https?:\/\/|mailto:|tel:|sms:|tg:|whatsapp:)/i.test(raw))return raw;
+   // A bare email is made actionable; other bare strings are not treated as executable URLs.
+   if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw))return 'mailto:'+raw;
+   return '';
+ }
  const oldRender=window.renderAllPortfolio;
- window.renderAllPortfolio=function(data){data=data||{};data.profile=data.profile||{};data.experiences=data.experiences||[];data.projects=data.projects||[];data.certificates=data.certificates||[];data.softSkills=data.softSkills||[];data.hardSkills=data.hardSkills||[];
+ window.renderAllPortfolio=function(data){data=normalizePublicPortfolio(data);
    oldRender.call(this,data);
+   const emailBtn=document.getElementById('pub-email-btn');if(emailBtn){const v=String(data.profile.email||'').trim();emailBtn.href=v?(v.startsWith('mailto:')?v:'mailto:'+v):'#';emailBtn.style.display=v?'inline-flex':'none';}
+   const waBtn=document.getElementById('pub-wa-btn');if(waBtn){const v=String(data.profile.wa||'').replace(/[^0-9]/g,'');waBtn.href=v?'https://wa.me/'+v:'#';waBtn.style.display=v?'inline-flex':'none';}
    const linkedin=document.getElementById('pub-linkedin-btn');if(linkedin){linkedin.href=safeUrl(data.profile.linkedin);linkedin.style.display=data.profile.linkedin?'inline-flex':'none';}
-   if(data.profile.github){let contacts=document.querySelector('.contact-badges');if(contacts&&!document.getElementById('pub-github-btn'))contacts.insertAdjacentHTML('beforeend',`<a id="pub-github-btn" href="${safeUrl(data.profile.github)}" target="_blank" rel="noopener" class="contact-btn">GitHub</a>`);}else document.getElementById('pub-github-btn')?.remove();
+   const contactBox=document.querySelector('.contact-badges');
+   if(contactBox){
+     contactBox.querySelectorAll('[data-dynamic-contact="1"]').forEach(n=>n.remove());
+     const links=[];
+     if(data.profile.github)links.push({label:'GitHub',url:data.profile.github,icon:'⌘'});
+     (Array.isArray(data.profile.customLinks)?data.profile.customLinks:[]).forEach(x=>links.push({label:x.label||x.name||'Tautan',url:x.url||x.href||'',icon:x.icon||'🔗'}));
+     links.forEach((x,i)=>{const href=safeContactHref(x.url);if(!href)return;const a=document.createElement('a');a.className='contact-btn';a.dataset.dynamicContact='1';a.href=href;a.textContent=(x.icon?x.icon+' ':'')+x.label;a.target=/^(https?:)/i.test(href)?'_blank':'_self';a.rel='noopener noreferrer';contactBox.appendChild(a);});
+   }
    document.getElementById('pub-hard-container').innerHTML=data.hardSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4>${s.level?`<div class="skill-level">${esc(s.level)}</div><div class="skill-level-track"><span style="width:${({Beginner:25,Intermediate:55,Advanced:80,Expert:100}[s.level]||55)}%"></span></div>`:''}<div>${expandableText(s.desc,`Hard Skill ${s.title}`)}</div></div>`).join('');
    document.getElementById('pub-soft-container').innerHTML=data.softSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4><div>${expandableText(s.desc,`Soft Skill ${s.title}`)}</div></div>`).join('');
    document.getElementById('pub-exp-container').innerHTML=data.experiences.map(e=>`<article class="exp-card exp-card-modern">${e.img?`<button class="exp-photo-button" type="button" onclick="openFileSafely('${safeUrl(convertCloudImageUrl(e.img))}','Dokumentasi ${esc(e.company)}')"><img class="exp-photo" src="${safeUrl(convertCloudImageUrl(e.img))}" alt="Dokumentasi ${esc(e.company)}"></button>`:''}<div class="exp-content"><div class="exp-header"><h3>${esc(e.title)}</h3>${e.badge?`<span class="exp-badge">${esc(e.badge)}</span>`:''}</div><div class="exp-company">${esc(e.company)}</div><div class="exp-description">${expandableText(e.desc,`Pengalaman ${e.company}`)}</div>${e.responsibilities?.length?`<h4 style="margin-top:12px">Tanggung Jawab</h4><ul>${e.responsibilities.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${e.tools?.length?`<div class="work-meta">${e.tools.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}<div class="attachment-list">${atts(e.attachments,e.file,e.fileName)}</div></div></article>`).join('');
