@@ -109,8 +109,14 @@
             </div>
             <div class="input-group"><label>No WhatsApp (628...)</label><input type="text" id="p-wa" placeholder=""></div>
             <div class="input-group"><label>Email</label><input type="text" id="p-email" placeholder=""></div>
-            <div class="input-group"><label>LinkedIn URL</label><input type="text" id="p-linkedin" placeholder=""></div>
-            <p class="upgrade-note">Tambahan GitHub tersedia di bagian profil setelah panel selesai dimuat.</p>
+            <div class="input-group"><label>LinkedIn URL</label><input type="text" id="p-linkedin" placeholder="https://www.linkedin.com/in/username"></div>
+            <div class="input-group"><label>GitHub URL (opsional)</label><input type="text" id="p-github" placeholder="https://github.com/username"></div>
+            <div class="input-group">
+                <label>Tombol Kontak / Media Sosial Tambahan</label>
+                <div class="upgrade-note">Tambahkan tombol apa pun secara manual: Instagram, TikTok, Telegram, YouTube, Behance, website pribadi, nomor telepon, atau aplikasi lain. Isi nama tombol dan URL lengkap. Untuk email gunakan mailto:alamat@email.com; telepon gunakan tel:+628...; WhatsApp gunakan https://wa.me/628...</div>
+                <div id="custom-links-admin"></div>
+                <button type="button" class="btn btn-blue" onclick="addCustomLink()">＋ Tambah Tombol Kontak</button>
+            </div>
         </div>
 
         <!-- 2. UPLOAD FILE CV RESMI -->
@@ -167,7 +173,7 @@
     </div>
 
     <div class="floating-bar">
-        <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+        <a href="public.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
         <button class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
     </div>
 
@@ -175,7 +181,7 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBP4P7U8VwqyP74QopwvnboZ-_IlvtlNnZaNyT-P-2Sz8LTPqODczGxX9KNofFXhDP/exec";
 
         let emptyData = {
-            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", cvFile: "" },
+            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
             education: [],
             softSkills: [],
             hardSkills: [],
@@ -188,8 +194,14 @@
         // Menyamakan struktur data agar data lama tetap bisa dibaca.
         function normalizePortfolio(data) {
             const source = (data && typeof data === 'object') ? data : {};
+            const profile = { ...emptyData.profile, ...(source.profile || {}) };
+            // Migrasi ringan: tautan kontak lama dari beberapa versi tetap dipertahankan.
+            profile.customLinks = Array.isArray(profile.customLinks) ? profile.customLinks
+                : (Array.isArray(profile.socialLinks) ? profile.socialLinks
+                : (Array.isArray(source.customLinks) ? source.customLinks : []));
             return {
-                profile: { ...emptyData.profile, ...(source.profile || {}) },
+                ...source, // jangan buang properti tambahan dari versi sebelumnya/berikutnya
+                profile,
                 education: Array.isArray(source.education) ? source.education : [],
                 softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
                 hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
@@ -370,6 +382,8 @@
             document.getElementById('p-wa').value = data.profile.wa || '';
             document.getElementById('p-email').value = data.profile.email || '';
             document.getElementById('p-linkedin').value = data.profile.linkedin || '';
+            document.getElementById('p-github').value = data.profile.github || '';
+            if (window.renderCustomLinks) window.renderCustomLinks(data.profile.customLinks || []);
             document.getElementById('p-cv-file').value = data.profile.cvFile || '';
 
             renderEducationAdmin(data.education);
@@ -821,6 +835,17 @@
  window.__portfolioEsc=esc;
  window.__portfolioAttachmentText=formatAttachments;
  window.__portfolioParseAttachments=parseAttachments;
+ const normalizeContactLink=x=>({label:String(x?.label||x?.name||x?.title||'Tautan').trim(),url:String(x?.url||x?.href||'').trim(),icon:String(x?.icon||'🔗').trim()});
+ window.renderCustomLinks=function(items){const box=document.getElementById('custom-links-admin');if(!box)return;box.innerHTML='';(Array.isArray(items)?items:[]).map(normalizeContactLink).forEach((x,i)=>box.insertAdjacentHTML('beforeend',`
+  <div class="item-card-admin custom-link-row" data-index="${i}">
+   <div class="input-group"><label>Nama tombol / aplikasi</label><input class="custom-link-label" type="text" value="${esc(x.label)}" placeholder="Contoh: Instagram, Telegram, Website" oninput="updateStorageMeter()"></div>
+   <div class="input-group"><label>URL / alamat tujuan</label><input class="custom-link-url" type="text" value="${esc(x.url)}" placeholder="https://... / mailto:... / tel:..." oninput="updateStorageMeter()"></div>
+   <div class="input-group"><label>Ikon / Emoji (opsional)</label><input class="custom-link-icon" type="text" value="${esc(x.icon)}" placeholder="🔗" oninput="updateStorageMeter()"></div>
+   <button type="button" class="btn btn-red" onclick="removeCustomLink(${i})">Hapus Tombol</button>
+  </div>`));};
+ window.addCustomLink=function(){const items=window.getCustomLinksFromDOM();items.push({label:'',url:'',icon:'🔗'});window.renderCustomLinks(items);updateStorageMeter();};
+ window.removeCustomLink=function(i){const items=window.getCustomLinksFromDOM();items.splice(i,1);window.renderCustomLinks(items);updateStorageMeter();};
+ window.getCustomLinksFromDOM=function(){return [...document.querySelectorAll('#custom-links-admin .custom-link-row')].map(c=>({label:val(c,'.custom-link-label').trim(),url:val(c,'.custom-link-url').trim(),icon:val(c,'.custom-link-icon').trim()||'🔗'}));};
  window.renderList=function(containerId,items,fields){
    const c=document.getElementById(containerId); if(!c)return; c.innerHTML='';
    (items||[]).forEach((it,i)=>{let html='<div class="item-card-admin" data-index="'+i+'">';
@@ -853,10 +878,10 @@
  window.getExperiencesFromDOM=function(){return [...document.querySelectorAll('#exp-container .item-card-admin')].map((c,i)=>({title:val(c,'.field-title'),badge:val(c,'.field-badge'),company:val(c,'.field-company'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),file:'',fileName:'',responsibilities:val(c,'.field-responsibilities').split(/\r?\n/).map(x=>x.trim()).filter(Boolean),tools:val(c,'.field-tools').split(',').map(x=>x.trim()).filter(Boolean),attachments:parseAttachments(val(c,'.field-attachments'))}));};
  window.getProjectsFromDOM=function(){return [...document.querySelectorAll('#proj-container .item-card-admin')].map(c=>({category:val(c,'.field-category'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),objective:val(c,'.field-objective'),tools:val(c,'.field-tools').split(',').map(x=>x.trim()).filter(Boolean),result:val(c,'.field-result'),link:val(c,'.field-link'),attachments:parseAttachments(val(c,'.field-attachments')),featured:!!c.querySelector('.field-featured')?.checked,best:!!c.querySelector('.field-best')?.checked,latest:!!c.querySelector('.field-latest')?.checked}));};
  window.getCertsFromDOM=function(){return [...document.querySelectorAll('#cert-container .item-card-admin')].map(c=>({issuer:val(c,'.field-issuer'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),link:val(c,'.field-link'),attachments:parseAttachments(val(c,'.field-attachments'))}));};
- window.loadCurrentData=function(){const get=id=>document.getElementById(id)?.value||'';return {profile:{name:get('p-name'),desc:get('p-desc'),photo:get('p-photo'),wa:get('p-wa'),email:get('p-email'),linkedin:get('p-linkedin'),github:get('p-github'),cvFile:get('p-cv-file')},education:window.getEducationFromDOM(),softSkills:window.getDataFromDOM('soft-container',['title','desc']),hardSkills:window.getDataFromDOM('hard-container',['title','desc']),experiences:window.getExperiencesFromDOM(),projects:window.getProjectsFromDOM(),certificates:window.getCertsFromDOM(),gallery:window.getGalleryFromDOM()};};
+ window.loadCurrentData=function(){const get=id=>document.getElementById(id)?.value||'';return {profile:{name:get('p-name'),desc:get('p-desc'),photo:get('p-photo'),wa:get('p-wa'),email:get('p-email'),linkedin:get('p-linkedin'),github:get('p-github'),cvFile:get('p-cv-file'),customLinks:window.getCustomLinksFromDOM()},education:window.getEducationFromDOM(),softSkills:window.getDataFromDOM('soft-container',['title','desc']),hardSkills:window.getDataFromDOM('hard-container',['title','desc']),experiences:window.getExperiencesFromDOM(),projects:window.getProjectsFromDOM(),certificates:window.getCertsFromDOM(),gallery:window.getGalleryFromDOM()};};
  window.previewPortfolioDraft=function(){const d=loadCurrentData();const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuka preview.');return;}const cards=(d.projects||[]).map(p=>`<article><small>${esc(p.category)}</small><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p><p><b>Tujuan:</b> ${esc(p.objective)}</p><p><b>Tools:</b> ${esc((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${esc(p.result)}</p></article>`).join('');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Preview Portofolio</title><style>body{font:16px Arial;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.1),rgba(30,58,138,.35) 30%,#090d16 70%,#030508);color:#e2e8f0;margin:0;padding:30px;min-height:100vh}main{max-width:850px;margin:auto;background:rgba(15,23,42,.94);border:1px solid rgba(147,197,253,.24);padding:35px;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.5)}h1,h2{color:#93c5fd}article{padding:16px;background:rgba(30,41,59,.72);border:1px solid rgba(147,197,253,.2);border-radius:12px;margin:14px 0}p{line-height:1.6;white-space:pre-line;color:#cbd5e1}small{color:#93c5fd}</style></head><body><main><h1>${esc(d.profile.name)}</h1><p>${esc(d.profile.desc)}</p><h2>Pengalaman</h2>${(d.experiences||[]).map(e=>`<article><h3>${esc(e.title)} — ${esc(e.company)}</h3><p>${esc(e.desc)}</p><p>${esc((e.responsibilities||[]).join(' • '))}</p></article>`).join('')}<h2>Proyek</h2>${cards}<h2>Pendidikan</h2>${(d.education||[]).map(e=>`<article><h3>${esc(e.title)}</h3><p>${esc(e.period)} · ${esc(e.desc)}</p></article>`).join('')}</main></body></html>`);w.document.close();};
  window.generatePortfolioBook=function(){const d=loadCurrentData();const escp=esc;const section=(title,body)=>`<section><h2>${title}</h2>${body||'<p>Belum ada data.</p>'}</section>`;const html=`<!doctype html><html><head><meta charset="utf-8"><title>Digital Portfolio Book - ${escp(d.profile.name)}</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:11pt 'Arial',sans-serif;color:#172033;line-height:1.55}header{min-height:245mm;display:flex;flex-direction:column;justify-content:center;border-bottom:7px solid #2563eb;page-break-after:always}header h1{font-size:34pt;color:#12336b;margin:0}header p{font-size:15pt;color:#52627a}h2{font-size:19pt;color:#12336b;border-bottom:2px solid #dbeafe;padding-bottom:7px;margin:0 0 14px}section{page-break-inside:auto;margin-bottom:22px}article{page-break-inside:avoid;border:1px solid #d9e2ef;border-radius:8px;padding:12px;margin:10px 0}h3{margin:0 0 5px;color:#1d4ed8}p{white-space:pre-line;margin:5px 0}.muted{color:#64748b;font-size:9pt}.pagebreak{page-break-before:always}.tag{display:inline-block;background:#eaf2ff;color:#1d4ed8;padding:3px 8px;border-radius:20px;margin:2px;font-size:9pt}@media screen{body{max-width:850px;margin:30px auto;padding:25px;background:#fff;box-shadow:0 5px 35px #ccd5e2}.print{position:fixed;right:20px;top:20px;background:#2563eb;color:#fff;padding:12px 18px;border:0;border-radius:8px;cursor:pointer}}@media print{.print{display:none}}</style></head><body><button class="print" onclick="window.print()">Cetak / Simpan PDF</button><header>${d.profile.photo?`<img src="${escp(d.profile.photo)}" style="width:38mm;height:48mm;object-fit:cover;border-radius:8px;margin-bottom:18px">`:''}<p>DIGITAL PORTFOLIO BOOK</p><h1>${escp(d.profile.name||'Portofolio Profesional')}</h1><p>${escp(d.profile.headline||'Professional Portfolio')}</p><p class="muted">${escp(d.profile.email)} · ${escp(d.profile.linkedin)}</p></header>${section('Profil',`<p>${escp(d.profile.desc)}</p>`)}${section('Pendidikan',(d.education||[]).map(e=>`<article><h3>${escp(e.title)}</h3><p class="muted">${escp(e.period)} · ${escp(e.badge)}</p><p>${escp(e.desc)}</p></article>`).join(''))}${section('Pengalaman Kerja',(d.experiences||[]).map(e=>`<article><h3>${escp(e.title)} — ${escp(e.company)}</h3><p class="muted">${escp(e.badge)}</p><p>${escp(e.desc)}</p><p>${escp((e.responsibilities||[]).map(x=>'• '+x).join('\n'))}</p><p><b>Tools:</b> ${escp((e.tools||[]).join(', '))}</p></article>`).join(''))}${section('Keterampilan',[...(d.softSkills||[]).map(x=>({...x,type:'Soft'})),...(d.hardSkills||[]).map(x=>({...x,type:'Hard'}))].map(x=>`<article><h3>${escp(x.title)} <span class="muted">${escp(x.type)} · ${escp(x.level||'')}</span></h3><p>${escp(x.desc)}</p></article>`).join(''))}${section('Proyek',(d.projects||[]).map(p=>`<article><h3>${escp(p.title)}</h3><p class="muted">${escp(p.category)} ${(p.featured?' · Featured':'')} ${(p.best?' · Best':'')} ${(p.latest?' · Latest':'')}</p><p>${escp(p.desc)}</p><p><b>Tujuan:</b> ${escp(p.objective)}</p><p><b>Tools:</b> ${escp((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${escp(p.result)}</p></article>`).join(''))}${section('Sertifikat',(d.certificates||[]).map(c=>`<article><h3>${escp(c.title)}</h3><p class="muted">${escp(c.issuer)}</p><p>${escp(c.desc)}</p></article>`).join(''))}<p class="muted">Dokumen dibuat dari data Admin Portofolio Merki Aryanto. Lampiran lengkap tetap tersedia melalui website.</p></body></html>`;const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuat Digital Portfolio Book.');return;}w.document.open();w.document.write(html);w.document.close();};
- const oldOnload=window.onload;window.onload=async function(ev){if(typeof oldOnload==='function')await oldOnload.call(this,ev);const profile=document.querySelector('.section-box');if(profile&&!document.getElementById('p-github')){const g=document.createElement('div');g.className='input-group';g.innerHTML='<label>GitHub URL (opsional)</label><input type="text" id="p-github" placeholder="https://github.com/username">';const linkedin=document.getElementById('p-linkedin')?.parentElement;if(linkedin)linkedin.after(g);}let d={};try{d=JSON.parse(localStorage.getItem('portfolio_data')||'{}')}catch(e){}if(document.getElementById('p-github'))document.getElementById('p-github').value=d.profile?.github||'';if(d.profile){renderList('hard-container',d.hardSkills||[],['title','desc']);renderExperiencesAdmin(d.experiences||[]);renderProjectsAdmin(d.projects||[]);renderCertsAdmin(d.certificates||[]);}const bar=document.querySelector('.floating-bar');if(bar&&!document.getElementById('btn-preview-draft')){bar.insertAdjacentHTML('afterbegin','<button id="btn-preview-draft" class="btn-view" type="button" onclick="previewPortfolioDraft()">Preview Draft</button><button class="btn-view" type="button" onclick="generatePortfolioBook()">Portfolio Book PDF</button>');}};
+ const oldOnload=window.onload;window.onload=async function(ev){if(typeof oldOnload==='function')await oldOnload.call(this,ev);const bar=document.querySelector('.floating-bar');if(bar&&!document.getElementById('btn-preview-draft')){bar.insertAdjacentHTML('afterbegin','<button id="btn-preview-draft" class="btn-view" type="button" onclick="previewPortfolioDraft()">Preview Draft</button><button class="btn-view" type="button" onclick="generatePortfolioBook()">Portfolio Book PDF</button>');}};
  const oldSave=window.saveAllData;window.saveAllData=async function(){try{const d=loadCurrentData();const history=JSON.parse(localStorage.getItem('portfolio_history')||'[]');history.unshift({savedAt:new Date().toISOString(),data:d});localStorage.setItem('portfolio_history',JSON.stringify(history.slice(0,10)));}catch(e){console.warn('Riwayat lokal tidak tersimpan',e)}return oldSave.apply(this,arguments);};
 })();
 </script>
