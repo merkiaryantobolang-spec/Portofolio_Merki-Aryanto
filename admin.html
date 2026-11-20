@@ -7,13 +7,7 @@
     <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background: radial-gradient(circle at 85% 15%, rgba(255,255,255,.12) 0%, rgba(30,58,138,.45) 30%, #090d16 70%, #030508 100%); background-color:#030508; color:#ffffff; padding:40px 20px; display:flex; flex-direction:column; align-items:center; min-height:100vh; overflow-x:hidden; }
-        html { color-scheme: dark; scrollbar-color: #475569 #0b1220; }
-        * { scrollbar-width: thin; scrollbar-color: #475569 #0b1220; }
-        *::-webkit-scrollbar { width:10px; height:10px; }
-        *::-webkit-scrollbar-track { background:#0b1220; border-radius:10px; }
-        *::-webkit-scrollbar-thumb { background:linear-gradient(180deg,#3b82f6,#334155); border:2px solid #0b1220; border-radius:10px; }
-        *::-webkit-scrollbar-thumb:hover { background:#60a5fa; }
+        body { background: #030508; color: #ffffff; padding: 40px 20px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .admin-wrapper { max-width: 850px; width: 100%; background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(14px); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 20px; padding: 35px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8); margin-bottom: 80px; }
         h1 { font-size: 1.8rem; margin-bottom: 8px; color: #60a5fa; text-align: center; }
         .subtitle { text-align: center; font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; }
@@ -32,13 +26,9 @@
         .section-box h3 { font-size: 1.15rem; color: #93c5fd; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .input-group { margin-bottom: 14px; }
         label { display: block; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 5px; font-weight: 600; }
-        input[type="text"], input[type="url"], input[type="email"], input[type="file"], textarea, select { width:100%; padding:12px; background:rgba(15,23,42,.94); border:1px solid rgba(147,197,253,.24); border-radius:8px; color:#f8fafc; font-size:.95rem; color-scheme:dark; }
-        input::placeholder, textarea::placeholder { color:#64748b; opacity:1; }
-        select option { background:#0f172a; color:#f8fafc; }
-        input[type="file"]::file-selector-button { margin-right:10px; padding:7px 11px; border:1px solid rgba(147,197,253,.35); border-radius:7px; background:rgba(37,99,235,.28); color:#dbeafe; cursor:pointer; }
-        input[type="file"]::file-selector-button:hover { background:rgba(37,99,235,.48); }
-        textarea { resize:vertical; height:90px; line-height:1.55; scrollbar-color:#475569 #0b1220; }
-        input:focus, textarea:focus, select:focus { outline:none; border-color:#60a5fa; box-shadow:0 0 0 3px rgba(59,130,246,.13); }
+        input[type="text"], textarea, input[type="file"] { width: 100%; padding: 12px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 8px; color: #ffffff; font-size: 0.95rem; }
+        textarea { resize: vertical; height: 80px; }
+        input:focus, textarea:focus { outline: none; border-color: #60a5fa; }
         .item-card-admin { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
         .preview-thumb { max-height: 90px; border-radius: 6px; margin-top: 8px; display: none; border: 1px solid rgba(96, 165, 250, 0.4); }
         .btn { padding: 9px 18px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: all 0.2s ease; }
@@ -109,14 +99,7 @@
             </div>
             <div class="input-group"><label>No WhatsApp (628...)</label><input type="text" id="p-wa" placeholder=""></div>
             <div class="input-group"><label>Email</label><input type="text" id="p-email" placeholder=""></div>
-            <div class="input-group"><label>LinkedIn URL</label><input type="text" id="p-linkedin" placeholder="https://www.linkedin.com/in/username"></div>
-            <div class="input-group"><label>GitHub URL (opsional)</label><input type="text" id="p-github" placeholder="https://github.com/username"></div>
-            <div class="input-group">
-                <label>Tombol Kontak / Media Sosial Tambahan</label>
-                <div class="upgrade-note">Tambahkan tombol apa pun secara manual: Instagram, TikTok, Telegram, YouTube, Behance, website pribadi, nomor telepon, atau aplikasi lain. Isi nama tombol dan URL lengkap. Untuk email gunakan mailto:alamat@email.com; telepon gunakan tel:+628...; WhatsApp gunakan https://wa.me/628...</div>
-                <div id="custom-links-admin"></div>
-                <button type="button" class="btn btn-blue" onclick="addCustomLink()">＋ Tambah Tombol Kontak</button>
-            </div>
+            <div class="input-group"><label>LinkedIn URL</label><input type="text" id="p-linkedin" placeholder=""></div>
         </div>
 
         <!-- 2. UPLOAD FILE CV RESMI -->
@@ -181,7 +164,7 @@
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBP4P7U8VwqyP74QopwvnboZ-_IlvtlNnZaNyT-P-2Sz8LTPqODczGxX9KNofFXhDP/exec";
 
         let emptyData = {
-            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
+            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", cvFile: "" },
             education: [],
             softSkills: [],
             hardSkills: [],
@@ -194,14 +177,8 @@
         // Menyamakan struktur data agar data lama tetap bisa dibaca.
         function normalizePortfolio(data) {
             const source = (data && typeof data === 'object') ? data : {};
-            const profile = { ...emptyData.profile, ...(source.profile || {}) };
-            // Migrasi ringan: tautan kontak lama dari beberapa versi tetap dipertahankan.
-            profile.customLinks = Array.isArray(profile.customLinks) ? profile.customLinks
-                : (Array.isArray(profile.socialLinks) ? profile.socialLinks
-                : (Array.isArray(source.customLinks) ? source.customLinks : []));
             return {
-                ...source, // jangan buang properti tambahan dari versi sebelumnya/berikutnya
-                profile,
+                profile: { ...emptyData.profile, ...(source.profile || {}) },
                 education: Array.isArray(source.education) ? source.education : [],
                 softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
                 hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
@@ -382,8 +359,6 @@
             document.getElementById('p-wa').value = data.profile.wa || '';
             document.getElementById('p-email').value = data.profile.email || '';
             document.getElementById('p-linkedin').value = data.profile.linkedin || '';
-            document.getElementById('p-github').value = data.profile.github || '';
-            if (window.renderCustomLinks) window.renderCustomLinks(data.profile.customLinks || []);
             document.getElementById('p-cv-file').value = data.profile.cvFile || '';
 
             renderEducationAdmin(data.education);
@@ -581,32 +556,75 @@
             });
         }
 
+        function escapeAdminValue(value) {
+            return String(value == null ? '' : value).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
         function renderExperiencesAdmin(experiences) {
             const container = document.getElementById('exp-container');
             container.innerHTML = '';
             experiences.forEach((exp, idx) => {
+                // Kompatibilitas: berkas tunggal dari format lama tetap ditampilkan.
+                let attachments = Array.isArray(exp.attachments) ? exp.attachments : [];
+                if (!attachments.length && exp.file) attachments = [{ name: exp.fileName || 'Berkas Pendukung', url: exp.file }];
+                const attachmentRows = attachments.map((a, ai) => `
+                    <div class="exp-attachment-row" style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) auto;gap:8px;margin:8px 0;align-items:center">
+                        <input type="text" class="field-attachment-name" value="${escapeAdminValue(a.name || '')}" placeholder="Nama/keterangan lampiran" oninput="updateStorageMeter()">
+                        <input type="text" class="field-attachment-url" value="${escapeAdminValue(a.url || '')}" placeholder="URL atau data berkas" oninput="updateStorageMeter()">
+                        <button type="button" class="btn btn-red" onclick="removeExpAttachment(this)" aria-label="Hapus lampiran">Hapus</button>
+                    </div>`).join('');
                 container.innerHTML += `
-                    <div class="item-card-admin">
-                        <div class="input-group"><label>POSISI / JABATAN</label><input type="text" class="field-title" value="${exp.title || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-badge" value="${exp.badge || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${exp.company || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc" oninput="updateStorageMeter()">${exp.desc || ''}</textarea></div>
+                    <div class="item-card-admin exp-admin-card">
+                        <div class="input-group"><label>POSISI / JABATAN</label><input type="text" class="field-title" value="${escapeAdminValue(exp.title)}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-badge" value="${escapeAdminValue(exp.badge)}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${escapeAdminValue(exp.company)}" oninput="updateStorageMeter()"></div>
+                        <div class="input-group"><label>DESKRIPSI PEKERJAAN, TANGGUNG JAWAB, DAN TOOLS</label><textarea class="field-desc" oninput="updateStorageMeter()">${escapeAdminValue(exp.desc)}</textarea></div>
                         <div class="input-group">
                             <label>FOTO PERUSAHAAN / DOKUMENTASI KERJA</label>
                             <input type="file" accept="image/*" onchange="processImageUpload(this, 'exp-img-${idx}', 'prev-exp-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="exp-img-${idx}" class="field-img" value="${exp.img || ''}" placeholder="Atau tempel URL foto..." oninput="updateStorageMeter()">
-                            <img id="prev-exp-${idx}" src="${exp.img || ''}" class="preview-thumb" style="display:${exp.img ? 'block' : 'none'};">
+                            <input type="text" id="exp-img-${idx}" class="field-img" value="${escapeAdminValue(exp.img)}" placeholder="Atau tempel URL foto..." oninput="updateStorageMeter()">
+                            <img id="prev-exp-${idx}" src="${escapeAdminValue(exp.img)}" class="preview-thumb" style="display:${exp.img ? 'block' : 'none'};">
                         </div>
                         <div class="input-group">
-                            <label>BERKAS PENDUKUNG (PDF/DOC/DLL) ATAU LINK</label>
-                            <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,image/*" onchange="encodeFileAsURL(this, 'exp-file-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="exp-file-${idx}" class="field-file" value="${exp.file || ''}" placeholder="Upload berkas atau tempel link Google Drive/website..." oninput="updateStorageMeter()">
-                            <input type="text" class="field-file-name" value="${exp.fileName || ''}" placeholder="Nama berkas (contoh: Sertifikat Magang)" style="margin-top:6px" oninput="updateStorageMeter()">
-                            <small style="display:block;color:#94a3b8;margin-top:6px;line-height:1.5">Untuk dokumen besar, lebih aman unggah ke Google Drive lalu tempel tautan berbagi di atas. Pastikan akses tautan diatur agar dapat dilihat pengunjung.</small>
+                            <label>LAMPIRAN PENDUKUNG (BISA LEBIH DARI SATU)</label>
+                            <div class="exp-attachments-list">${attachmentRows}</div>
+                            <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+                                <button type="button" class="btn btn-blue" onclick="addExpAttachment(this)">+ Tambah URL/Lampiran</button>
+                                <label class="btn btn-blue" style="cursor:pointer">Upload Banyak File<input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,image/*" onchange="uploadExpAttachments(this)" style="display:none"></label>
+                            </div>
+                            <small style="display:block;color:#94a3b8;margin-top:8px;line-height:1.5">Untuk dokumen berukuran besar, unggah ke Google Drive lalu tempel URL berbagi. Pastikan izin akses dapat dilihat pengunjung. Unggahan langsung dibatasi 1 MB per file agar penyimpanan website tidak cepat penuh.</small>
                         </div>
                         <button class="btn btn-red" onclick="removeExp(${idx})">Hapus Pengalaman Ini</button>
                     </div>`;
             });
+        }
+
+        function addExpAttachment(button) {
+            const list = button.closest('.input-group').querySelector('.exp-attachments-list');
+            const row = document.createElement('div');
+            row.className = 'exp-attachment-row';
+            row.style.cssText = 'display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) auto;gap:8px;margin:8px 0;align-items:center';
+            row.innerHTML = '<input type="text" class="field-attachment-name" placeholder="Nama/keterangan lampiran" oninput="updateStorageMeter()"><input type="text" class="field-attachment-url" placeholder="URL atau data berkas" oninput="updateStorageMeter()"><button type="button" class="btn btn-red" onclick="removeExpAttachment(this)">Hapus</button>';
+            list.appendChild(row); updateStorageMeter();
+        }
+        function removeExpAttachment(button) { button.closest('.exp-attachment-row').remove(); updateStorageMeter(); }
+        async function uploadExpAttachments(input) {
+            const files = Array.from(input.files || []);
+            const list = input.closest('.input-group').querySelector('.exp-attachments-list');
+            for (const file of files) {
+                if (file.size > 1024 * 1024) { alert('File ' + file.name + ' melebihi batas 1 MB. Unggah ke Google Drive lalu gunakan URL.'); continue; }
+                const dataUrl = await new Promise((resolve, reject) => {
+                    const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(file);
+                });
+                const row = document.createElement('div');
+                row.className = 'exp-attachment-row';
+                row.style.cssText = 'display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) auto;gap:8px;margin:8px 0;align-items:center';
+                const name = document.createElement('input'); name.type='text'; name.className='field-attachment-name'; name.value=file.name; name.placeholder='Nama/keterangan lampiran'; name.oninput=updateStorageMeter;
+                const url = document.createElement('input'); url.type='text'; url.className='field-attachment-url'; url.value=dataUrl; url.placeholder='URL atau data berkas'; url.oninput=updateStorageMeter;
+                const del = document.createElement('button'); del.type='button'; del.className='btn btn-red'; del.textContent='Hapus'; del.onclick=()=>removeExpAttachment(del);
+                row.append(name,url,del); list.appendChild(row);
+            }
+            input.value=''; updateStorageMeter();
         }
 
         function renderEducationAdmin(education) {
@@ -710,8 +728,13 @@
                     company: card.querySelector('.field-company').value,
                     desc: card.querySelector('.field-desc').value,
                     img: card.querySelector('.field-img').value,
-                    file: card.querySelector('.field-file').value,
-                    fileName: card.querySelector('.field-file-name').value
+                    // Field file/fileName tetap dipertahankan untuk kompatibilitas data lama.
+                    file: '',
+                    fileName: '',
+                    attachments: Array.from(card.querySelectorAll('.exp-attachment-row')).map(row => ({
+                        name: row.querySelector('.field-attachment-name').value.trim(),
+                        url: row.querySelector('.field-attachment-url').value.trim()
+                    })).filter(a => a.url)
                 });
             });
             return list;
@@ -775,7 +798,7 @@
         function addEdu() { let d = loadCurrentData(); d.education.push({title:"", period:"", badge:"", desc:"", img:""}); saveTemp(d); renderEducationAdmin(d.education); updateStorageMeter(); }
         function addSoft() { let d = loadCurrentData(); d.softSkills.push({title:"", desc:""}); saveTemp(d); renderList('soft-container', d.softSkills, ['title', 'desc']); updateStorageMeter(); }
         function addHard() { let d = loadCurrentData(); d.hardSkills.push({title:"", desc:""}); saveTemp(d); renderList('hard-container', d.hardSkills, ['title', 'desc']); updateStorageMeter(); }
-        function addExp() { let d = loadCurrentData(); d.experiences.push({title:"", badge:"", company:"", desc:"", img:"", file:"", fileName:""}); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
+        function addExp() { let d = loadCurrentData(); d.experiences.push({title:"", badge:"", company:"", desc:"", img:"", file:"", fileName:"", attachments:[]}); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
         function addProj() { let d = loadCurrentData(); d.projects.push({category:"", title:"", desc:"", link:""}); saveTemp(d); renderProjectsAdmin(d.projects); updateStorageMeter(); }
         function addCert() { let d = loadCurrentData(); d.certificates.push({issuer:"", title:"", desc:"", link:""}); saveTemp(d); renderCertsAdmin(d.certificates); updateStorageMeter(); }
         function addGal() { let d = loadCurrentData(); d.gallery.push({caption:"", img:""}); saveTemp(d); renderGalleryAdmin(d.gallery); updateStorageMeter(); }
@@ -821,70 +844,5 @@
             }
         }
     </script>
-
-<!-- FULL UPGRADE LAYER: backward-compatible editor extensions -->
-<style>
-.upgrade-note{font-size:.78rem;color:#93c5fd;line-height:1.5;margin-top:6px}.field-level,.field-featured,.field-best,.field-latest{width:100%;padding:10px;background:#0f172a;color:#fff;border:1px solid #475569;border-radius:8px}.upgrade-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.upgrade-actions button{border:0;border-radius:9px;padding:10px 14px;background:#334155;color:#fff;font-weight:700;cursor:pointer}.upgrade-actions button.primary{background:#2563eb}.upgrade-actions button.good{background:#059669}.item-card-admin textarea{min-height:76px;background:rgba(15,23,42,.96);color:#f8fafc;border-color:rgba(147,197,253,.24)}.field-attachments{min-height:125px!important;background:#0b1220!important;color:#dbeafe!important;border-color:rgba(96,165,250,.38)!important}.field-level,.field-featured,.field-best,.field-latest{color-scheme:dark}.item-card-admin{background:rgba(15,23,42,.78);border-color:rgba(147,197,253,.18)}.section-box{background:rgba(30,41,59,.56);border-color:rgba(147,197,253,.16)}
-</style>
-<script>
-(function(){
- const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const val=(card,sel)=>card.querySelector(sel)?.value||'';
- const parseAttachments=raw=>(raw||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{let i=line.indexOf('|');return i<0?{name:'Lampiran',url:line}:{name:line.slice(0,i).trim()||'Lampiran',url:line.slice(i+1).trim()}}).filter(x=>x.url);
- const formatAttachments=arr=>(Array.isArray(arr)?arr:[]).map(x=>(x.name||'Lampiran')+' | '+(x.url||x.link||'')).filter(x=>!x.endsWith('| ')).join('\n');
- window.__portfolioEsc=esc;
- window.__portfolioAttachmentText=formatAttachments;
- window.__portfolioParseAttachments=parseAttachments;
- const normalizeContactLink=x=>({label:String(x?.label||x?.name||x?.title||'Tautan').trim(),url:String(x?.url||x?.href||'').trim(),icon:String(x?.icon||'🔗').trim()});
- window.renderCustomLinks=function(items){const box=document.getElementById('custom-links-admin');if(!box)return;box.innerHTML='';(Array.isArray(items)?items:[]).map(normalizeContactLink).forEach((x,i)=>box.insertAdjacentHTML('beforeend',`
-  <div class="item-card-admin custom-link-row" data-index="${i}">
-   <div class="input-group"><label>Nama tombol / aplikasi</label><input class="custom-link-label" type="text" value="${esc(x.label)}" placeholder="Contoh: Instagram, Telegram, Website" oninput="updateStorageMeter()"></div>
-   <div class="input-group"><label>URL / alamat tujuan</label><input class="custom-link-url" type="text" value="${esc(x.url)}" placeholder="https://... / mailto:... / tel:..." oninput="updateStorageMeter()"></div>
-   <div class="input-group"><label>Ikon / Emoji (opsional)</label><input class="custom-link-icon" type="text" value="${esc(x.icon)}" placeholder="🔗" oninput="updateStorageMeter()"></div>
-   <button type="button" class="btn btn-red" onclick="removeCustomLink(${i})">Hapus Tombol</button>
-  </div>`));};
- window.addCustomLink=function(){const items=window.getCustomLinksFromDOM();items.push({label:'',url:'',icon:'🔗'});window.renderCustomLinks(items);updateStorageMeter();};
- window.removeCustomLink=function(i){const items=window.getCustomLinksFromDOM();items.splice(i,1);window.renderCustomLinks(items);updateStorageMeter();};
- window.getCustomLinksFromDOM=function(){return [...document.querySelectorAll('#custom-links-admin .custom-link-row')].map(c=>({label:val(c,'.custom-link-label').trim(),url:val(c,'.custom-link-url').trim(),icon:val(c,'.custom-link-icon').trim()||'🔗'}));};
- window.renderList=function(containerId,items,fields){
-   const c=document.getElementById(containerId); if(!c)return; c.innerHTML='';
-   (items||[]).forEach((it,i)=>{let html='<div class="item-card-admin" data-index="'+i+'">';
-     fields.forEach(f=>{html+=`<div class="input-group"><label>${esc(f==='title'?'NAMA KETERAMPILAN':'DESKRIPSI')}</label>${f==='desc'?`<textarea class="field-desc">${esc(it[f]||'')}</textarea>`:`<input type="text" class="field-${f}" value="${esc(it[f]||'')}">`}</div>`});
-     if(containerId==='hard-container'||containerId==='soft-container') html+=`<div class="input-group"><label>LEVEL KEMAMPUAN (opsional)</label><select class="field-level"><option ${it.level==='Beginner'?'selected':''}>Beginner</option><option ${it.level==='Intermediate'?'selected':''}>Intermediate</option><option ${it.level==='Advanced'?'selected':''}>Advanced</option><option ${it.level==='Expert'?'selected':''}>Expert</option></select></div>`;
-     html+=`<button class="btn btn-red" onclick="removeItem('${containerId}',${i})">Hapus Item Ini</button></div>`;c.insertAdjacentHTML('beforeend',html);
-   });
- };
- window.renderExperiencesAdmin=function(items){const c=document.getElementById('exp-container');if(!c)return;c.innerHTML='';(items||[]).forEach((e,i)=>c.insertAdjacentHTML('beforeend',`
- <div class="item-card-admin"><div class="input-group"><label>POSISI / JABATAN</label><input class="field-title" value="${esc(e.title)}"></div>
- <div class="input-group"><label>PERIODE</label><input class="field-badge" value="${esc(e.badge)}"></div><div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input class="field-company" value="${esc(e.company)}"></div>
- <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc">${esc(e.desc)}</textarea></div>
- <div class="input-group"><label>TANGGUNG JAWAB (satu per baris)</label><textarea class="field-responsibilities" placeholder="Contoh: Melakukan inspeksi kualitas">${esc((e.responsibilities||[]).join('\n'))}</textarea></div>
- <div class="input-group"><label>TOOLS YANG DIGUNAKAN (pisahkan koma)</label><input class="field-tools" value="${esc(Array.isArray(e.tools)?e.tools.join(', '):(e.tools||''))}"></div>
- <div class="input-group"><label>FOTO PERUSAHAAN / DOKUMENTASI</label><input type="file" accept="image/*" onchange="processImageUpload(this,'exp-img-${i}','prev-exp-${i}')"><input id="exp-img-${i}" class="field-img" value="${esc(e.img)}" placeholder="URL foto"><img id="prev-exp-${i}" class="preview-thumb" src="${esc(e.img)}" style="display:${e.img?'block':'none'}"></div>
- <div class="input-group"><label>LAMPIRAN (satu per baris: Nama | URL)</label><input type="file" multiple onchange="addMultiAttachments(this,'exp-attachments-${i}')"><textarea id="exp-attachments-${i}" class="field-attachments" placeholder="Sertifikat Magang | https://...">${esc(formatAttachments(e.attachments||((e.file)?[{name:e.fileName||'Berkas Pendukung',url:e.file}]:[])))}</textarea><div class="upgrade-note">Bisa menambahkan beberapa URL sekaligus atau memilih banyak file hingga 1,5 MB per file. File yang lebih besar harus diunggah ke Google Drive terlebih dahulu, lalu tempel tautan berbagi (akses: siapa saja yang memiliki link).</div></div>
- <button class="btn btn-red" onclick="removeExp(${i})">Hapus Pengalaman Ini</button></div>`));};
- window.renderProjectsAdmin=function(items){const c=document.getElementById('proj-container');if(!c)return;c.innerHTML='';(items||[]).forEach((p,i)=>c.insertAdjacentHTML('beforeend',`
- <div class="item-card-admin"><div class="input-group"><label>KATEGORI</label><input class="field-category" value="${esc(p.category)}"></div><div class="input-group"><label>NAMA PROYEK</label><input class="field-title" value="${esc(p.title)}"></div>
- <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc">${esc(p.desc)}</textarea></div><div class="input-group"><label>GAMBAR / SCREENSHOT PROYEK</label><input type="file" accept="image/*" onchange="processImageUpload(this,'proj-img-${i}','prev-proj-${i}')"><input id="proj-img-${i}" class="field-img" value="${esc(p.img||'')}" placeholder="URL gambar proyek"><img id="prev-proj-${i}" class="preview-thumb" src="${esc(p.img||'')}" style="display:${p.img?'block':'none'}"></div><div class="input-group"><label>TUJUAN & MANFAAT</label><textarea class="field-objective">${esc(p.objective||'')}</textarea></div>
- <div class="input-group"><label>TOOLS / TEKNOLOGI</label><input class="field-tools" value="${esc(Array.isArray(p.tools)?p.tools.join(', '):(p.tools||''))}"></div><div class="input-group"><label>HASIL PROYEK</label><textarea class="field-result">${esc(p.result||'')}</textarea></div>
- <div class="input-group"><label>LAMPIRAN (satu per baris: Nama | URL)</label><input type="file" multiple onchange="addMultiAttachments(this,'proj-attachments-${i}')"><textarea id="proj-attachments-${i}" class="field-attachments">${esc(formatAttachments(p.attachments||((p.link)?[{name:'Lihat Proyek',url:p.link}]:[])))}</textarea><input class="field-link" value="${esc(p.link||'')}" placeholder="Tautan utama lama (opsional)"></div>
- <div class="input-group"><label>TONJOLKAN PROYEK</label><label><input type="checkbox" class="field-featured" ${p.featured?'checked':''}> Featured Project</label><label><input type="checkbox" class="field-best" ${p.best?'checked':''}> Best Project</label><label><input type="checkbox" class="field-latest" ${p.latest?'checked':''}> Latest Project</label></div>
- <button class="btn btn-red" onclick="removeProj(${i})">Hapus Project Ini</button></div>`));};
- window.renderCertsAdmin=function(items){const c=document.getElementById('cert-container');if(!c)return;c.innerHTML='';(items||[]).forEach((x,i)=>c.insertAdjacentHTML('beforeend',`
- <div class="item-card-admin"><div class="input-group"><label>PENERBIT / LEMBAGA</label><input class="field-issuer" value="${esc(x.issuer)}"></div><div class="input-group"><label>NAMA SERTIFIKAT</label><input class="field-title" value="${esc(x.title)}"></div><div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc">${esc(x.desc)}</textarea></div>
- <div class="input-group"><label>LAMPIRAN (satu per baris: Nama | URL)</label><input type="file" multiple onchange="addMultiAttachments(this,'cert-attachments-${i}')"><textarea id="cert-attachments-${i}" class="field-attachments">${esc(formatAttachments(x.attachments||((x.link)?[{name:'Sertifikat',url:x.link}]:[])))}</textarea><input class="field-link" value="${esc(x.link||'')}" placeholder="Tautan utama lama (opsional)"></div><button class="btn btn-red" onclick="removeCert(${i})">Hapus Sertifikat Ini</button></div>`));};
- window.addMultiAttachments=async function(input,targetId){const box=document.getElementById(targetId);if(!box||!input.files?.length)return;const lines=box.value.split(/\r?\n/).filter(Boolean);for(const file of input.files){if(file.size>1500000){alert('File '+file.name+' lebih dari 1,5 MB. Unggah ke Google Drive lalu tempel URL-nya.');continue;}const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});lines.push(file.name+' | '+data);}box.value=lines.join('\n');input.value='';updateStorageMeter();};
- window.getDataFromDOM=function(containerId,fields){return [...document.querySelectorAll('#'+containerId+' .item-card-admin')].map(card=>{let o={};fields.forEach(f=>o[f]=val(card,'.field-'+f));if(containerId==='hard-container'||containerId==='soft-container')o.level=val(card,'.field-level')||'';return o;});};
- window.getExperiencesFromDOM=function(){return [...document.querySelectorAll('#exp-container .item-card-admin')].map((c,i)=>{const attachments=parseAttachments(val(c,'.field-attachments'));return {title:val(c,'.field-title'),badge:val(c,'.field-badge'),company:val(c,'.field-company'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),file:attachments[0]?.url||'',fileName:attachments[0]?.name||'',responsibilities:val(c,'.field-responsibilities').split(/\r?\n/).map(x=>x.trim()).filter(Boolean),tools:val(c,'.field-tools').split(',').map(x=>x.trim()).filter(Boolean),attachments};});};
- window.getProjectsFromDOM=function(){return [...document.querySelectorAll('#proj-container .item-card-admin')].map(c=>({category:val(c,'.field-category'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),objective:val(c,'.field-objective'),tools:val(c,'.field-tools').split(',').map(x=>x.trim()).filter(Boolean),result:val(c,'.field-result'),link:val(c,'.field-link'),attachments:parseAttachments(val(c,'.field-attachments')),featured:!!c.querySelector('.field-featured')?.checked,best:!!c.querySelector('.field-best')?.checked,latest:!!c.querySelector('.field-latest')?.checked}));};
- window.getCertsFromDOM=function(){return [...document.querySelectorAll('#cert-container .item-card-admin')].map(c=>({issuer:val(c,'.field-issuer'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),link:val(c,'.field-link'),attachments:parseAttachments(val(c,'.field-attachments'))}));};
- window.loadCurrentData=function(){const get=id=>document.getElementById(id)?.value||'';return {profile:{name:get('p-name'),desc:get('p-desc'),photo:get('p-photo'),wa:get('p-wa'),email:get('p-email'),linkedin:get('p-linkedin'),github:get('p-github'),cvFile:get('p-cv-file'),customLinks:window.getCustomLinksFromDOM()},education:window.getEducationFromDOM(),softSkills:window.getDataFromDOM('soft-container',['title','desc']),hardSkills:window.getDataFromDOM('hard-container',['title','desc']),experiences:window.getExperiencesFromDOM(),projects:window.getProjectsFromDOM(),certificates:window.getCertsFromDOM(),gallery:window.getGalleryFromDOM()};};
- window.previewPortfolioDraft=function(){const d=loadCurrentData();const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuka preview.');return;}const cards=(d.projects||[]).map(p=>`<article><small>${esc(p.category)}</small><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p><p><b>Tujuan:</b> ${esc(p.objective)}</p><p><b>Tools:</b> ${esc((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${esc(p.result)}</p></article>`).join('');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Preview Portofolio</title><style>body{font:16px Arial;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.1),rgba(30,58,138,.35) 30%,#090d16 70%,#030508);color:#e2e8f0;margin:0;padding:30px;min-height:100vh}main{max-width:850px;margin:auto;background:rgba(15,23,42,.94);border:1px solid rgba(147,197,253,.24);padding:35px;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.5)}h1,h2{color:#93c5fd}article{padding:16px;background:rgba(30,41,59,.72);border:1px solid rgba(147,197,253,.2);border-radius:12px;margin:14px 0}p{line-height:1.6;white-space:pre-line;color:#cbd5e1}small{color:#93c5fd}</style></head><body><main><h1>${esc(d.profile.name)}</h1><p>${esc(d.profile.desc)}</p><h2>Pengalaman</h2>${(d.experiences||[]).map(e=>`<article><h3>${esc(e.title)} — ${esc(e.company)}</h3><p>${esc(e.desc)}</p><p>${esc((e.responsibilities||[]).join(' • '))}</p></article>`).join('')}<h2>Proyek</h2>${cards}<h2>Pendidikan</h2>${(d.education||[]).map(e=>`<article><h3>${esc(e.title)}</h3><p>${esc(e.period)} · ${esc(e.desc)}</p></article>`).join('')}</main></body></html>`);w.document.close();};
- window.generatePortfolioBook=function(){const d=loadCurrentData();const escp=esc;const section=(title,body)=>`<section><h2>${title}</h2>${body||'<p>Belum ada data.</p>'}</section>`;const html=`<!doctype html><html><head><meta charset="utf-8"><title>Digital Portfolio Book - ${escp(d.profile.name)}</title><style>@page{size:A4;margin:18mm}*{box-sizing:border-box}body{font:11pt 'Arial',sans-serif;color:#172033;line-height:1.55}header{min-height:245mm;display:flex;flex-direction:column;justify-content:center;border-bottom:7px solid #2563eb;page-break-after:always}header h1{font-size:34pt;color:#12336b;margin:0}header p{font-size:15pt;color:#52627a}h2{font-size:19pt;color:#12336b;border-bottom:2px solid #dbeafe;padding-bottom:7px;margin:0 0 14px}section{page-break-inside:auto;margin-bottom:22px}article{page-break-inside:avoid;border:1px solid #d9e2ef;border-radius:8px;padding:12px;margin:10px 0}h3{margin:0 0 5px;color:#1d4ed8}p{white-space:pre-line;margin:5px 0}.muted{color:#64748b;font-size:9pt}.pagebreak{page-break-before:always}.tag{display:inline-block;background:#eaf2ff;color:#1d4ed8;padding:3px 8px;border-radius:20px;margin:2px;font-size:9pt}@media screen{body{max-width:850px;margin:30px auto;padding:25px;background:#fff;box-shadow:0 5px 35px #ccd5e2}.print{position:fixed;right:20px;top:20px;background:#2563eb;color:#fff;padding:12px 18px;border:0;border-radius:8px;cursor:pointer}}@media print{.print{display:none}}</style></head><body><button class="print" onclick="window.print()">Cetak / Simpan PDF</button><header>${d.profile.photo?`<img src="${escp(d.profile.photo)}" style="width:38mm;height:48mm;object-fit:cover;border-radius:8px;margin-bottom:18px">`:''}<p>DIGITAL PORTFOLIO BOOK</p><h1>${escp(d.profile.name||'Portofolio Profesional')}</h1><p>${escp(d.profile.headline||'Professional Portfolio')}</p><p class="muted">${escp(d.profile.email)} · ${escp(d.profile.linkedin)}</p></header>${section('Profil',`<p>${escp(d.profile.desc)}</p>`)}${section('Pendidikan',(d.education||[]).map(e=>`<article><h3>${escp(e.title)}</h3><p class="muted">${escp(e.period)} · ${escp(e.badge)}</p><p>${escp(e.desc)}</p></article>`).join(''))}${section('Pengalaman Kerja',(d.experiences||[]).map(e=>`<article><h3>${escp(e.title)} — ${escp(e.company)}</h3><p class="muted">${escp(e.badge)}</p><p>${escp(e.desc)}</p><p>${escp((e.responsibilities||[]).map(x=>'• '+x).join('\n'))}</p><p><b>Tools:</b> ${escp((e.tools||[]).join(', '))}</p></article>`).join(''))}${section('Keterampilan',[...(d.softSkills||[]).map(x=>({...x,type:'Soft'})),...(d.hardSkills||[]).map(x=>({...x,type:'Hard'}))].map(x=>`<article><h3>${escp(x.title)} <span class="muted">${escp(x.type)} · ${escp(x.level||'')}</span></h3><p>${escp(x.desc)}</p></article>`).join(''))}${section('Proyek',(d.projects||[]).map(p=>`<article><h3>${escp(p.title)}</h3><p class="muted">${escp(p.category)} ${(p.featured?' · Featured':'')} ${(p.best?' · Best':'')} ${(p.latest?' · Latest':'')}</p><p>${escp(p.desc)}</p><p><b>Tujuan:</b> ${escp(p.objective)}</p><p><b>Tools:</b> ${escp((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${escp(p.result)}</p></article>`).join(''))}${section('Sertifikat',(d.certificates||[]).map(c=>`<article><h3>${escp(c.title)}</h3><p class="muted">${escp(c.issuer)}</p><p>${escp(c.desc)}</p></article>`).join(''))}<p class="muted">Dokumen dibuat dari data Admin Portofolio Merki Aryanto. Lampiran lengkap tetap tersedia melalui website.</p></body></html>`;const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuat Digital Portfolio Book.');return;}w.document.open();w.document.write(html);w.document.close();};
- const oldOnload=window.onload;window.onload=async function(ev){if(typeof oldOnload==='function')await oldOnload.call(this,ev);const bar=document.querySelector('.floating-bar');if(bar&&!document.getElementById('btn-preview-draft')){bar.insertAdjacentHTML('afterbegin','<button id="btn-preview-draft" class="btn-view" type="button" onclick="previewPortfolioDraft()">Preview Draft</button><button class="btn-view" type="button" onclick="generatePortfolioBook()">Portfolio Book PDF</button>');}};
- const oldSave=window.saveAllData;window.saveAllData=async function(){try{const d=loadCurrentData();const history=JSON.parse(localStorage.getItem('portfolio_history')||'[]');history.unshift({savedAt:new Date().toISOString(),data:d});localStorage.setItem('portfolio_history',JSON.stringify(history.slice(0,10)));}catch(e){console.warn('Riwayat lokal tidak tersimpan',e)}return oldSave.apply(this,arguments);};
-})();
-</script>
-
 </body>
 </html>
