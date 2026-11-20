@@ -184,6 +184,16 @@
         .exp-content { min-width:0; }
         .exp-description { color:#dbeafe; font-size:.94rem; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere; }
         .exp-file-link { margin-top:16px; }
+        .cv-document-card { padding:22px; background:rgba(30,41,59,.68); border-color:rgba(147,197,253,.28); }
+        .cv-document-heading { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:16px; text-align:left; }
+        .cv-document-icon { width:52px; height:52px; flex:0 0 52px; display:grid; place-items:center; border-radius:14px; background:rgba(37,99,235,.2); border:1px solid rgba(147,197,253,.3); font-size:1.8rem; }
+        .cv-document-heading h4 { color:#f8fafc; font-size:1.12rem; margin-bottom:4px; }
+        .cv-document-heading p { color:#93c5fd; font-size:.84rem; }
+        .cv-preview-shell { width:100%; height:min(82vh,1100px); min-height:620px; overflow:hidden; border:1px solid rgba(147,197,253,.35); border-radius:12px; background:#0b1220; box-shadow:0 12px 32px rgba(0,0,0,.32); }
+        .cv-pdf-frame { display:block; width:100%; height:100%; min-height:620px; border:0; background:#0b1220; overflow:auto; }
+        .cv-document-actions { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin-top:15px; }
+        .cv-document-actions .project-link { cursor:pointer; }
+        .cv-scroll-hint,.cv-empty-note { color:#94a3b8; font-size:.8rem; line-height:1.55; text-align:center; margin-top:12px; }
         @media (max-width: 700px) {
             .content-wrapper { padding:76px 12px 30px; }
             .page-section, .profile-sheet, .education-sheet { padding:20px 15px; border-radius:16px; width:100%; }
@@ -199,6 +209,11 @@
             .exp-photo-button { height:190px; }
             .exp-header h3 { font-size:1.05rem; }
             .exp-description { font-size:.9rem; line-height:1.65; }
+            .cv-document-card { padding:14px; }
+            .cv-preview-shell { height:76dvh; min-height:500px; }
+            .cv-document-heading { justify-content:flex-start; }
+            .cv-document-actions { flex-direction:column; align-items:stretch; }
+            .cv-document-actions .project-link { width:100%; justify-content:center; }
             .school-img-box { height:190px; }
             .school-info { padding:16px; }
             .profile-photo-frame { width:135px; height:190px; }
@@ -260,7 +275,7 @@
 
     <div class="content-wrapper" id="main-wrapper">
         <div id="start-screen">
-            <button class="btn-start" id="btn-start" onclick="startPortfolio()" disabled>MEMUAT...</button>
+            <button class="btn-start" id="btn-start" onclick="startPortfolio()">START</button>
         </div>
 
         <div id="home-screen" style="display: none;">
@@ -361,7 +376,7 @@
                 const timeoutId = setTimeout(() => {
                     cleanup();
                     reject(new Error('Waktu akses Google Apps Script habis.'));
-                }, 20000);
+                }, 10000);
 
                 window[callbackName] = function(result) {
                     cleanup();
@@ -513,7 +528,7 @@
                 let imgSrc = (edu.img && edu.img.trim() !== "") ? convertCloudImageUrl(edu.img) : `https://placehold.co/700x300/0f172a/60a5fa?text=${encodeURIComponent(edu.title || 'Sekolah')}`;
                 track.innerHTML += `
                     <div class="school-card">
-                        <div class="school-img-box"><img src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${edu.title}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
+                        <div class="school-img-box"><img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${edu.title}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
                         <div class="school-info"><h4>${edu.title}</h4><span class="school-period">${edu.period}</span><div class="school-description">${expandableText(edu.desc, `Deskripsi ${edu.title || 'Pendidikan'}`)}</div></div>
                     </div>`;
                 dots.innerHTML += `<span class="dot ${idx===0?'active':''}" onclick="goToSchool(${idx})"></span>`;
@@ -525,12 +540,23 @@
                 let hasFile = data.profile.cvFile && data.profile.cvFile.trim() !== "";
                 let btn = getSmartButton(cvFileLink);
                 
+                const cvEmbedUrl = hasFile ? getPdfEmbedUrl(cvFileLink) : '';
                 cvContainer.innerHTML = `
-                    <div class="project-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px;">
-                        <div style="font-size: 3rem; margin-bottom: 12px;">📄</div>
-                        <h4 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">Curriculum Vitae - Merki Aryanto</h4>
-                        <p style="color:#cbd5e1; font-size:0.9rem; margin-bottom:20px;">Klik tombol di bawah untuk melihat langsung dokumen PDF secara penuh atau mengunduhnya.</p>
-                        ${hasFile ? `<button onclick="openFileSafely('${cvFileLink}', 'Curriculum Vitae Resmi')" class="project-link">${btn.text}</button>` : `<p style="color:#94a3b8; font-size:0.88rem;"><em>File CV resmi belum di-upload melalui panel admin.</em></p>`}
+                    <div class="project-card cv-document-card">
+                        <div class="cv-document-heading">
+                            <div class="cv-document-icon">📄</div>
+                            <div><h4>Curriculum Vitae - Merki Aryanto</h4><p>Curriculum Vitae Resmi</p></div>
+                        </div>
+                        ${hasFile ? `
+                            <div class="cv-preview-shell" aria-label="Pratinjau Curriculum Vitae">
+                                <iframe class="cv-pdf-frame" src="${esc(cvEmbedUrl)}" title="Curriculum Vitae Resmi - Merki Aryanto" loading="eager" allow="autoplay; fullscreen" scrolling="yes" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                            <div class="cv-document-actions">
+                                <button type="button" onclick="openPdfDocument('${encodeURIComponent(cvFileLink)}','Curriculum Vitae Resmi')" class="project-link">🔎 Buka Tampilan Besar</button>
+                                <a class="project-link cv-download-link" href="${esc(getPdfDownloadUrl(cvFileLink))}" target="_blank" rel="noopener noreferrer">⬇ Unduh CV PDF Lengkap</a>
+                            </div>
+                            <p class="cv-scroll-hint">Geser/scroll pada area dokumen untuk membaca seluruh halaman CV. Jika pratinjau tidak muncul, pastikan izin Google Drive diatur ke <b>Siapa saja yang memiliki link — Pelihat</b>.</p>
+                        ` : `<p class="cv-empty-note"><em>File CV resmi belum di-upload melalui panel admin.</em></p>`}
                     </div>`;
             }
 
@@ -539,7 +565,7 @@
 
             document.getElementById('pub-exp-container').innerHTML = (data.experiences || []).map((e, idx) => `
                 <article class="exp-card exp-card-modern">
-                    ${e.img ? `<button class="exp-photo-button" type="button" onclick="openFileSafely('${convertCloudImageUrl(e.img)}', 'Dokumentasi ${e.company || 'Pengalaman Kerja'}')"><img class="exp-photo" src="${convertCloudImageUrl(e.img)}" alt="Dokumentasi ${e.company || 'Pengalaman Kerja'}" onerror="this.parentElement.style.display='none'"></button>` : ''}
+                    ${e.img ? `<button class="exp-photo-button" type="button" onclick="openFileSafely('${convertCloudImageUrl(e.img)}', 'Dokumentasi ${e.company || 'Pengalaman Kerja'}')"><img class="exp-photo" loading="lazy" decoding="async" src="${convertCloudImageUrl(e.img)}" alt="Dokumentasi ${e.company || 'Pengalaman Kerja'}" onerror="this.parentElement.style.display='none'"></button>` : ''}
                     <div class="exp-content">
                         <div class="exp-header"><h3>${e.title || ''}</h3>${e.badge ? `<span class="exp-badge">${e.badge}</span>` : ''}</div>
                         <div class="exp-company">${e.company || ''}</div>
@@ -578,43 +604,64 @@
                 let imgSrc = (g.img && g.img.trim() !== "") ? convertCloudImageUrl(g.img) : "https://placehold.co/300x220/0f172a/60a5fa?text=Photo";
                 return `
                     <div class="gallery-item">
-                        <img src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${g.caption}')" onerror="this.src='https://placehold.co/300x220/0f172a/60a5fa?text=Photo'">
+                        <img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${g.caption}')" onerror="this.src='https://placehold.co/300x220/0f172a/60a5fa?text=Photo'">
                         <div class="gallery-caption">${g.caption}</div>
                     </div>`;
             }).join('');
         }
 
-        window.onload = async function() {
+        // Render awal tidak menunggu Google Apps Script. Ini mencegah halaman
+        // Public tertahan hingga 20 detik ketika koneksi Spreadsheet lambat.
+        function initializePortfolioPublic() {
             const startBtn = document.getElementById('btn-start');
-            let saved = null;
-            let data = defaultData;
+            let initialData = defaultData;
 
-            // Data cloud diprioritaskan. LocalStorage hanya menjadi cadangan
-            // jika jaringan atau Google Apps Script sedang tidak tersedia.
+            // Tampilkan cache lokal (jika ada) atau data kosong secepat mungkin.
             try {
-                saved = localStorage.getItem('portfolio_data');
-                if (saved) data = JSON.parse(saved);
+                const saved = localStorage.getItem('portfolio_data');
+                if (saved) initialData = JSON.parse(saved);
             } catch (localError) {
-                console.warn('Cadangan browser tidak dapat dibaca:', localError);
+                console.warn('Cache lokal tidak dapat dibaca:', localError);
             }
 
             try {
-                const cloudData = await readPortfolioFromCloudPublic();
-                if (cloudData && cloudData.profile) {
-                    data = cloudData;
-                    try { localStorage.setItem('portfolio_data', JSON.stringify(data)); }
-                    catch (storageError) { console.warn('Cache browser tidak dapat diperbarui:', storageError); }
-                } else if (cloudData && cloudData.status === 'empty') {
-                    data = defaultData;
-                }
-            } catch (cloudError) {
-                console.error('Gagal mengambil portofolio dari Google Sheets:', cloudError);
+                renderAllPortfolio(initialData);
+            } catch (renderError) {
+                console.error('Gagal menampilkan data awal portofolio:', renderError);
+                try { renderAllPortfolio(defaultData); } catch (_) {}
             }
 
-            renderAllPortfolio(data);
-            startBtn.disabled = false;
-            startBtn.innerText = "START";
-        };
+            // Tombol START langsung aktif. Pengambilan data cloud berjalan
+            // di belakang layar dan tidak mengunci tampilan/aksi pengunjung.
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerText = 'START';
+            }
+
+            readPortfolioFromCloudPublic().then(cloudData => {
+                if (cloudData && cloudData.profile) {
+                    try {
+                        localStorage.setItem('portfolio_data', JSON.stringify(cloudData));
+                    } catch (storageError) {
+                        console.warn('Cache browser tidak dapat diperbarui:', storageError);
+                    }
+                    // Sinkronkan konten setelah data cloud tersedia tanpa
+                    // menahan halaman awal atau tombol START.
+                    renderAllPortfolio(cloudData);
+                } else if (cloudData && cloudData.status === 'empty') {
+                    try { localStorage.removeItem('portfolio_data'); } catch (_) {}
+                    renderAllPortfolio(defaultData);
+                }
+            }).catch(cloudError => {
+                console.warn('Data cloud belum tersedia; halaman tetap memakai cache/default:', cloudError);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePortfolioPublic, { once: true });
+        } else {
+            initializePortfolioPublic();
+        }
 
         function startPortfolio() {
             document.getElementById('start-screen').style.display = 'none';
@@ -772,5 +819,99 @@
 
       window.addEventListener("load", trackVisitor);
     </script>
+
+<!-- PORTFOLIO PUBLIC FULL UPGRADE LAYER -->
+<style>
+.expandable-text{white-space:pre-line;text-align:left;line-height:1.65;overflow-wrap:anywhere}.expandable-preview{max-height:6.6em;overflow:hidden;position:relative;white-space:pre-line}.expandable-preview:after{content:"";position:absolute;bottom:0;left:0;right:0;height:1.7em;background:linear-gradient(transparent,rgba(15,23,42,.92))}.expandable-text.is-expanded .expandable-preview{max-height:230px;overflow-y:auto;padding-right:7px}.expandable-text.is-expanded .expandable-preview:after{display:none}.read-more-btn{margin-top:8px;border:1px solid rgba(147,197,253,.4);border-radius:20px;background:rgba(37,99,235,.2);color:#bfdbfe;padding:7px 13px;cursor:pointer;font-weight:700}.attachment-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.attachment-link{display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.3);color:#bfdbfe;text-decoration:none;font-size:.85rem}.project-flags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.project-flag{font-size:.68rem;background:#1e3a8a;color:#dbeafe;padding:4px 8px;border-radius:20px}.skill-level{font-size:.75rem;color:#93c5fd;margin:6px 0 10px}.skill-level-track{height:6px;background:#1e293b;border-radius:10px;overflow:hidden}.skill-level-track span{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#34d399)}.work-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.work-meta span{font-size:.78rem;color:#bfdbfe;background:rgba(30,64,175,.2);padding:5px 9px;border-radius:20px}.portfolio-search{width:100%;max-width:850px;padding:11px 14px;border-radius:10px;border:1px solid #475569;background:#0f172a;color:white;margin:0 0 16px}.portfolio-search:focus{outline:2px solid #60a5fa}.portfolio-book-hint{color:#94a3b8;font-size:.8rem;margin-top:8px}
+@media(max-width:700px){.expandable-preview{max-height:6.2em}.expandable-text.is-expanded .expandable-preview{max-height:210px}.attachment-link{min-height:40px}}
+</style>
+<script>
+(function(){
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const safeUrl=u=>{u=String(u||'').trim();return /^(https?:\/\/|data:image\/|data:application\/pdf[,;]|data:video\/)/i.test(u)?u:'#'};
+ const rich=s=>esc(s).replace(/\r?\n/g,'<br>');
+ const atts=(arr,legacyUrl,legacyName)=>{let a=Array.isArray(arr)?arr.slice():[];if(!a.length&&legacyUrl)a=[{name:legacyName||'Lihat Dokumen',url:legacyUrl}];return a.filter(x=>x&&x.url).map(x=>`<button type="button" class="attachment-link" onclick="openPortfolioAttachment('${encodeURIComponent(safeUrl(x.url))}','${encodeURIComponent(x.name||'Lampiran')}')">📎 ${esc(x.name||'Lampiran')}</button>`).join('')};
+ window.openPortfolioAttachment=function(url,title){openFileSafely(decodeURIComponent(url),decodeURIComponent(title));};
+ window.expandableText=function(value,label){const content=rich(value||'');const plain=String(value||'').trim();if(plain.length<=190)return `<div class="expandable-text">${content}</div>`;const id='expand-'+Math.random().toString(36).slice(2);return `<div class="expandable-text" id="${id}"><div class="expandable-preview">${content}</div><button type="button" class="read-more-btn" onclick="toggleExpandable('${id}',this)">Lihat Lainnya</button></div>`;};
+ window.toggleExpandable=function(id,btn){const el=document.getElementById(id);if(!el)return;const open=el.classList.toggle('is-expanded');btn.textContent=open?'Tutup Detail':'Lihat Lainnya';};
+ window.openDescriptionModal=function(){/* Deskripsi kini dibuka di dalam kartu, tanpa modal. */};
+ window.closeDescriptionModal=function(){document.getElementById('description-modal')?.classList.remove('show');};
+ // Unified document viewer: PDF, image, and supported media use one in-site viewer.
+ window.getDriveFileId=function(rawUrl){
+   const raw=String(rawUrl||'').trim();
+   if(!raw)return '';
+   try{
+     const u=new URL(raw);
+     const host=u.hostname.toLowerCase();
+     if(host==='drive.google.com'||host.endsWith('.drive.google.com')||host==='docs.google.com'||host.endsWith('.docs.google.com')){
+       const pathMatch=u.pathname.match(/\/(?:file|document|spreadsheets|presentation)\/d\/([a-zA-Z0-9_-]+)/);
+       return pathMatch?.[1]||u.searchParams.get('id')||'';
+     }
+   }catch(e){}
+   const m=raw.match(/(?:\/d\/|[?&]id=)([a-zA-Z0-9_-]+)/);
+   return m?.[1]||'';
+ };
+ window.getPdfEmbedUrl=function(rawUrl){
+   const raw=String(rawUrl||'').trim();
+   if(!raw)return '';
+   if(/^data:application\/pdf/i.test(raw))return raw;
+   const id=window.getDriveFileId(raw);
+   if(id)return 'https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview';
+   return raw;
+ };
+ window.getPdfDownloadUrl=function(rawUrl){
+   const raw=String(rawUrl||'').trim();
+   if(!raw)return '#';
+   if(/^data:application\/pdf/i.test(raw))return raw;
+   const id=window.getDriveFileId(raw);
+   if(id)return 'https://drive.google.com/uc?export=download&id='+encodeURIComponent(id);
+   return raw;
+ };
+ window.openPdfDocument=function(encodedUrl,title){
+   const raw=decodeURIComponent(encodedUrl||'');
+   if(!raw){alert('File CV belum tersedia.');return;}
+   const modal=document.getElementById('media-modal');
+   const container=document.getElementById('modal-viewer-container');
+   if(!modal||!container){window.open(getPdfEmbedUrl(raw),'_blank','noopener,noreferrer');return;}
+   document.getElementById('modal-file-title').textContent=title||'Pratinjau PDF';
+   const dl=document.getElementById('modal-download-btn');dl.href=getPdfDownloadUrl(raw);dl.removeAttribute('download');dl.target='_blank';dl.rel='noopener noreferrer';dl.textContent='⬇ Unduh PDF Lengkap';dl.style.display='inline-flex';
+   const frame=getPdfEmbedUrl(raw);
+   container.innerHTML=`<iframe src="${esc(frame)}" title="${esc(title||'Pratinjau PDF')}" allow="autoplay; fullscreen" scrolling="yes" style="display:block;width:100%;height:100%;min-height:78vh;border:0;background:#0b1220;flex:1 1 auto"></iframe>`;
+   modal.style.display='flex';document.body.style.overflow='hidden';
+ };
+ window.openFileSafely=function(url,title){
+   if(!url||url==='#'){alert('Maaf, tautan atau berkas belum tersedia.');return;}
+   const raw=String(url).trim(),lower=raw.toLowerCase();
+   const isPdf=lower.startsWith('data:application/pdf')||/\.pdf(?:[?#]|$)/i.test(lower)||lower.includes('drive.google.com/')||lower.includes('docs.google.com/');
+   const isImage=lower.startsWith('data:image/')||/\.(png|jpe?g|gif|webp|svg)(?:[?#]|$)/i.test(lower)||lower.includes('googleusercontent.com');
+   if(isPdf){window.openPdfDocument(encodeURIComponent(raw),title||'Pratinjau PDF');return;}
+   const processed=isImage?convertCloudImageUrl(raw):raw;
+   const modal=document.getElementById('media-modal'),container=document.getElementById('modal-viewer-container');
+   if(!modal||!container){window.open(processed,'_blank','noopener,noreferrer');return;}
+   document.getElementById('modal-file-title').textContent=title||'Pratinjau Dokumen';
+   const dl=document.getElementById('modal-download-btn');dl.href=raw;dl.download=(title||'dokumen').replace(/[^a-z0-9-_]+/gi,'_');dl.style.display='inline-flex';
+   if(isImage)container.innerHTML=`<img src="${esc(processed)}" alt="${esc(title)}" style="max-width:100%;max-height:100%;object-fit:contain">`;
+   else if(lower.startsWith('data:video/'))container.innerHTML=`<video src="${esc(raw)}" controls style="width:100%;height:100%;background:#000"></video>`;
+   else {window.open(raw,'_blank','noopener,noreferrer');return;}
+   modal.style.display='flex';document.body.style.overflow='hidden';
+ };
+ const oldClose=window.closeModal;window.closeModal=function(){const m=document.getElementById('media-modal'),c=document.getElementById('modal-viewer-container');if(c)c.innerHTML='';if(m)m.style.display='none';document.body.style.overflow='';};
+ const oldRender=window.renderAllPortfolio;
+ window.renderAllPortfolio=function(data){data=data||{};data.profile=data.profile||{};data.experiences=data.experiences||[];data.projects=data.projects||[];data.certificates=data.certificates||[];data.softSkills=data.softSkills||[];data.hardSkills=data.hardSkills||[];
+   oldRender.call(this,data);
+   const linkedin=document.getElementById('pub-linkedin-btn');if(linkedin){linkedin.href=safeUrl(data.profile.linkedin);linkedin.style.display=data.profile.linkedin?'inline-flex':'none';}
+   if(data.profile.github){let contacts=document.querySelector('.contact-badges');if(contacts&&!document.getElementById('pub-github-btn'))contacts.insertAdjacentHTML('beforeend',`<a id="pub-github-btn" href="${safeUrl(data.profile.github)}" target="_blank" rel="noopener" class="contact-btn">GitHub</a>`);}else document.getElementById('pub-github-btn')?.remove();
+   document.getElementById('pub-hard-container').innerHTML=data.hardSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4>${s.level?`<div class="skill-level">${esc(s.level)}</div><div class="skill-level-track"><span style="width:${({Beginner:25,Intermediate:55,Advanced:80,Expert:100}[s.level]||55)}%"></span></div>`:''}<div>${expandableText(s.desc,`Hard Skill ${s.title}`)}</div></div>`).join('');
+   document.getElementById('pub-soft-container').innerHTML=data.softSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4><div>${expandableText(s.desc,`Soft Skill ${s.title}`)}</div></div>`).join('');
+   document.getElementById('pub-exp-container').innerHTML=data.experiences.map(e=>`<article class="exp-card exp-card-modern">${e.img?`<button class="exp-photo-button" type="button" onclick="openFileSafely('${safeUrl(convertCloudImageUrl(e.img))}','Dokumentasi ${esc(e.company)}')"><img class="exp-photo" src="${safeUrl(convertCloudImageUrl(e.img))}" alt="Dokumentasi ${esc(e.company)}"></button>`:''}<div class="exp-content"><div class="exp-header"><h3>${esc(e.title)}</h3>${e.badge?`<span class="exp-badge">${esc(e.badge)}</span>`:''}</div><div class="exp-company">${esc(e.company)}</div><div class="exp-description">${expandableText(e.desc,`Pengalaman ${e.company}`)}</div>${e.responsibilities?.length?`<h4 style="margin-top:12px">Tanggung Jawab</h4><ul>${e.responsibilities.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${e.tools?.length?`<div class="work-meta">${e.tools.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}<div class="attachment-list">${atts(e.attachments,e.file,e.fileName)}</div></div></article>`).join('');
+   document.getElementById('pub-proj-container').innerHTML=data.projects.map(p=>`<div class="project-card">${p.img?`<img src="${safeUrl(convertCloudImageUrl(p.img))}" alt="Screenshot ${esc(p.title)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:14px;cursor:zoom-in" onclick="openPortfolioAttachment('${encodeURIComponent(safeUrl(convertCloudImageUrl(p.img)))}','${encodeURIComponent('Screenshot '+(p.title||'Proyek'))}')">`:''}<div class="project-flags">${p.featured?'<span class="project-flag">⭐ Featured</span>':''}${p.best?'<span class="project-flag">🏆 Best Project</span>':''}${p.latest?'<span class="project-flag">🆕 Latest</span>':''}</div><div style="font-size:.75rem;color:#60a5fa;font-weight:700;text-transform:uppercase">${esc(p.category)}</div><h4 style="color:#fff;margin:7px 0">${esc(p.title)}</h4><div class="card-description">${expandableText(p.desc,`Proyek ${p.title}`)}</div>${p.objective?`<div style="margin-top:10px;color:#cbd5e1"><b>Tujuan & Manfaat:</b> ${expandableText(p.objective,'Tujuan Proyek')}</div>`:''}${p.tools?.length?`<div class="work-meta">${p.tools.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}${p.result?`<div style="margin-top:10px;color:#cbd5e1"><b>Hasil:</b> ${expandableText(p.result,'Hasil Proyek')}</div>`:''}<div class="attachment-list">${atts(p.attachments,p.link,'Lihat Proyek')}</div></div>`).join('');
+   document.getElementById('pub-cert-container').innerHTML=data.certificates.map(c=>`<div class="cert-card"><div style="font-size:.75rem;color:#60a5fa;font-weight:700;text-transform:uppercase">${esc(c.issuer)}</div><h4 style="color:#fff;margin:7px 0">${esc(c.title)}</h4><div class="card-description">${expandableText(c.desc,`Sertifikat ${c.title}`)}</div><div class="attachment-list">${atts(c.attachments,c.link,'Lihat Sertifikat')}</div></div>`).join('');
+   addPortfolioSearch();
+ };
+ function addPortfolioSearch(){['pub-proj-container','pub-cert-container'].forEach(id=>{const el=document.getElementById(id);if(!el||document.getElementById(id+'-search'))return;const input=document.createElement('input');input.id=id+'-search';input.className='portfolio-search';input.placeholder=id.includes('proj')?'Cari proyek...':'Cari sertifikat...';el.parentNode.insertBefore(input,el);input.addEventListener('input',()=>{const q=input.value.toLowerCase();el.querySelectorAll(':scope > *').forEach(card=>card.style.display=card.innerText.toLowerCase().includes(q)?'':'none');});});}
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeDescriptionModal();}});
+})();
+</script>
+
 </body>
 </html>
