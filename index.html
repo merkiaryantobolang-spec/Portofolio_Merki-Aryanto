@@ -579,9 +579,9 @@
                 photoPlaceholder.style.display = "flex";
             }
 
-            document.getElementById('pub-email-btn').href = "mailto:" + (data.profile.email || "");
-            document.getElementById('pub-wa-btn').href = "https://wa.me/" + (data.profile.wa || "");
-            document.getElementById('pub-linkedin-btn').href = data.profile.linkedin || "#";
+            // Kontak dirender sepenuhnya dari profile.customLinks oleh lapisan
+            // kontak dinamis di bawah. Jangan akses tombol statis lama yang
+            // sudah tidak ada di HTML (akses null menghentikan seluruh render).
 
             let track = document.getElementById('pub-school-track');
             let dots = document.getElementById('carousel-dots');
