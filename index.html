@@ -444,6 +444,7 @@
         function escapeHtmlEarly(value) {
             return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[ch]));
         }
+        window.esc = escapeHtmlEarly;
         function extractDriveIdEarly(rawUrl) {
             const raw = String(rawUrl || "").trim();
             if (!raw) return "";
@@ -615,7 +616,7 @@
                             </div>
                             <div class="cv-document-actions">
                                 <button type="button" onclick="openPdfDocument('${encodeURIComponent(cvFileLink)}','Curriculum Vitae Resmi')" class="project-link">🔎 Buka Tampilan Besar</button>
-                                <a class="project-link cv-download-link" href="${esc(getPdfDownloadUrl(cvFileLink))}" target="_blank" rel="noopener noreferrer">⬇ Unduh CV PDF Lengkap</a>
+                                <a class="project-link cv-download-link" href="${escapeHtmlEarly(getPdfDownloadUrl(cvFileLink))}" target="_blank" rel="noopener noreferrer">⬇ Unduh CV PDF Lengkap</a>
                             </div>
                             <p class="cv-scroll-hint">Geser/scroll pada area dokumen untuk membaca seluruh halaman CV. Jika pratinjau tidak muncul, pastikan izin Google Drive diatur ke <b>Siapa saja yang memiliki link — Pelihat</b>.</p>
                         ` : `<p class="cv-empty-note"><em>File CV resmi belum di-upload melalui panel admin.</em></p>`}
