@@ -375,7 +375,7 @@
                 const timeoutId = setTimeout(() => {
                     cleanup();
                     reject(new Error('Waktu akses Google Apps Script habis.'));
-                }, 10000);
+                }, 25000);
 
                 window[callbackName] = function(result) {
                     cleanup();
@@ -580,9 +580,33 @@
                 photoPlaceholder.style.display = "flex";
             }
 
-            // Kontak dirender sepenuhnya dari profile.customLinks oleh lapisan
-            // kontak dinamis di bawah. Jangan akses tombol statis lama yang
-            // sudah tidak ada di HTML (akses null menghentikan seluruh render).
+            const earlyContactBox = document.querySelector('.contact-badges');
+            if (earlyContactBox) {
+                earlyContactBox.replaceChildren();
+                const links = Array.isArray(data.profile.customLinks) ? data.profile.customLinks : [];
+                links.forEach(item => {
+                    const label = String(item?.label || item?.name || item?.title || 'Kontak').trim();
+                    let href = String(item?.url || item?.href || '').trim();
+                    if (!href) return;
+                    if (!/^(https?:\/\/|mailto:|tel:|sms:|tg:|whatsapp:)/i.test(href)) {
+                        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(href)) href = 'mailto:' + href;
+                        else {
+                            const digits = href.replace(/[\s\-().+]/g, '');
+                            if (/^\d{8,15}$/.test(digits)) href = 'https://wa.me/' + (digits.startsWith('0') ? '62' + digits.slice(1) : digits);
+                            else href = 'https://' + href.replace(/^\/+/, '');
+                        }
+                    }
+                    const a = document.createElement('a');
+                    a.className = 'contact-btn';
+                    a.dataset.dynamicContact = '1';
+                    a.href = href;
+                    a.textContent = (item?.icon ? String(item.icon) + ' ' : '') + label;
+                    a.target = /^https?:/i.test(href) ? '_blank' : '_self';
+                    a.rel = 'noopener noreferrer';
+                    earlyContactBox.appendChild(a);
+                });
+                earlyContactBox.style.display = earlyContactBox.children.length ? 'flex' : 'none';
+            }
 
             let track = document.getElementById('pub-school-track');
             let dots = document.getElementById('carousel-dots');
