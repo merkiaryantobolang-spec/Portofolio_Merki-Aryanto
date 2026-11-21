@@ -226,6 +226,31 @@
             body { overflow-x:hidden; }
         }
     </style>
+
+<style id="cv-mobile-button-standard-fix">
+@media (max-width: 700px) {
+  .cv-document-actions {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+  .cv-document-actions > *,
+  .cv-document-actions .project-link {
+    width: auto !important;
+    flex: 0 1 auto !important;
+    min-height: 36px !important;
+    padding: 8px 14px !important;
+    margin-top: 0 !important;
+    font-size: 0.82rem !important;
+    line-height: 1.2 !important;
+    border-radius: 8px !important;
+    justify-content: center !important;
+  }
+}
+</style>
 </head>
 <body>
 
@@ -615,7 +640,7 @@
                 let imgSrc = (edu.img && edu.img.trim() !== "") ? convertCloudImageUrl(edu.img) : `https://placehold.co/700x300/0f172a/60a5fa?text=${encodeURIComponent(edu.title || 'Sekolah')}`;
                 track.innerHTML += `
                     <div class="school-card">
-                        <div class="school-img-box"><img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${edu.title}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
+                        <div class="school-img-box"><img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${escapeHtmlEarly(edu.title).replace(/'/g, "\\'")}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
                         <div class="school-info"><h4>${edu.title}</h4><span class="school-period">${edu.period}</span><div class="school-description">${expandableText(edu.desc, `Deskripsi ${edu.title || 'Pendidikan'}`)}</div></div>
                     </div>`;
                 dots.innerHTML += `<span class="dot ${idx===0?'active':''}" onclick="goToSchool(${idx})"></span>`;
@@ -691,7 +716,7 @@
                 let imgSrc = (g.img && g.img.trim() !== "") ? convertCloudImageUrl(g.img) : "https://placehold.co/300x220/0f172a/60a5fa?text=Photo";
                 return `
                     <div class="gallery-item">
-                        <img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${g.caption}')" onerror="this.src='https://placehold.co/300x220/0f172a/60a5fa?text=Photo'">
+                        <img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${escapeHtmlEarly(g.caption).replace(/'/g, "\\'")}')" onerror="this.src='https://placehold.co/300x220/0f172a/60a5fa?text=Photo'">
                         <div class="gallery-caption">${g.caption}</div>
                     </div>`;
             }).join('');
@@ -1372,5 +1397,40 @@
 }
 </style>
 
+
+<style id="portfolio-audit-v5-polish">
+@media (max-width: 700px) {
+  .nav-arrow { top: 95px !important; width: 36px !important; height: 36px !important; }
+  .switch-skill-btn { width: auto !important; padding: 9px 18px !important; font-size: 0.85rem !important; min-height: 38px !important; }
+  .contact-badges .contact-btn { width: auto !important; flex: 0 1 auto !important; padding: 8px 14px !important; font-size: 0.84rem !important; min-height: 36px !important; }
+}
+</style>
+<script id="portfolio-audit-v5-runtime">
+(function() {
+  // 1. Resize background network canvas on window resize / phone rotation
+  window.addEventListener('resize', function() {
+    var c = document.getElementById('network-canvas');
+    if (c) {
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+    }
+  });
+
+  // 2. Hide search bar automatically when Projects or Certificates list is empty
+  var prevRender = window.renderAllPortfolio;
+  if (typeof prevRender === 'function') {
+    window.renderAllPortfolio = function(data) {
+      prevRender.call(this, data);
+      ['pub-proj-container', 'pub-cert-container'].forEach(function(id) {
+        var box = document.getElementById(id);
+        var search = document.getElementById(id + '-search');
+        if (box && search) {
+          search.style.display = box.children.length > 0 ? '' : 'none';
+        }
+      });
+    };
+  }
+})();
+</script>
 </body>
 </html>
