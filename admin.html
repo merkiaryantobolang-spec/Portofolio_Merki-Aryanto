@@ -18,7 +18,7 @@
         h1 { font-size: 1.8rem; margin-bottom: 8px; color: #60a5fa; text-align: center; }
         .subtitle { text-align: center; font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px; }
         
-        .reset-container { text-align: center; margin-bottom: 25px; }
+        .reset-container { text-align: center; margin-bottom: 25px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
         .btn-reset { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.4); padding: 8px 16px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
         .btn-reset:hover { background: rgba(239, 68, 68, 0.4); color: #fff; }
 
@@ -28,7 +28,7 @@
         .storage-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #3b82f6, #10b981); transition: width 0.4s ease; }
         .storage-info-text { font-size: 0.78rem; color: #94a3b8; margin-top: 8px; text-align: right; }
 
-        .section-box { background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 14px; padding: 22px; margin-bottom: 25px; }
+        .section-box { background: rgba(30, 41, 59, 0.56); border: 1px solid rgba(147, 197, 253, 0.16); border-radius: 14px; padding: 22px; margin-bottom: 25px; }
         .section-box h3 { font-size: 1.15rem; color: #93c5fd; margin-bottom: 15px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
         .input-group { margin-bottom: 14px; }
         label { display: block; font-size: 0.85rem; color: #cbd5e1; margin-bottom: 5px; font-weight: 600; }
@@ -37,10 +37,10 @@
         select option { background:#0f172a; color:#f8fafc; }
         input[type="file"]::file-selector-button { margin-right:10px; padding:7px 11px; border:1px solid rgba(147,197,253,.35); border-radius:7px; background:rgba(37,99,235,.28); color:#dbeafe; cursor:pointer; }
         input[type="file"]::file-selector-button:hover { background:rgba(37,99,235,.48); }
-        textarea { resize:vertical; height:90px; line-height:1.55; scrollbar-color:#475569 #0b1220; }
+        textarea { resize:vertical; min-height:82px; line-height:1.55; scrollbar-color:#475569 #0b1220; }
         input:focus, textarea:focus, select:focus { outline:none; border-color:#60a5fa; box-shadow:0 0 0 3px rgba(59,130,246,.13); }
-        .item-card-admin { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
-        .preview-thumb { max-height: 90px; border-radius: 6px; margin-top: 8px; display: none; border: 1px solid rgba(96, 165, 250, 0.4); }
+        .item-card-admin { background: rgba(15, 23, 42, 0.78); border: 1px solid rgba(147, 197, 253, 0.18); padding: 15px; border-radius: 10px; margin-bottom: 15px; }
+        .preview-thumb { max-height: 110px; border-radius: 8px; margin-top: 8px; display: none; border: 1px solid rgba(96, 165, 250, 0.4); object-fit: cover; }
         .btn { padding: 9px 18px; font-size: 0.88rem; font-weight: 600; border-radius: 8px; cursor: pointer; border: none; transition: all 0.2s ease; }
         .btn-blue { background: #2563eb; color: #fff; }
         .btn-blue:hover { background: #1d4ed8; }
@@ -49,8 +49,19 @@
         .floating-bar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 12px; z-index: 100; }
         .btn-save { padding: 14px 28px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; font-weight: 700; font-size: 1rem; border-radius: 50px; box-shadow: 0 5px 20px rgba(16, 185, 129, 0.5); cursor: pointer; border: none; }
         .btn-save:disabled { opacity: 0.6; cursor: wait; }
-        .btn-view { padding: 14px 24px; background: rgba(59, 130, 246, 0.9); color: white; font-weight: 600; font-size: 0.95rem; border-radius: 50px; text-decoration: none; box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4); }
+        .btn-view { padding: 14px 24px; background: rgba(59, 130, 246, 0.9); color: white; font-weight: 600; font-size: 0.95rem; border-radius: 50px; text-decoration: none; box-shadow: 0 5px 20px rgba(59, 130, 246, 0.4); border: none; cursor: pointer; }
         #cloud-status { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(3, 5, 8, 0.85); z-index: 999; display: flex; justify-content: center; align-items: center; font-size: 1.1rem; color: #60a5fa; font-weight: 600; text-align: center; padding: 20px; }
+        .upgrade-note { font-size: .78rem; color: #93c5fd; line-height: 1.5; margin-top: 6px; margin-bottom: 10px; }
+        .field-attachments { min-height: 110px !important; background: #0b1220 !important; color: #dbeafe !important; border-color: rgba(96, 165, 250, 0.38) !important; }
+        .attachment-admin-list { display: grid; gap: 7px; margin-top: 10px; }
+        .attachment-admin-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 9px 11px; border: 1px solid rgba(148, 163, 184, 0.25); border-radius: 9px; background: rgba(148, 163, 184, 0.07); }
+        .attachment-admin-name { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; font-size: .9rem; }
+        .attachment-admin-kind { font-size: .76rem; color: #94a3b8; }
+        .attachment-remove-btn { padding: 6px 10px !important; font-size: .78rem !important; margin-top: 0 !important; }
+        .contact-preview-chip { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; padding: 4px 10px; border-radius: 999px; background: rgba(59, 130, 246, 0.16); border: 1px solid rgba(96, 165, 250, 0.35); color: #93c5fd; font-size: 0.78rem; word-break: break-all; }
+        .checkbox-group { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
+        .checkbox-group label { display: inline-flex; align-items: center; gap: 6px; font-weight: 500; cursor: pointer; margin-bottom: 0; }
+        .checkbox-group input[type="checkbox"] { width: auto; accent-color: #3b82f6; }
 
         @media (max-width: 700px) {
             body { padding: 14px 10px 100px; }
@@ -62,13 +73,10 @@
             .floating-bar > * { flex: 1; text-align: center; padding: 12px 8px; font-size: .85rem; }
             .storage-box { padding: 13px; }
             input[type="text"], textarea, input[type="file"] { font-size: 16px; }
+            .attachment-admin-row { gap: 7px; }
+            .attachment-admin-name { flex-basis: 100%; }
         }
     </style>
-
-<style id="portfolio-stage3-admin-experience">
-.exp-attachment-manager .field-attachments,.project-attachment-manager .field-attachments{min-height:110px;line-height:1.55}.attachment-admin-list{display:grid;gap:7px;margin-top:10px}.attachment-admin-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 11px;border:1px solid rgba(148,163,184,.25);border-radius:9px;background:rgba(148,163,184,.07)}.attachment-admin-name{flex:1 1 220px;min-width:0;overflow-wrap:anywhere;font-size:.9rem}.attachment-admin-kind{font-size:.76rem;color:#94a3b8}.attachment-remove-btn{padding:6px 10px!important;font-size:.78rem!important}
-@media(max-width:700px){.attachment-admin-row{gap:7px}.attachment-admin-name{flex-basis:100%}}
-</style>
 </head>
 <body>
 
@@ -82,856 +90,1172 @@
     <a href="https://docs.google.com/spreadsheets/d/1mbTCck_Q4fRpzeK62qB6vLa4NLkmsQdtZvjOAgOXvo8/edit?usp=sharing" target="_blank" class="btn btn-blue" style="background: #0f9d58; text-decoration: none;">📊 Buka Sheets Rekruter</a>
 </div>
 
-    <div class="admin-wrapper">
-        <h1>Panel Admin Portofolio</h1>
-        <p class="subtitle">Kelola profil, file CV PDF, dan portofoliomu.</p>
+<div class="admin-wrapper">
+    <h1>Panel Admin Portofolio</h1>
+    <p class="subtitle">Kelola profil, kontak, file CV PDF, dan portofoliomu secara lengkap.</p>
 
-        <div class="reset-container">
-            <button class="btn-reset" onclick="resetAllData()">🗑️ Kosongkan / Reset Semua Data Lama</button>
+    <div class="reset-container">
+        <button type="button" class="btn-reset" onclick="resetAllData()">🗑️ Kosongkan / Reset Semua Data Lama</button>
+    </div>
+
+    <div class="storage-box">
+        <div class="storage-header">
+            <span>📊 Kapasitas Penyimpanan Cloud Multi-Sel Google Sheets (± 5 MB)</span>
+            <span id="storage-percentage">0%</span>
         </div>
-
-        <div class="storage-box">
-            <div class="storage-header">
-                <span>📊 Kapasitas Penyimpanan Data (LocalStorage & Cloud)</span>
-                <span id="storage-percentage">0%</span>
-            </div>
-            <div class="storage-bar-bg">
-                <div class="storage-bar-fill" id="storage-bar-fill"></div>
-            </div>
-            <div class="storage-info-text" id="storage-info-text">Terpakai: 0 KB dari ± 5 MB (5,120 KB)</div>
+        <div class="storage-bar-bg">
+            <div class="storage-bar-fill" id="storage-bar-fill"></div>
         </div>
+        <div class="storage-info-text" id="storage-info-text">Terpakai: 0 KB dari 5 MB (Otomatis dipecah per 40.000 karakter di Google Sheets)</div>
+    </div>
 
-        <!-- 1. PROFIL -->
-        <div class="section-box">
-            <h3>1. Profil Utama</h3>
-            <div class="input-group"><label>Nama Lengkap</label><input type="text" id="p-name" placeholder=""></div>
-            <div class="input-group"><label>Deskripsi / Bio Singkat</label><textarea id="p-desc" placeholder=""></textarea></div>
-            <div class="input-group">
-                <label>Foto Profil (Upload Gambar atau Paste URL)</label>
-                <input type="file" accept="image/*" onchange="processImageUpload(this, 'p-photo', 'prev-p-photo')">
-                <input type="text" id="p-photo" value="" placeholder="Atau paste URL foto di sini..." style="margin-top: 8px;" oninput="updateStorageMeter()">
-                <img id="prev-p-photo" class="preview-thumb">
-            </div>
-            <div class="input-group">
-                <label>Daftar Kontak dan Media Sosial (Bebas Diatur)</label>
-                <div class="upgrade-note">Tidak ada kontak wajib. Tambahkan, ubah nama, edit tautan, atau hapus jenis kontak kapan saja. Contoh URL: https://wa.me/628..., mailto:nama@email.com, tel:+628..., https://instagram.com/akun, https://t.me/username, atau tautan situs lainnya. Urutan tombol di Public mengikuti urutan daftar di sini.</div>
-                <div id="custom-links-admin"></div>
-                <button type="button" class="btn btn-blue" onclick="addCustomLink()">＋ Tambah Kontak</button>
-            </div>
+    <!-- 1. PROFIL -->
+    <div class="section-box">
+        <h3>1. Profil Utama</h3>
+        <div class="input-group"><label>Nama Lengkap</label><input type="text" id="p-name" placeholder="Contoh: Merki Aryanto" oninput="updateStorageMeter()"></div>
+        <div class="input-group"><label>Deskripsi / Bio Singkat</label><textarea id="p-desc" placeholder="Tuliskan ringkasan profil profesional Anda..." oninput="updateStorageMeter()"></textarea></div>
+        <div class="input-group">
+            <label>Foto Profil (Upload Gambar atau Paste URL Google Drive)</label>
+            <input type="file" accept="image/*" onchange="processImageUpload(this, 'p-photo', 'prev-p-photo')">
+            <input type="text" id="p-photo" value="" placeholder="Atau paste URL foto / link Google Drive di sini..." style="margin-top: 8px;" oninput="syncPreviewImage('p-photo', 'prev-p-photo'); updateStorageMeter();">
+            <img id="prev-p-photo" class="preview-thumb">
         </div>
-
-        <!-- 2. UPLOAD FILE CV RESMI -->
-        <div class="section-box">
-            <h3>2. Official CV Document (PDF)</h3>
-            <div class="input-group">
-                <label>Upload File CV PDF (Bisa dilihat langsung & didownload pengunjung)</label>
-                <input type="file" accept=".pdf" onchange="encodeFileAsURL(this, 'p-cv-file')">
-                <input type="text" id="p-cv-file" value="" placeholder="Atau paste URL file PDF CV di sini..." style="margin-top: 8px;" oninput="updateStorageMeter()">
-            </div>
-        </div>
-
-        <!-- 3. RIWAYAT PENDIDIKAN -->
-        <div class="section-box">
-            <h3>3. Riwayat Pendidikan & Sekolah <button class="btn btn-blue" onclick="addEdu()">+ Tambah Sekolah</button></h3>
-            <div id="edu-container"></div>
-        </div>
-
-        <!-- 4. SOFT SKILLS -->
-        <div class="section-box">
-            <h3>4. Soft Skills <button class="btn btn-blue" onclick="addSoft()">+ Tambah</button></h3>
-            <div id="soft-container"></div>
-        </div>
-
-        <!-- 5. HARD SKILLS -->
-        <div class="section-box">
-            <h3>5. Hard Skills <button class="btn btn-blue" onclick="addHard()">+ Tambah</button></h3>
-            <div id="hard-container"></div>
-        </div>
-
-        <!-- 6. PENGALAMAN -->
-        <div class="section-box">
-            <h3>6. Pengalaman Kerja <button class="btn btn-blue" onclick="addExp()">+ Tambah Pengalaman</button></h3>
-            <div id="exp-container"></div>
-        </div>
-
-        <!-- 7. MY PROJECTS -->
-        <div class="section-box">
-            <h3>7. My Projects <button class="btn btn-blue" onclick="addProj()">+ Tambah Project</button></h3>
-            <div id="proj-container"></div>
-        </div>
-
-        <!-- 8. SERTIFIKAT -->
-        <div class="section-box">
-            <h3>8. Certificates & Credentials <button class="btn btn-blue" onclick="addCert()">+ Tambah Sertifikat</button></h3>
-            <div id="cert-container"></div>
-        </div>
-
-        <!-- 9. GALERI FOTO -->
-        <div class="section-box">
-            <h3>9. Gallery & Documentation <button class="btn btn-blue" onclick="addGal()">+ Tambah Foto Galeri</button></h3>
-            <div id="gal-container"></div>
+        <div class="input-group">
+            <label>Daftar Kontak dan Media Sosial (Otomatis Format URL Valid)</label>
+            <div class="upgrade-note">Anda cukup isi nomor HP/WA (contoh: <code>082142412131</code>), alamat email (contoh: <code>merkiaryanto.bolang@gmail.com</code>), atau link LinkedIn/GitHub/Instagram — sistem akan otomatis mengubahnya menjadi tautan <code>https://wa.me/...</code> atau <code>mailto:...</code> agar tombol muncul & bisa diklik di halaman Publik.</div>
+            <div id="custom-links-admin"></div>
+            <button type="button" class="btn btn-blue" onclick="addCustomLink()">＋ Tambah Kontak</button>
         </div>
     </div>
 
-    <div class="floating-bar">
-        <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
-        <button class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
+    <!-- 2. UPLOAD FILE CV RESMI -->
+    <div class="section-box">
+        <h3>2. Official CV Document (PDF)</h3>
+        <div class="input-group">
+            <label>Upload File CV PDF atau Tempel Link Google Drive CV</label>
+            <input type="file" accept=".pdf" onchange="encodeFileAsURL(this, 'p-cv-file')">
+            <input type="text" id="p-cv-file" value="" placeholder="Atau paste URL file PDF CV / Google Drive di sini..." style="margin-top: 8px;" oninput="updateStorageMeter()">
+            <div class="upgrade-note">Anda bisa langsung mengupload file PDF dari perangkat (otomatis dikompresi & dipecah ke beberapa baris di Google Sheets) atau menempel tautan berbagi Google Drive (<em>Siapa saja yang memiliki link</em>).</div>
+        </div>
     </div>
 
-    <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7TCNHMCeWz-iU-bkHKf1pKKc83XsHiZNic3T4kkz59BY_yd_EVOTcbySaVgcjIi0S/exec";
+    <!-- 3. RIWAYAT PENDIDIKAN -->
+    <div class="section-box">
+        <h3>3. Riwayat Pendidikan & Sekolah <button type="button" class="btn btn-blue" onclick="addEdu()">+ Tambah Sekolah</button></h3>
+        <div id="edu-container"></div>
+    </div>
 
-        let emptyData = {
-            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
-            education: [],
-            softSkills: [],
-            hardSkills: [],
-            experiences: [],
-            projects: [],
-            certificates: [],
-            gallery: []
+    <!-- 4. SOFT SKILLS -->
+    <div class="section-box">
+        <h3>4. Soft Skills <button type="button" class="btn btn-blue" onclick="addSoft()">+ Tambah</button></h3>
+        <div id="soft-container"></div>
+    </div>
+
+    <!-- 5. HARD SKILLS -->
+    <div class="section-box">
+        <h3>5. Hard Skills <button type="button" class="btn btn-blue" onclick="addHard()">+ Tambah</button></h3>
+        <div id="hard-container"></div>
+    </div>
+
+    <!-- 6. PENGALAMAN -->
+    <div class="section-box">
+        <h3>6. Pengalaman Kerja <button type="button" class="btn btn-blue" onclick="addExp()">+ Tambah Pengalaman</button></h3>
+        <div id="exp-container"></div>
+    </div>
+
+    <!-- 7. MY PROJECTS -->
+    <div class="section-box">
+        <h3>7. My Projects <button type="button" class="btn btn-blue" onclick="addProj()">+ Tambah Project</button></h3>
+        <div id="proj-container"></div>
+    </div>
+
+    <!-- 8. SERTIFIKAT -->
+    <div class="section-box">
+        <h3>8. Certificates & Credentials <button type="button" class="btn btn-blue" onclick="addCert()">+ Tambah Sertifikat</button></h3>
+        <div id="cert-container"></div>
+    </div>
+
+    <!-- 9. GALERI FOTO -->
+    <div class="section-box">
+        <h3>9. Gallery & Documentation <button type="button" class="btn btn-blue" onclick="addGal()">+ Tambah Foto Galeri</button></h3>
+        <div id="gal-container"></div>
+    </div>
+</div>
+
+<div class="floating-bar">
+    <button id="btn-preview-draft" class="btn-view" type="button" onclick="previewPortfolioDraft()">Preview Draft</button>
+    <button class="btn-view" type="button" onclick="generatePortfolioBook()">Portfolio Book PDF</button>
+    <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+    <button type="button" class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
+</div>
+
+<script>
+(function() {
+    'use strict';
+
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7TCNHMCeWz-iU-bkHKf1pKKc83XsHiZNic3T4kkz59BY_yd_EVOTcbySaVgcjIi0S/exec";
+    const CHUNK_SIZE = 40000; // Selaras dengan CHUNK_SIZE di Google Apps Script (40.000 karakter/baris)
+    const MAX_TOTAL_STORAGE_BYTES = 5 * 1024 * 1024; // Kapasitas total hingga ± 5 MB (multi-baris di kolom A)
+
+    const emptyData = {
+        profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
+        education: [],
+        softSkills: [],
+        hardSkills: [],
+        experiences: [],
+        projects: [],
+        certificates: [],
+        gallery: []
+    };
+
+    const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+
+    const val = (node, sel) => node.querySelector(sel)?.value || '';
+
+    // Konversi otomatis tautan Google Drive view/share menjadi direct image URL saat ditampilkan di preview
+    function resolveDisplayUrl(url) {
+        const raw = String(url || '').trim();
+        if (!raw) return '';
+        const m1 = raw.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i);
+        if (m1) return 'https://lh3.googleusercontent.com/d/' + m1[1];
+        const m2 = raw.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/i);
+        if (m2) return 'https://lh3.googleusercontent.com/d/' + m2[1];
+        return raw;
+    }
+
+    // Normalisasi otomatis input kontak (nomor HP/WA, email, domain tanpa https://) agar selalu valid di Public & Cloud
+    function normalizeContactUrl(label, rawUrl) {
+        const lbl = String(label || '').trim().toLowerCase();
+        let u = String(rawUrl || '').trim();
+        if (!u) return '';
+
+        // Jika sudah punya skema valid
+        if (/^(https?:\/\/|mailto:|tel:)/i.test(u)) return u;
+
+        // Deteksi nomor telepon / WhatsApp (misal: 082142412131, 6282142412131, +62 821-4241-2131)
+        const digitsOnly = u.replace(/[\s\-().+]/g, '');
+        if (/^\d{8,15}$/.test(digitsOnly)) {
+            let intl = digitsOnly;
+            if (intl.startsWith('0')) intl = '62' + intl.slice(1);
+            if (lbl.includes('telp') || lbl.includes('telepon') || lbl.includes('phone') || lbl.includes('call')) {
+                return 'tel:+' + intl;
+            }
+            return 'https://wa.me/' + intl;
+        }
+
+        // Deteksi alamat email (misal: merkiaryanto.bolang@gmail.com)
+        if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(u)) {
+            return 'mailto:' + u;
+        }
+
+        // Deteksi username Instagram / Telegram dengan @
+        if (u.startsWith('@')) {
+            const handle = u.slice(1);
+            if (lbl.includes('tele')) return 'https://t.me/' + handle;
+            if (lbl.includes('tiktok')) return 'https://www.tiktok.com/@' + handle;
+            return 'https://instagram.com/' + handle;
+        }
+
+        // Jika domain tanpa protokol (misal: linkedin.com/in/merkiaryanto atau github.com/merki)
+        return 'https://' + u.replace(/^\/+/, '');
+    }
+
+    function detectDefaultIcon(label, url) {
+        const s = (String(label || '') + ' ' + String(url || '')).toLowerCase();
+        if (s.includes('whatsapp') || s.includes('wa.me') || s === 'wa') return '💬';
+        if (s.includes('mail') || s.includes('gmail')) return '✉️';
+        if (s.includes('linkedin')) return 'in';
+        if (s.includes('github')) return '⌘';
+        if (s.includes('instagram') || s.includes('ig')) return '📸';
+        if (s.includes('telegram') || s.includes('t.me')) return '✈️';
+        if (s.includes('tel:')) return '📞';
+        return '🔗';
+    }
+
+    function normalizeContactLink(x) {
+        const rawLabel = String(x?.label || x?.name || x?.title || '').trim();
+        const rawUrl = String(x?.url || x?.href || '').trim();
+        const url = normalizeContactUrl(rawLabel, rawUrl);
+        let label = rawLabel;
+        if (!label || label.toLowerCase() === 'tautan') {
+            if (url.startsWith('https://wa.me/')) label = 'WhatsApp';
+            else if (url.startsWith('mailto:')) label = 'Email';
+            else if (url.includes('linkedin.com')) label = 'LinkedIn';
+            else if (url.includes('github.com')) label = 'GitHub';
+            else if (url.includes('instagram.com')) label = 'Instagram';
+            else if (url) label = 'Kontak';
+        }
+        const rawIcon = String(x?.icon || '').trim();
+        const icon = (!rawIcon || rawIcon === '🔗') ? detectDefaultIcon(label, url) : rawIcon;
+        return { label, url, icon };
+    }
+
+    function parseAttachments(raw) {
+        return (raw || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean).map(line => {
+            const i = line.indexOf('|');
+            return i < 0 ? { name: 'Lampiran', url: line } : { name: line.slice(0, i).trim() || 'Lampiran', url: line.slice(i + 1).trim() };
+        }).filter(x => x.url);
+    }
+
+    function formatAttachments(arr) {
+        return (Array.isArray(arr) ? arr : [])
+            .map(x => (x.name || 'Lampiran') + ' | ' + (x.url || x.link || ''))
+            .filter(x => !x.endsWith('| '))
+            .join('\n');
+    }
+
+    function normalizePortfolio(data) {
+        const source = (data && typeof data === 'object') ? data : {};
+        const profile = { ...emptyData.profile, ...(source.profile || {}) };
+
+        let rawLinks = Array.isArray(profile.customLinks) ? profile.customLinks
+            : (Array.isArray(profile.socialLinks) ? profile.socialLinks
+            : (Array.isArray(source.customLinks) ? source.customLinks : []));
+
+        let savedLinks = rawLinks
+            .map(normalizeContactLink)
+            .filter(x => x.url !== '');
+
+        if (!savedLinks.length) {
+            const legacy = [
+                { label: 'WhatsApp', url: profile.wa || '', icon: '💬' },
+                { label: 'Email', url: profile.email || '', icon: '✉️' },
+                { label: 'LinkedIn', url: profile.linkedin || '', icon: 'in' },
+                { label: 'GitHub', url: profile.github || '', icon: '⌘' }
+            ].map(normalizeContactLink).filter(x => x.url !== '');
+            savedLinks = legacy;
+        }
+
+        // Sinkronkan kembali field legacy (wa, email, linkedin, github) agar halaman Public versi lama maupun baru tetap membacanya!
+        let waVal = '', emailVal = '', linkedinVal = '', githubVal = '';
+        savedLinks.forEach(item => {
+            const l = item.label.toLowerCase();
+            const u = item.url;
+            if (!waVal && (l.includes('whatsapp') || u.includes('wa.me/'))) {
+                waVal = u.replace(/^https?:\/\/wa\.me\//i, '').replace(/\D/g, '') || u;
+            } else if (!emailVal && (l.includes('email') || u.startsWith('mailto:'))) {
+                emailVal = u.replace(/^mailto:/i, '');
+            } else if (!linkedinVal && (l.includes('linkedin') || u.includes('linkedin.com'))) {
+                linkedinVal = u;
+            } else if (!githubVal && (l.includes('github') || u.includes('github.com'))) {
+                githubVal = u;
+            }
+        });
+
+        profile.wa = waVal;
+        profile.email = emailVal;
+        profile.linkedin = linkedinVal;
+        profile.github = githubVal;
+        profile.customLinks = savedLinks;
+
+        return {
+            ...source,
+            profile,
+            education: Array.isArray(source.education) ? source.education : [],
+            softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
+            hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
+            experiences: Array.isArray(source.experiences) ? source.experiences : [],
+            projects: Array.isArray(source.projects) ? source.projects : [],
+            certificates: Array.isArray(source.certificates) ? source.certificates : [],
+            gallery: Array.isArray(source.gallery) ? source.gallery : []
         };
+    }
 
-        function normalizePortfolio(data) {
-            const source = (data && typeof data === 'object') ? data : {};
-            const profile = { ...emptyData.profile, ...(source.profile || {}) };
-            let savedLinks = (Array.isArray(profile.customLinks) && profile.customLinks.length) ? profile.customLinks
-                : (Array.isArray(profile.socialLinks) && profile.socialLinks.length ? profile.socialLinks
-                : (Array.isArray(source.customLinks) ? source.customLinks : (Array.isArray(profile.customLinks) ? profile.customLinks : [])));
-            if (!savedLinks.length) {
-                const legacy = [
-                    {label:'WhatsApp', url:profile.wa ? (/^https?:/i.test(profile.wa) ? profile.wa : 'https://wa.me/'+String(profile.wa).replace(/\D/g,'')) : '', icon:'💬'},
-                    {label:'Email', url:profile.email ? (/^mailto:/i.test(profile.email) ? profile.email : 'mailto:'+profile.email) : '', icon:'✉️'},
-                    {label:'LinkedIn', url:profile.linkedin || '', icon:'in'},
-                    {label:'GitHub', url:profile.github || '', icon:'⌘'}
-                ].filter(x=>x.url);
-                savedLinks = legacy;
-            }
-            profile.customLinks = savedLinks;
-            return {
-                ...source,
-                profile,
-                education: Array.isArray(source.education) ? source.education : [],
-                softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
-                hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
-                experiences: Array.isArray(source.experiences) ? source.experiences : [],
-                projects: Array.isArray(source.projects) ? source.projects : [],
-                certificates: Array.isArray(source.certificates) ? source.certificates : [],
-                gallery: Array.isArray(source.gallery) ? source.gallery : []
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function setCloudMessage(message, color) {
+        const status = document.getElementById('cloud-status');
+        if (!status) return;
+        status.textContent = message;
+        if (color) status.style.color = color;
+        status.style.display = 'flex';
+    }
+
+    function readPortfolioFromCloud() {
+        return new Promise((resolve, reject) => {
+            const callbackName = '__portfolioCallback_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+            const script = document.createElement('script');
+            let finished = false;
+
+            const cleanup = () => {
+                if (finished) return;
+                finished = true;
+                clearTimeout(timeoutId);
+                script.onerror = null;
+                if (script.parentNode) script.parentNode.removeChild(script);
+                try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
             };
-        }
 
-        function delay(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
+            const timeoutId = setTimeout(() => {
+                cleanup();
+                reject(new Error('Waktu akses Google Apps Script habis. Periksa deployment dan koneksi internet.'));
+            }, 20000);
 
-        function setCloudMessage(message, color) {
-            const status = document.getElementById('cloud-status');
-            if (!status) return;
-            status.textContent = message;
-            if (color) status.style.color = color;
-            status.style.display = 'flex';
-        }
-
-        function readPortfolioFromCloud() {
-            return new Promise((resolve, reject) => {
-                const callbackName = '__portfolioCallback_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
-                const script = document.createElement('script');
-                let finished = false;
-
-                const cleanup = () => {
-                    if (finished) return;
-                    finished = true;
-                    clearTimeout(timeoutId);
-                    script.onerror = null;
-                    if (script.parentNode) script.parentNode.removeChild(script);
-                    try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
-                };
-
-                const timeoutId = setTimeout(() => {
-                    cleanup();
-                    reject(new Error('Waktu akses Google Apps Script habis. Periksa deployment dan koneksi internet.'));
-                }, 20000);
-
-                window[callbackName] = function(result) {
-                    cleanup();
-                    if (result && result.profile) {
-                        resolve(normalizePortfolio(result));
-                    } else if (result && result.status === 'empty') {
-                        resolve(normalizePortfolio(emptyData));
-                    } else {
-                        reject(new Error((result && result.message) || 'Respons Google Sheets tidak dikenali.'));
-                    }
-                };
-
-                script.onerror = function() {
-                    cleanup();
-                    reject(new Error('Google Apps Script tidak dapat dimuat. Periksa URL Web App, akses Anyone, dan deployment versi terbaru.'));
-                };
-
-                script.src = SCRIPT_URL
-                    + '?action=getPortfolio'
-                    + '&callback=' + encodeURIComponent(callbackName)
-                    + '&t=' + Date.now();
-
-                document.head.appendChild(script);
-            });
-        }
-
-        // PERBAIKAN UTAMA: Form langsung dikirim ke iframe target tanpa menunggu load awal yang rawan terlewat.
-        function postPayloadWithoutCors(payload) {
-            return new Promise((resolve, reject) => {
-                const frameName = 'gasPostFrame_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
-                const iframe = document.createElement('iframe');
-                iframe.name = frameName;
-                iframe.title = 'Proses penyimpanan data';
-                iframe.style.display = 'none';
-                iframe.setAttribute('aria-hidden', 'true');
-
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = SCRIPT_URL;
-                form.target = frameName;
-                form.enctype = 'application/x-www-form-urlencoded';
-                form.acceptCharset = 'UTF-8';
-                form.style.display = 'none';
-
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'payload';
-                input.value = JSON.stringify(payload);
-                form.appendChild(input);
-
-                let settled = false;
-                const finish = (error) => {
-                    if (settled) return;
-                    settled = true;
-                    clearTimeout(timer);
-                    iframe.removeEventListener('load', onLoad);
-                    iframe.removeEventListener('error', onError);
-                    setTimeout(() => {
-                        if (form.parentNode) form.parentNode.removeChild(form);
-                        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-                    }, 300);
-                    if (error) reject(error);
-                    else resolve(true);
-                };
-
-                const onLoad = () => finish();
-                const onError = () => finish(new Error('POST ke Google Apps Script gagal dimuat.'));
-                const timer = setTimeout(() => {
-                    finish(new Error('Waktu pengiriman ke Google Apps Script habis.'));
-                }, 30000);
-
-                iframe.addEventListener('load', onLoad, { once: true });
-                iframe.addEventListener('error', onError, { once: true });
-
-                document.body.appendChild(iframe);
-                document.body.appendChild(form);
-
-                try {
-                    form.submit();
-                } catch (error) {
-                    finish(error);
+            window[callbackName] = function(result) {
+                cleanup();
+                if (result && result.profile) {
+                    resolve(normalizePortfolio(result));
+                } else if (result && result.status === 'empty') {
+                    resolve(normalizePortfolio(emptyData));
+                } else {
+                    reject(new Error((result && result.message) || 'Respons Google Sheets tidak dikenali.'));
                 }
-            });
-        }
+            };
 
-        function stableJson(value) {
-            if (Array.isArray(value)) return '[' + value.map(stableJson).join(',') + ']';
-            if (value && typeof value === 'object') {
-                return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + stableJson(value[key])).join(',') + '}';
-            }
-            return JSON.stringify(value);
-        }
+            script.onerror = function() {
+                cleanup();
+                reject(new Error('Google Apps Script tidak dapat dimuat. Periksa URL Web App, akses Anyone, dan deployment versi terbaru.'));
+            };
 
-        async function sendPortfolioAndVerify(data) {
-            const normalized = normalizePortfolio(data);
-            await postPayloadWithoutCors({ action: 'savePortfolio', data: normalized });
-            const expected = stableJson(normalizePortfolio(normalized));
-            let lastError = null;
-            for (let attempt = 0; attempt < 20; attempt++) {
-                await delay(attempt === 0 ? 400 : 800);
-                try {
-                    const savedData = await readPortfolioFromCloud();
-                    if (stableJson(normalizePortfolio(savedData)) === expected) return true;
-                    lastError = new Error('Data yang dibaca ulang belum sama dengan data yang dikirim.');
-                } catch (error) { lastError = error; }
-            }
-            throw new Error('Penyimpanan belum terverifikasi dari Google Sheets. ' + (lastError?.message || 'Periksa deployment Apps Script.'));
-        }
+            script.src = SCRIPT_URL
+                + '?action=getPortfolio'
+                + '&callback=' + encodeURIComponent(callbackName)
+                + '&t=' + Date.now();
 
-        window.onload = async function() {
-            let data = normalizePortfolio(emptyData);
-            let cloudLoaded = false;
+            document.head.appendChild(script);
+        });
+    }
 
-            setCloudMessage('⏳ Menyinkronkan data dengan Google Sheets...', '#60a5fa');
+    function postPayloadWithoutCors(payload) {
+        return new Promise((resolve, reject) => {
+            const frameName = 'gasPostFrame_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+            const iframe = document.createElement('iframe');
+            iframe.name = frameName;
+            iframe.title = 'Proses penyimpanan data';
+            iframe.style.display = 'none';
+            iframe.setAttribute('aria-hidden', 'true');
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = SCRIPT_URL;
+            form.target = frameName;
+            form.enctype = 'application/x-www-form-urlencoded';
+            form.acceptCharset = 'UTF-8';
+            form.style.display = 'none';
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'payload';
+            input.value = JSON.stringify(payload);
+            form.appendChild(input);
+
+            let settled = false;
+            const finish = (error) => {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                iframe.removeEventListener('load', onLoad);
+                iframe.removeEventListener('error', onError);
+                setTimeout(() => {
+                    if (form.parentNode) form.parentNode.removeChild(form);
+                    if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+                }, 300);
+                if (error) reject(error);
+                else resolve(true);
+            };
+
+            const onLoad = () => finish();
+            const onError = () => finish(new Error('POST ke Google Apps Script gagal dimuat.'));
+            const timer = setTimeout(() => {
+                finish(new Error('Waktu pengiriman ke Google Apps Script habis.'));
+            }, 30000);
+
+            iframe.addEventListener('load', onLoad, { once: true });
+            iframe.addEventListener('error', onError, { once: true });
+
+            document.body.appendChild(iframe);
+            document.body.appendChild(form);
 
             try {
-                data = await readPortfolioFromCloud();
-                cloudLoaded = true;
-                try {
-                    localStorage.setItem('portfolio_data', JSON.stringify(data));
-                } catch (storageError) {
-                    console.warn('Data cloud berhasil dibaca, tetapi cache browser tidak dapat diperbarui:', storageError);
+                form.submit();
+            } catch (error) {
+                finish(error);
+            }
+        });
+    }
+
+    function stableJson(value) {
+        if (Array.isArray(value)) return '[' + value.map(stableJson).join(',') + ']';
+        if (value && typeof value === 'object') {
+            return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + stableJson(value[key])).join(',') + '}';
+        }
+        return JSON.stringify(value);
+    }
+
+    async function sendPortfolioAndVerify(data) {
+        const normalized = normalizePortfolio(data);
+        const serialized = JSON.stringify(normalized);
+        const byteSize = new Blob([serialized]).size;
+        if (byteSize > MAX_TOTAL_STORAGE_BYTES) {
+            throw new Error(
+                'Total ukuran data (' + (byteSize / (1024 * 1024)).toFixed(2) + ' MB) melebihi batas maksimal 5 MB!\n' +
+                'Gunakan tautan Google Drive untuk dokumen atau video yang sangat besar.'
+            );
+        }
+
+        await postPayloadWithoutCors({ action: 'savePortfolio', data: normalized });
+        const expected = stableJson(normalized);
+        let lastError = null;
+        for (let attempt = 0; attempt < 16; attempt++) {
+            await delay(attempt === 0 ? 500 : 850);
+            try {
+                const savedData = await readPortfolioFromCloud();
+                if (stableJson(normalizePortfolio(savedData)) === expected) return true;
+                lastError = new Error('Data yang dibaca ulang belum sama dengan data yang dikirim.');
+            } catch (error) {
+                lastError = error;
+            }
+        }
+        throw new Error('Penyimpanan belum terverifikasi dari Google Sheets. ' + (lastError?.message || 'Periksa deployment Apps Script.'));
+    }
+
+    window.syncPreviewImage = function(inputId, previewId) {
+        const inp = document.getElementById(inputId);
+        const img = document.getElementById(previewId);
+        if (!inp || !img) return;
+        const src = resolveDisplayUrl(inp.value);
+        if (src) {
+            img.src = src;
+            img.style.display = 'block';
+        } else {
+            img.removeAttribute('src');
+            img.style.display = 'none';
+        }
+    };
+
+    window.updateStorageMeter = function() {
+        try {
+            const currentData = normalizePortfolio(window.loadCurrentData());
+            const jsonString = JSON.stringify(currentData);
+            const bytesUsed = new Blob([jsonString]).size;
+            const kbUsed = (bytesUsed / 1024).toFixed(1);
+            const mbUsed = (bytesUsed / (1024 * 1024)).toFixed(2);
+            const chunkCount = Math.max(1, Math.ceil(jsonString.length / CHUNK_SIZE));
+
+            let percentage = ((bytesUsed / MAX_TOTAL_STORAGE_BYTES) * 100).toFixed(1);
+            if (percentage > 100) percentage = 100;
+
+            const fillBar = document.getElementById('storage-bar-fill');
+            const percentText = document.getElementById('storage-percentage');
+            const infoText = document.getElementById('storage-info-text');
+
+            if (fillBar) {
+                fillBar.style.width = percentage + '%';
+                fillBar.style.background = bytesUsed > MAX_TOTAL_STORAGE_BYTES
+                    ? 'linear-gradient(90deg, #ef4444, #dc2626)'
+                    : (bytesUsed > MAX_TOTAL_STORAGE_BYTES * 0.8 ? 'linear-gradient(90deg, #f59e0b, #ea580c)' : 'linear-gradient(90deg, #3b82f6, #10b981)');
+            }
+            if (percentText) percentText.innerText = percentage + '% terpakai';
+            if (infoText) {
+                const sizeLabel = bytesUsed < 1024 * 1024 ? `${kbUsed} KB` : `${mbUsed} MB`;
+                infoText.innerText = `Terpakai: ${sizeLabel} dari 5 MB (${chunkCount} bagian baris di Google Sheets)`;
+                infoText.style.color = bytesUsed > MAX_TOTAL_STORAGE_BYTES ? '#f87171' : '#94a3b8';
+            }
+        } catch (e) {}
+    };
+
+    window.processImageUpload = function(element, targetInputId, previewImgId) {
+        const file = element.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 800;
+                let scaleSize = MAX_WIDTH / img.width;
+                if (scaleSize > 1) scaleSize = 1;
+
+                canvas.width = Math.round(img.width * scaleSize);
+                canvas.height = Math.round(img.height * scaleSize);
+
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.72);
+                const target = document.getElementById(targetInputId);
+                if (target) target.value = compressedDataUrl;
+
+                if (previewImgId) {
+                    const prevEl = document.getElementById(previewImgId);
+                    if (prevEl) {
+                        prevEl.src = compressedDataUrl;
+                        prevEl.style.display = 'block';
+                    }
                 }
-                setCloudMessage('✅ Data portofolio berhasil dimuat dari Google Sheets.', '#10b981');
-            } catch (cloudError) {
-                try {
-                    const saved = localStorage.getItem('portfolio_data');
-                    if (saved) data = normalizePortfolio(JSON.parse(saved));
-                } catch (localError) {
-                    console.warn('Data lokal tidak dapat dibaca:', localError);
-                }
-                setCloudMessage('⚠️ Google Sheets belum dapat diakses. Menampilkan data cadangan browser. ' + cloudError.message, '#fbbf24');
-                console.error('Gagal memuat data cloud:', cloudError);
+                window.updateStorageMeter();
+                alert('Sukses! Gambar "' + file.name + '" berhasil dikompresi (' + (compressedDataUrl.length / 1024).toFixed(1) + ' KB).');
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
+
+    window.encodeFileAsURL = async function(element, targetInputId) {
+        const file = element.files[0];
+        if (!file) return;
+
+        if (file.type.startsWith('image/')) {
+            window.processImageUpload(element, targetInputId, null);
+            return;
+        }
+
+        const applyEncoded = (dataUrl) => {
+            if (dataUrl.length > 1800000) {
+                alert(
+                    '⚠️ File "' + file.name + '" setelah dikompresi berukuran ' + (dataUrl.length / (1024 * 1024)).toFixed(2) + ' MB (batas maksimal per file langsung adalah 1,8 MB).\n\n' +
+                    'Untuk file di atas 1,8 MB, upload ke Google Drive lalu tempel URL-nya di kolom link.'
+                );
+                element.value = '';
+                return;
+            }
+            const target = document.getElementById(targetInputId);
+            if (target) target.value = dataUrl;
+            window.updateStorageMeter();
+            alert('Sukses! Berkas "' + file.name + '" berhasil dimuat.');
+        };
+
+        if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                const compressedPdfBytes = await pdfDoc.save({ useObjectStreams: true });
+                const blob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
+                const reader = new FileReader();
+                reader.onloadend = () => applyEncoded(reader.result);
+                reader.readAsDataURL(blob);
+                return;
+            } catch (err) {}
+        }
+
+        const reader = new FileReader();
+        reader.onloadend = () => applyEncoded(reader.result);
+        reader.readAsDataURL(file);
+    };
+
+    // --- KONTAK DINAMIS ---
+    window.renderCustomLinks = function(items) {
+        const box = document.getElementById('custom-links-admin');
+        if (!box) return;
+        box.innerHTML = '';
+        const list = Array.isArray(items) ? items : [];
+        list.forEach((rawItem, i) => {
+            const label = String(rawItem?.label || rawItem?.name || '').trim();
+            const url = String(rawItem?.url || rawItem?.href || '').trim();
+            const icon = String(rawItem?.icon || '').trim();
+            const previewUrl = normalizeContactUrl(label, url);
+            box.insertAdjacentHTML('beforeend', `
+                <div class="item-card-admin custom-link-row" data-index="${i}">
+                    <div class="input-group">
+                        <label>Nama Kontak / Platform</label>
+                        <input class="custom-link-label" type="text" value="${esc(label)}" placeholder="Contoh: WhatsApp, Email, LinkedIn, Instagram" oninput="refreshContactPreview(${i}); updateStorageMeter();">
+                    </div>
+                    <div class="input-group">
+                        <label>Nomor HP / Email / URL Tujuan</label>
+                        <input class="custom-link-url" type="text" value="${esc(url)}" placeholder="Contoh: 082142412131 atau merkiaryanto.bolang@gmail.com atau https://..." oninput="refreshContactPreview(${i}); updateStorageMeter();">
+                        <div id="contact-preview-${i}" class="contact-preview-chip" style="display:${previewUrl ? 'inline-flex' : 'none'};">🔗 Tersimpan sebagai: ${esc(previewUrl)}</div>
+                    </div>
+                    <div class="input-group">
+                        <label>Ikon / Emoji (opsional)</label>
+                        <input class="custom-link-icon" type="text" value="${esc(icon)}" placeholder="Otomatis jika dikosongkan (💬, ✉️, in, ⌘)" oninput="updateStorageMeter()">
+                    </div>
+                    <button type="button" class="btn btn-red" onclick="removeCustomLink(${i})">Hapus Kontak Ini</button>
+                </div>
+            `);
+        });
+    };
+
+    window.refreshContactPreview = function(i) {
+        const rows = document.querySelectorAll('#custom-links-admin .custom-link-row');
+        const row = rows[i];
+        if (!row) return;
+        const label = val(row, '.custom-link-label');
+        const url = val(row, '.custom-link-url');
+        const preview = document.getElementById('contact-preview-' + i);
+        const normalized = normalizeContactUrl(label, url);
+        if (preview) {
+            if (normalized) {
+                preview.textContent = '🔗 Tersimpan sebagai: ' + normalized;
+                preview.style.display = 'inline-flex';
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+    };
+
+    window.addCustomLink = function() {
+        const items = window.getCustomLinksFromDOM();
+        items.push({ label: '', url: '', icon: '' });
+        window.renderCustomLinks(items);
+        window.updateStorageMeter();
+    };
+
+    window.removeCustomLink = function(i) {
+        const items = window.getCustomLinksFromDOM();
+        items.splice(i, 1);
+        window.renderCustomLinks(items);
+        window.updateStorageMeter();
+    };
+
+    window.getCustomLinksFromDOM = function() {
+        return [...document.querySelectorAll('#custom-links-admin .custom-link-row')]
+            .map(c => normalizeContactLink({
+                label: val(c, '.custom-link-label'),
+                url: val(c, '.custom-link-url'),
+                icon: val(c, '.custom-link-icon')
+            }))
+            .filter(x => x.url !== '');
+    };
+
+    // --- PENDIDIKAN ---
+    window.renderEducationAdmin = function(items) {
+        const c = document.getElementById('edu-container');
+        if (!c) return;
+        c.innerHTML = '';
+        (items || []).forEach((e, i) => {
+            const dispImg = resolveDisplayUrl(e.img);
+            c.insertAdjacentHTML('beforeend', `
+                <div class="item-card-admin">
+                    <div class="input-group"><label>NAMA SEKOLAH / KAMPUS</label><input type="text" class="field-title" value="${esc(e.title)}" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-period" value="${esc(e.period)}" placeholder="Contoh: 2022 – 2026" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>JENJANG / JURUSAN</label><input type="text" class="field-badge" value="${esc(e.badge)}" placeholder="Contoh: S1 Teknik Industri" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>DESKRIPSI / IPK / PRESTASI</label><textarea class="field-desc" oninput="updateStorageMeter()">${esc(e.desc)}</textarea></div>
+                    <div class="input-group">
+                        <label>FOTO SEKOLAH / KAMPUS</label>
+                        <input type="file" accept="image/*" onchange="processImageUpload(this,'edu-img-${i}','prev-edu-${i}')">
+                        <input type="text" id="edu-img-${i}" class="field-img" value="${esc(e.img)}" placeholder="URL foto / Google Drive (opsional)" oninput="syncPreviewImage('edu-img-${i}','prev-edu-${i}'); updateStorageMeter();">
+                        <img id="prev-edu-${i}" class="preview-thumb" src="${esc(dispImg)}" style="display:${dispImg ? 'block' : 'none'}">
+                    </div>
+                    <div class="input-group edu-attachment-manager">
+                        <label>LAMPIRAN PENDIDIKAN (Ijazah, Transkrip, Sertifikat)</label>
+                        <input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,image/*" onchange="addMultiAttachments(this,'edu-attachments-${i}');setTimeout(()=>refreshEducationAttachmentControls(${i}),80)">
+                        <textarea id="edu-attachments-${i}" class="field-attachments" oninput="refreshEducationAttachmentControls(${i});updateStorageMeter()" placeholder="Nama Dokumen | https://drive.google.com/...">${esc(formatAttachments(e.attachments || []))}</textarea>
+                        <div id="edu-attachment-controls-${i}" class="attachment-admin-list"></div>
+                    </div>
+                    <button type="button" class="btn btn-red" onclick="removeEdu(${i})">Hapus Riwayat Ini</button>
+                </div>
+            `);
+        });
+        (items || []).forEach((_, i) => window.refreshEducationAttachmentControls(i));
+    };
+
+    window.refreshEducationAttachmentControls = function(i) {
+        const box = document.getElementById('edu-attachments-' + i);
+        const host = document.getElementById('edu-attachment-controls-' + i);
+        if (!box || !host) return;
+        const rows = box.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+        host.innerHTML = rows.map((line, n) => {
+            const cut = line.indexOf('|');
+            const name = cut < 0 ? 'Lampiran' : (line.slice(0, cut).trim() || 'Lampiran');
+            const url = cut < 0 ? line : line.slice(cut + 1).trim();
+            return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url) ? 'File terlampir' : 'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeEducationAttachment(${i},${n})">Hapus</button></div>`;
+        }).join('');
+    };
+
+    window.removeEducationAttachment = function(i, n) {
+        const box = document.getElementById('edu-attachments-' + i);
+        if (!box) return;
+        const rows = box.value.split(/\r?\n/).filter(x => x.trim());
+        rows.splice(n, 1);
+        box.value = rows.join('\n');
+        window.refreshEducationAttachmentControls(i);
+        window.updateStorageMeter();
+    };
+
+    window.getEducationFromDOM = function() {
+        return [...document.querySelectorAll('#edu-container .item-card-admin')].map(c => ({
+            title: val(c, '.field-title'),
+            period: val(c, '.field-period'),
+            badge: val(c, '.field-badge'),
+            desc: val(c, '.field-desc'),
+            img: val(c, '.field-img'),
+            attachments: parseAttachments(val(c, '.field-attachments'))
+        }));
+    };
+
+    // --- SKILLS ---
+    window.renderList = function(containerId, items, fields) {
+        const c = document.getElementById(containerId);
+        if (!c) return;
+        c.innerHTML = '';
+        (items || []).forEach((it, i) => {
+            let html = `<div class="item-card-admin" data-index="${i}">`;
+            fields.forEach(f => {
+                html += `<div class="input-group"><label>${f === 'title' ? 'NAMA KETERAMPILAN' : 'DESKRIPSI'}</label>${
+                    f === 'desc'
+                        ? `<textarea class="field-desc" oninput="updateStorageMeter()">${esc(it[f] || '')}</textarea>`
+                        : `<input type="text" class="field-${f}" value="${esc(it[f] || '')}" oninput="updateStorageMeter()">`
+                }</div>`;
+            });
+            html += `<div class="input-group"><label>LEVEL KEMAMPUAN</label><select class="field-level" onchange="updateStorageMeter()"><option value="">Tidak ditentukan</option>${['Beginner', 'Intermediate', 'Advanced', 'Expert'].map(x => `<option value="${x}" ${it.level === x ? 'selected' : ''}>${x}</option>`).join('')}</select></div>`;
+            html += `<button type="button" class="btn btn-red" onclick="removeItem('${containerId}',${i})">Hapus Item Ini</button></div>`;
+            c.insertAdjacentHTML('beforeend', html);
+        });
+    };
+
+    window.getDataFromDOM = function(containerId, fields) {
+        return [...document.querySelectorAll('#' + containerId + ' .item-card-admin')].map(card => {
+            const o = {};
+            fields.forEach(f => o[f] = val(card, '.field-' + f));
+            o.level = val(card, '.field-level') || '';
+            return o;
+        });
+    };
+
+    // --- PENGALAMAN ---
+    window.renderExperiencesAdmin = function(items) {
+        const c = document.getElementById('exp-container');
+        if (!c) return;
+        c.innerHTML = '';
+        (items || []).forEach((e, i) => {
+            const dispImg = resolveDisplayUrl(e.img);
+            c.insertAdjacentHTML('beforeend', `
+                <div class="item-card-admin">
+                    <div class="input-group"><label>POSISI / JABATAN</label><input type="text" class="field-title" value="${esc(e.title)}" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>PERIODE KERJA</label><input type="text" class="field-period" value="${esc(e.period || e.badge || '')}" placeholder="Contoh: Juli 2025 – Agustus 2025" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${esc(e.company)}" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc" oninput="updateStorageMeter()">${esc(e.desc)}</textarea></div>
+                    <div class="input-group"><label>TANGGUNG JAWAB / CAPAIAN (satu poin per baris)</label><textarea class="field-responsibilities" placeholder="Contoh: Melakukan inspeksi kualitas produk dan material" oninput="updateStorageMeter()">${esc((e.responsibilities || []).join('\n'))}</textarea></div>
+                    <div class="input-group"><label>TOOLS YANG DIGUNAKAN (pisahkan dengan koma)</label><input type="text" class="field-tools" value="${esc(Array.isArray(e.tools) ? e.tools.join(', ') : (e.tools || ''))}" placeholder="Contoh: Seven Tools, 5S, SolidWorks, Minitab" oninput="updateStorageMeter()"></div>
+                    <div class="input-group">
+                        <label>FOTO PERUSAHAAN / DOKUMENTASI</label>
+                        <input type="file" accept="image/*" onchange="processImageUpload(this,'exp-img-${i}','prev-exp-${i}')">
+                        <input type="text" id="exp-img-${i}" class="field-img" value="${esc(e.img)}" placeholder="URL foto / Google Drive" oninput="syncPreviewImage('exp-img-${i}','prev-exp-${i}'); updateStorageMeter();">
+                        <img id="prev-exp-${i}" class="preview-thumb" src="${esc(dispImg)}" style="display:${dispImg ? 'block' : 'none'}">
+                    </div>
+                    <div class="input-group exp-attachment-manager">
+                        <label>LAMPIRAN PENGALAMAN KERJA (Sertifikat Magang, Laporan, dll)</label>
+                        <input type="file" multiple onchange="addMultiAttachments(this,'exp-attachments-${i}');setTimeout(()=>refreshExperienceAttachmentControls(${i}),80)">
+                        <textarea id="exp-attachments-${i}" class="field-attachments" oninput="refreshExperienceAttachmentControls(${i});updateStorageMeter()" placeholder="Sertifikat Magang | https://drive.google.com/...">${esc(formatAttachments(e.attachments || (e.file ? [{ name: e.fileName || 'Berkas Pendukung', url: e.file }] : [])))}</textarea>
+                        <div id="exp-attachment-controls-${i}" class="attachment-admin-list"></div>
+                    </div>
+                    <button type="button" class="btn btn-red" onclick="removeExp(${i})">Hapus Pengalaman Ini</button>
+                </div>
+            `);
+        });
+        (items || []).forEach((_, i) => window.refreshExperienceAttachmentControls(i));
+    };
+
+    window.refreshExperienceAttachmentControls = function(i) {
+        const box = document.getElementById('exp-attachments-' + i);
+        const host = document.getElementById('exp-attachment-controls-' + i);
+        if (!box || !host) return;
+        const rows = box.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+        host.innerHTML = rows.map((line, n) => {
+            const cut = line.indexOf('|');
+            const name = cut < 0 ? 'Lampiran' : (line.slice(0, cut).trim() || 'Lampiran');
+            const url = cut < 0 ? line : line.slice(cut + 1).trim();
+            return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url) ? 'File terlampir' : 'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeExperienceAttachment(${i},${n})">Hapus</button></div>`;
+        }).join('');
+    };
+
+    window.removeExperienceAttachment = function(i, n) {
+        const box = document.getElementById('exp-attachments-' + i);
+        if (!box) return;
+        const rows = box.value.split(/\r?\n/).filter(x => x.trim());
+        rows.splice(n, 1);
+        box.value = rows.join('\n');
+        window.refreshExperienceAttachmentControls(i);
+        window.updateStorageMeter();
+    };
+
+    window.getExperiencesFromDOM = function() {
+        return [...document.querySelectorAll('#exp-container .item-card-admin')].map(c => {
+            const attachments = parseAttachments(val(c, '.field-attachments'));
+            return {
+                title: val(c, '.field-title'),
+                period: val(c, '.field-period'),
+                badge: val(c, '.field-period'),
+                company: val(c, '.field-company'),
+                desc: val(c, '.field-desc'),
+                img: val(c, '.field-img'),
+                file: attachments[0]?.url || '',
+                fileName: attachments[0]?.name || '',
+                responsibilities: val(c, '.field-responsibilities').split(/\r?\n/).map(x => x.trim()).filter(Boolean),
+                tools: val(c, '.field-tools').split(',').map(x => x.trim()).filter(Boolean),
+                attachments
+            };
+        });
+    };
+
+    // --- PROYEK ---
+    window.renderProjectsAdmin = function(items) {
+        const c = document.getElementById('proj-container');
+        if (!c) return;
+        c.innerHTML = '';
+        (items || []).forEach((p, i) => {
+            const dispImg = resolveDisplayUrl(p.img);
+            c.insertAdjacentHTML('beforeend', `
+                <div class="item-card-admin">
+                    <div class="input-group"><label>KATEGORI</label><input type="text" class="field-category" value="${esc(p.category)}" placeholder="Contoh: Product Design & Ergonomics" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>NAMA PROYEK</label><input type="text" class="field-title" value="${esc(p.title)}" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${esc(p.desc)}</textarea></div>
+                    <div class="input-group">
+                        <label>GAMBAR / SCREENSHOT PROYEK</label>
+                        <input type="file" accept="image/*" onchange="processImageUpload(this,'proj-img-${i}','prev-proj-${i}')">
+                        <input type="text" id="proj-img-${i}" class="field-img" value="${esc(p.img || '')}" placeholder="URL gambar proyek / Google Drive" oninput="syncPreviewImage('proj-img-${i}','prev-proj-${i}'); updateStorageMeter();">
+                        <img id="prev-proj-${i}" class="preview-thumb" src="${esc(dispImg)}" style="display:${dispImg ? 'block' : 'none'}">
+                    </div>
+                    <div class="input-group"><label>TUJUAN & MANFAAT</label><textarea class="field-objective" oninput="updateStorageMeter()">${esc(p.objective || '')}</textarea></div>
+                    <div class="input-group"><label>TOOLS / TEKNOLOGI</label><input type="text" class="field-tools" value="${esc(Array.isArray(p.tools) ? p.tools.join(', ') : (p.tools || ''))}" placeholder="Contoh: SolidWorks, SPSS, Minitab, Python" oninput="updateStorageMeter()"></div>
+                    <div class="input-group"><label>HASIL PROYEK</label><textarea class="field-result" oninput="updateStorageMeter()">${esc(p.result || '')}</textarea></div>
+                    <div class="input-group project-attachment-manager">
+                        <label>LAMPIRAN PROYEK (Laporan, Desain, Link Drive)</label>
+                        <input type="file" multiple onchange="addMultiAttachments(this,'proj-attachments-${i}');setTimeout(()=>refreshProjectAttachmentControls(${i}),80)">
+                        <textarea id="proj-attachments-${i}" class="field-attachments" oninput="refreshProjectAttachmentControls(${i});updateStorageMeter()" placeholder="Laporan Proyek | https://drive.google.com/...">${esc(formatAttachments(p.attachments || (p.link ? [{ name: 'Lihat Proyek', url: p.link }] : [])))}</textarea>
+                        <div id="proj-attachment-controls-${i}" class="attachment-admin-list"></div>
+                    </div>
+                    <div class="input-group">
+                        <label>TONJOLKAN PROYEK</label>
+                        <div class="checkbox-group">
+                            <label><input type="checkbox" class="field-featured" ${p.featured ? 'checked' : ''} onchange="updateStorageMeter()"> Featured Project</label>
+                            <label><input type="checkbox" class="field-best" ${p.best ? 'checked' : ''} onchange="updateStorageMeter()"> Best Project</label>
+                            <label><input type="checkbox" class="field-latest" ${p.latest ? 'checked' : ''} onchange="updateStorageMeter()"> Latest Project</label>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-red" onclick="removeProj(${i})">Hapus Project Ini</button>
+                </div>
+            `);
+        });
+        (items || []).forEach((_, i) => window.refreshProjectAttachmentControls(i));
+    };
+
+    window.refreshProjectAttachmentControls = function(i) {
+        const box = document.getElementById('proj-attachments-' + i);
+        const host = document.getElementById('proj-attachment-controls-' + i);
+        if (!box || !host) return;
+        const rows = box.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+        host.innerHTML = rows.map((line, n) => {
+            const cut = line.indexOf('|');
+            const name = cut < 0 ? 'Lampiran' : (line.slice(0, cut).trim() || 'Lampiran');
+            const url = cut < 0 ? line : line.slice(cut + 1).trim();
+            return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url) ? 'File terlampir' : 'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeProjectAttachment(${i},${n})">Hapus</button></div>`;
+        }).join('');
+    };
+
+    window.removeProjectAttachment = function(i, n) {
+        const box = document.getElementById('proj-attachments-' + i);
+        if (!box) return;
+        const rows = box.value.split(/\r?\n/).filter(x => x.trim());
+        rows.splice(n, 1);
+        box.value = rows.join('\n');
+        window.refreshProjectAttachmentControls(i);
+        window.updateStorageMeter();
+    };
+
+    window.getProjectsFromDOM = function() {
+        return [...document.querySelectorAll('#proj-container .item-card-admin')].map(c => {
+            const attachments = parseAttachments(val(c, '.field-attachments'));
+            return {
+                category: val(c, '.field-category'),
+                title: val(c, '.field-title'),
+                desc: val(c, '.field-desc'),
+                img: val(c, '.field-img'),
+                objective: val(c, '.field-objective'),
+                tools: val(c, '.field-tools').split(',').map(x => x.trim()).filter(Boolean),
+                result: val(c, '.field-result'),
+                link: attachments[0]?.url || '',
+                attachments,
+                featured: !!c.querySelector('.field-featured')?.checked,
+                best: !!c.querySelector('.field-best')?.checked,
+                latest: !!c.querySelector('.field-latest')?.checked
+            };
+        });
+    };
+
+    // --- SERTIFIKAT ---
+    window.renderCertsAdmin = function(items) {
+        const c = document.getElementById('cert-container');
+        if (!c) return;
+        c.innerHTML = '';
+        (items || []).forEach((x, i) => c.insertAdjacentHTML('beforeend', `
+            <div class="item-card-admin">
+                <div class="input-group"><label>PENERBIT / LEMBAGA</label><input type="text" class="field-issuer" value="${esc(x.issuer)}" oninput="updateStorageMeter()"></div>
+                <div class="input-group"><label>NAMA SERTIFIKAT</label><input type="text" class="field-title" value="${esc(x.title)}" oninput="updateStorageMeter()"></div>
+                <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${esc(x.desc)}</textarea></div>
+                <div class="input-group cert-attachment-manager">
+                    <label>FILE SERTIFIKAT / DOKUMEN BUKTI</label>
+                    <input type="file" multiple accept=".pdf,.doc,.docx,image/*" onchange="addMultiAttachments(this,'cert-attachments-${i}');setTimeout(()=>refreshCertificateAttachmentControls(${i}),80)">
+                    <textarea id="cert-attachments-${i}" class="field-attachments" oninput="refreshCertificateAttachmentControls(${i});updateStorageMeter()" placeholder="Nama Sertifikat | https://drive.google.com/...">${esc(formatAttachments(x.attachments || (x.link ? [{ name: 'Sertifikat', url: x.link }] : [])))}</textarea>
+                    <div id="cert-attachment-controls-${i}" class="attachment-admin-list"></div>
+                </div>
+                <button type="button" class="btn btn-red" onclick="removeCert(${i})">Hapus Sertifikat Ini</button>
+            </div>
+        `));
+        (items || []).forEach((_, i) => window.refreshCertificateAttachmentControls(i));
+    };
+
+    window.refreshCertificateAttachmentControls = function(i) {
+        const box = document.getElementById('cert-attachments-' + i);
+        const host = document.getElementById('cert-attachment-controls-' + i);
+        if (!box || !host) return;
+        const rows = box.value.split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+        host.innerHTML = rows.map((line, n) => {
+            const cut = line.indexOf('|');
+            const name = cut < 0 ? 'Lampiran' : (line.slice(0, cut).trim() || 'Lampiran');
+            const url = cut < 0 ? line : line.slice(cut + 1).trim();
+            return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url) ? 'File terlampir' : 'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeCertificateAttachment(${i},${n})">Hapus</button></div>`;
+        }).join('');
+    };
+
+    window.removeCertificateAttachment = function(i, n) {
+        const box = document.getElementById('cert-attachments-' + i);
+        if (!box) return;
+        const rows = box.value.split(/\r?\n/).filter(x => x.trim());
+        rows.splice(n, 1);
+        box.value = rows.join('\n');
+        window.refreshCertificateAttachmentControls(i);
+        window.updateStorageMeter();
+    };
+
+    window.getCertsFromDOM = function() {
+        return [...document.querySelectorAll('#cert-container .item-card-admin')].map(c => {
+            const attachments = parseAttachments(val(c, '.field-attachments'));
+            return {
+                issuer: val(c, '.field-issuer'),
+                title: val(c, '.field-title'),
+                desc: val(c, '.field-desc'),
+                link: attachments[0]?.url || '',
+                attachments
+            };
+        });
+    };
+
+    // --- GALERI ---
+    window.renderGalleryAdmin = function(gallery) {
+        const container = document.getElementById('gal-container');
+        if (!container) return;
+        container.innerHTML = '';
+        (gallery || []).forEach((g, idx) => {
+            const dispImg = resolveDisplayUrl(g.img);
+            container.insertAdjacentHTML('beforeend', `
+                <div class="item-card-admin">
+                    <div class="input-group"><label>KETERANGAN FOTO</label><input type="text" class="field-caption" value="${esc(g.caption || '')}" oninput="updateStorageMeter()"></div>
+                    <div class="input-group">
+                        <label>FOTO GALERI (Upload Gambar atau Link URL Cloud/Google Drive)</label>
+                        <input type="file" accept="image/*" onchange="processImageUpload(this, 'gal-img-${idx}', 'prev-gal-${idx}')" style="margin-bottom:6px;">
+                        <input type="text" id="gal-img-${idx}" class="field-img" value="${esc(g.img || '')}" placeholder="Atau paste link gambar/Google Drive di sini..." oninput="syncPreviewImage('gal-img-${idx}', 'prev-gal-${idx}'); updateStorageMeter();">
+                        <img id="prev-gal-${idx}" src="${esc(dispImg)}" class="preview-thumb" style="display:${dispImg ? 'block' : 'none'};">
+                    </div>
+                    <button type="button" class="btn btn-red" onclick="removeGal(${idx})">Hapus Foto Ini</button>
+                </div>
+            `);
+        });
+    };
+
+    window.getGalleryFromDOM = function() {
+        return [...document.querySelectorAll('#gal-container .item-card-admin')].map((card, idx) => ({
+            caption: val(card, '.field-caption'),
+            img: document.getElementById(`gal-img-${idx}`)?.value || ''
+        }));
+    };
+
+    // --- MULTI LAMPIRAN ---
+    window.addMultiAttachments = async function(input, targetId) {
+        const box = document.getElementById(targetId);
+        if (!box || !input.files?.length) return;
+        const lines = box.value.split(/\r?\n/).filter(Boolean);
+        for (const file of input.files) {
+            if (file.size > 1500000) {
+                alert(
+                    '⚠️ File "' + file.name + '" berukuran ' + (file.size / (1024 * 1024)).toFixed(2) + ' MB (lebih dari 1,5 MB).\n\n' +
+                    'Upload file tersebut ke Google Drive Anda, lalu tulis di kotak lampiran dengan format:\n' +
+                    file.name + ' | https://drive.google.com/file/d/...'
+                );
+                continue;
+            }
+            const data = await new Promise((resolve, reject) => {
+                const r = new FileReader();
+                r.onload = () => resolve(r.result);
+                r.onerror = reject;
+                r.readAsDataURL(file);
+            });
+            lines.push(file.name + ' | ' + data);
+        }
+        box.value = lines.join('\n');
+        input.value = '';
+        window.updateStorageMeter();
+    };
+
+    // --- ADD & REMOVE ITEMS ---
+    function saveTemp(data) {
+        try { localStorage.setItem('portfolio_data', JSON.stringify(data)); } catch (e) {}
+    }
+
+    window.addEdu = function() { const d = window.loadCurrentData(); d.education.push({ title: "", period: "", badge: "", desc: "", img: "", attachments: [] }); saveTemp(d); window.renderEducationAdmin(d.education); window.updateStorageMeter(); };
+    window.addSoft = function() { const d = window.loadCurrentData(); d.softSkills.push({ title: "", desc: "", level: "" }); saveTemp(d); window.renderList('soft-container', d.softSkills, ['title', 'desc']); window.updateStorageMeter(); };
+    window.addHard = function() { const d = window.loadCurrentData(); d.hardSkills.push({ title: "", desc: "", level: "" }); saveTemp(d); window.renderList('hard-container', d.hardSkills, ['title', 'desc']); window.updateStorageMeter(); };
+    window.addExp = function() { const d = window.loadCurrentData(); d.experiences.push({ title: "", period: "", badge: "", company: "", desc: "", img: "", file: "", fileName: "", responsibilities: [], tools: [], attachments: [] }); saveTemp(d); window.renderExperiencesAdmin(d.experiences); window.updateStorageMeter(); };
+    window.addProj = function() { const d = window.loadCurrentData(); d.projects.push({ category: "", title: "", desc: "", img: "", objective: "", tools: [], result: "", link: "", attachments: [], featured: false, best: false, latest: false }); saveTemp(d); window.renderProjectsAdmin(d.projects); window.updateStorageMeter(); };
+    window.addCert = function() { const d = window.loadCurrentData(); d.certificates.push({ issuer: "", title: "", desc: "", link: "", attachments: [] }); saveTemp(d); window.renderCertsAdmin(d.certificates); window.updateStorageMeter(); };
+    window.addGal = function() { const d = window.loadCurrentData(); d.gallery.push({ caption: "", img: "" }); saveTemp(d); window.renderGalleryAdmin(d.gallery); window.updateStorageMeter(); };
+
+    window.removeItem = function(containerId, idx) {
+        const d = window.loadCurrentData();
+        if (containerId === 'soft-container') { d.softSkills.splice(idx, 1); saveTemp(d); window.renderList('soft-container', d.softSkills, ['title', 'desc']); }
+        if (containerId === 'hard-container') { d.hardSkills.splice(idx, 1); saveTemp(d); window.renderList('hard-container', d.hardSkills, ['title', 'desc']); }
+        window.updateStorageMeter();
+    };
+    window.removeEdu = function(idx) { const d = window.loadCurrentData(); d.education.splice(idx, 1); saveTemp(d); window.renderEducationAdmin(d.education); window.updateStorageMeter(); };
+    window.removeExp = function(idx) { const d = window.loadCurrentData(); d.experiences.splice(idx, 1); saveTemp(d); window.renderExperiencesAdmin(d.experiences); window.updateStorageMeter(); };
+    window.removeProj = function(idx) { const d = window.loadCurrentData(); d.projects.splice(idx, 1); saveTemp(d); window.renderProjectsAdmin(d.projects); window.updateStorageMeter(); };
+    window.removeCert = function(idx) { const d = window.loadCurrentData(); d.certificates.splice(idx, 1); saveTemp(d); window.renderCertsAdmin(d.certificates); window.updateStorageMeter(); };
+    window.removeGal = function(idx) { const d = window.loadCurrentData(); d.gallery.splice(idx, 1); saveTemp(d); window.renderGalleryAdmin(d.gallery); window.updateStorageMeter(); };
+
+    window.loadCurrentData = function() {
+        const get = id => document.getElementById(id)?.value || '';
+        return normalizePortfolio({
+            profile: {
+                name: get('p-name'),
+                desc: get('p-desc'),
+                photo: get('p-photo'),
+                cvFile: get('p-cv-file'),
+                customLinks: window.getCustomLinksFromDOM()
+            },
+            education: window.getEducationFromDOM(),
+            softSkills: window.getDataFromDOM('soft-container', ['title', 'desc']),
+            hardSkills: window.getDataFromDOM('hard-container', ['title', 'desc']),
+            experiences: window.getExperiencesFromDOM(),
+            projects: window.getProjectsFromDOM(),
+            certificates: window.getCertsFromDOM(),
+            gallery: window.getGalleryFromDOM()
+        });
+    };
+
+    window.saveAllData = async function() {
+        const btn = document.getElementById('btn-save-main');
+        const originalText = btn.innerText;
+        btn.disabled = true;
+        btn.innerText = '⏳ Menyimpan & memeriksa cloud...';
+
+        try {
+            const finalData = window.loadCurrentData();
+            window.renderCustomLinks(finalData.profile.customLinks);
+
+            try {
+                localStorage.setItem('portfolio_data', JSON.stringify(finalData));
+            } catch (storageError) {
+                console.warn('Cache lokal tidak dapat disimpan:', storageError);
             }
 
-            document.getElementById('p-name').value = data.profile.name || '';
-            document.getElementById('p-desc').value = data.profile.desc || '';
-            document.getElementById('p-photo').value = data.profile.photo || '';
-            if (data.profile.photo) {
-                const pImg = document.getElementById('prev-p-photo');
-                pImg.src = data.profile.photo;
-                pImg.style.display = 'block';
-            }
-            if (window.renderCustomLinks) window.renderCustomLinks(data.profile.customLinks || []);
-            document.getElementById('p-cv-file').value = data.profile.cvFile || '';
+            window.updateStorageMeter();
+            setCloudMessage('⏳ Mengirim data dan memverifikasi penyimpanan Google Sheets...', '#60a5fa');
 
-            renderEducationAdmin(data.education);
-            renderList('soft-container', data.softSkills, ['title', 'desc']);
-            renderList('hard-container', data.hardSkills, ['title', 'desc']);
-            renderExperiencesAdmin(data.experiences);
-            renderProjectsAdmin(data.projects);
-            renderCertsAdmin(data.certificates);
-            renderGalleryAdmin(data.gallery);
+            await sendPortfolioAndVerify(finalData);
 
-            updateStorageMeter();
-
+            setCloudMessage('✅ Data berhasil disimpan dan diverifikasi di Google Sheets.', '#10b981');
+            alert('✅ Berhasil! Semua perubahan (profil, kontak, pengalaman, proyek, sertifikat, dll.) sudah tersimpan dan terverifikasi di Google Sheets.');
+        } catch (error) {
+            console.error('Penyimpanan cloud gagal:', error);
+            setCloudMessage('⚠️ Penyimpanan cloud belum terverifikasi.', '#fbbf24');
+            alert('⚠️ Gagal menyimpan ke Google Sheets:\n\n' + error.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerText = originalText;
             setTimeout(function() {
                 const status = document.getElementById('cloud-status');
                 if (status) status.style.display = 'none';
-            }, cloudLoaded ? 900 : 4500);
+            }, 3500);
+        }
+    };
+
+    window.resetAllData = async function() {
+        if (!confirm('Yakin ingin mengosongkan semua data portofolio dari memori & cloud?')) return;
+        try {
+            setCloudMessage('⏳ Mengosongkan data portofolio di Google Sheets...', '#60a5fa');
+            await sendPortfolioAndVerify(normalizePortfolio(emptyData));
+            localStorage.setItem('portfolio_data', JSON.stringify(emptyData));
+            alert('✅ Semua data portofolio berhasil dikosongkan dari cloud.');
+            location.reload();
+        } catch (error) {
+            setCloudMessage('⚠️ Pengosongan data belum terverifikasi.', '#fbbf24');
+            alert('❌ Data belum berhasil dikosongkan di Google Sheets. ' + error.message);
+            setTimeout(function() {
+                const status = document.getElementById('cloud-status');
+                if (status) status.style.display = 'none';
+            }, 3500);
+        }
+    };
+
+    window.generatePortfolioBook = function() {
+        const d = window.loadCurrentData();
+        const E = esc;
+        const para = x => E(x || '').replace(/\n/g, '<br>');
+        const attach = (a, legacy, label) => {
+            let rows = Array.isArray(a) ? a.slice() : [];
+            if (!rows.length && legacy) rows = [{ name: label || 'Dokumen', url: legacy }];
+            return rows.filter(x => x && x.url).map(x => `<a href="${E(x.url)}" target="_blank">${E(x.name || 'Lampiran')}</a>`).join(' · ');
         };
+        const card = (title, sub, body) => `<article><h3>${E(title || '')}</h3>${sub ? `<div class="muted">${E(sub)}</div>` : ''}${body || ''}</article>`;
+        const section = (title, body) => `<section><h2>${E(title)}</h2>${body || '<p class="muted">Belum ada data.</p>'}</section>`;
 
-        async function resetAllData() {
-            if (!confirm('Yakin ingin mengosongkan semua data portofolio dari memori & cloud?')) return;
+        const edu = (d.education || []).map(x => card(x.title, [x.badge, x.period].filter(Boolean).join(' · '), `<p>${para(x.desc)}</p>${x.img ? `<img class="edu-img" src="${E(resolveDisplayUrl(x.img))}">` : ''}<p class="attachments">${attach(x.attachments, '', 'Lampiran Pendidikan')}</p>`)).join('');
+        const exp = (d.experiences || []).map(x => card(x.title, x.company + ' · ' + (x.period || x.badge || ''), `<p>${para(x.desc)}</p>${(x.responsibilities || []).length ? `<ul>${x.responsibilities.map(y => `<li>${para(y)}</li>`).join('')}</ul>` : ''}<p><b>Tools:</b> ${E((x.tools || []).join(', '))}</p><p class="attachments">${attach(x.attachments, x.file, x.fileName)}</p>`)).join('');
+        const skills = [...(d.softSkills || []).map(x => ({ ...x, kind: 'Soft Skill' })), ...(d.hardSkills || []).map(x => ({ ...x, kind: 'Hard Skill' }))].map(x => card(x.title, x.kind + (x.level ? ' · ' + x.level : ''), `<p>${para(x.desc)}</p>`)).join('');
+        const projects = (d.projects || []).map(x => card(x.title, [x.category, x.featured ? 'Featured' : null, x.best ? 'Best Project' : null, x.latest ? 'Latest' : null].filter(Boolean).join(' · '), `${x.img ? `<img class="project-img" src="${E(resolveDisplayUrl(x.img))}">` : ''}<p>${para(x.desc)}</p>${x.objective ? `<p><b>Tujuan & Manfaat:</b><br>${para(x.objective)}</p>` : ''}${x.tools?.length ? `<p><b>Tools:</b> ${E(x.tools.join(', '))}</p>` : ''}${x.result ? `<p><b>Hasil:</b><br>${para(x.result)}</p>` : ''}<p class="attachments">${attach(x.attachments, x.link, 'Lihat Proyek')}</p>`)).join('');
+        const cert = (d.certificates || []).map(x => card(x.title, x.issuer, `<p>${para(x.desc)}</p><p class="attachments">${attach(x.attachments, x.link, 'Sertifikat')}</p>`)).join('');
+        const contacts = (d.profile.customLinks || []).map(x => `<a href="${E(x.url || '#')}">${E((x.icon || '') + ' ' + (x.label || 'Kontak'))}</a>`).join(' · ');
 
-            try {
-                setCloudMessage('⏳ Mengosongkan data portofolio di Google Sheets...', '#60a5fa');
-                await sendPortfolioAndVerify(normalizePortfolio(emptyData));
-                localStorage.setItem('portfolio_data', JSON.stringify(emptyData));
-                alert('✅ Semua data portofolio berhasil dikosongkan dari cloud.');
-                location.reload();
-            } catch (error) {
-                console.error('Reset gagal:', error);
-                setCloudMessage('⚠️ Pengosongan data belum terverifikasi.', '#fbbf24');
-                alert('❌ Data belum berhasil dikosongkan di Google Sheets. ' + error.message);
-                setTimeout(function() {
-                    const status = document.getElementById('cloud-status');
-                    if (status) status.style.display = 'none';
-                }, 4500);
-            }
-        }
+        const html = `<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Digital Portfolio Book - ${E(d.profile.name)}</title><style>@page{size:A4 portrait;margin:17mm 16mm 20mm}*{box-sizing:border-box}body{font:10.5pt/1.58 Arial,sans-serif;color:#18243a;margin:0}header{min-height:255mm;display:flex;flex-direction:column;justify-content:center;border-bottom:7px solid #2563eb;page-break-after:always}header img{width:42mm;height:52mm;object-fit:cover;border-radius:8px;margin-bottom:15mm}header h1{font-size:32pt;line-height:1.12;color:#12336b;margin:5mm 0}header .kicker{font-size:10pt;letter-spacing:2px;color:#2563eb;font-weight:bold}header .bio{font-size:14pt;color:#52627a;max-width:160mm}h2{font-size:18pt;color:#12336b;border-bottom:2px solid #dbeafe;padding-bottom:6px;margin:0 0 12px;break-after:avoid}h3{font-size:12pt;color:#1d4ed8;margin:0 0 4px}section{margin:0 0 20px;break-inside:auto}article{border:1px solid #d9e2ef;border-radius:8px;padding:11px 13px;margin:9px 0;break-inside:avoid-page}p{margin:5px 0;overflow-wrap:anywhere}.muted{font-size:9pt;color:#64748b}.attachments{font-size:9pt;margin-top:8px}.attachments a,header a{color:#1d4ed8;margin-right:5px}.edu-img,.project-img{display:block;max-width:100%;max-height:65mm;object-fit:contain;margin:8px 0;border-radius:5px}ul{margin:5px 0;padding-left:19px}li{margin:3px 0}.footer{position:fixed;bottom:-13mm;left:0;right:0;border-top:1px solid #dbe3ef;padding-top:4px;font-size:8pt;color:#64748b;display:flex;justify-content:space-between}.footer .page:after{content:counter(page)}@media screen{body{max-width:850px;margin:25px auto;padding:25px;background:#fff;box-shadow:0 5px 35px #ccd5e2}.printbar{position:sticky;top:0;background:#12336b;padding:10px;text-align:right;z-index:2}.printbar button{background:#2563eb;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}}@media print{.printbar{display:none}}</style></head><body><div class="printbar"><button onclick="window.print()">Cetak / Simpan sebagai PDF</button></div><header>${d.profile.photo ? `<img src="${E(resolveDisplayUrl(d.profile.photo))}">` : ''}<div class="kicker">DIGITAL PORTFOLIO BOOK</div><h1>${E(d.profile.name || 'Portofolio Profesional')}</h1><p class="bio">${para(d.profile.desc)}</p><p>${contacts}</p><p class="muted">Diperbarui ${new Date().toLocaleDateString('id-ID')}</p></header>${section('Profil Profesional', `<p>${para(d.profile.desc)}</p>`)}${section('Pendidikan', edu)}${section('Pengalaman Kerja', exp)}${section('Keterampilan', skills)}${section('Proyek', projects)}${section('Sertifikat', cert)}<div class="footer"><span>${E(d.profile.name || 'Portofolio Profesional')} · Digital Portfolio Book</span><span>Halaman <b class="page"></b></span></div></body></html>`;
+        const w = window.open('', '_blank');
+        if (!w) { alert('Izinkan pop-up browser untuk membuat Portfolio Book.'); return; }
+        w.document.open();
+        w.document.write(html);
+        w.document.close();
+    };
 
-        async function saveAllData() {
-            const btn = document.getElementById('btn-save-main');
-            const originalText = btn.innerText;
-            btn.disabled = true;
-            btn.innerText = '⏳ Menyimpan & memeriksa cloud...';
+    window.previewPortfolioDraft = function() {
+        window.generatePortfolioBook();
+    };
 
-            try {
-                const finalData = normalizePortfolio(loadCurrentData());
+    window.onload = async function() {
+        let data = normalizePortfolio(emptyData);
+        let cloudLoaded = false;
 
-                try {
-                    localStorage.setItem('portfolio_data', JSON.stringify(finalData));
-                } catch (storageError) {
-                    console.warn('Cache lokal tidak dapat disimpan:', storageError);
-                }
+        setCloudMessage('⏳ Menyinkronkan data dengan Google Sheets...', '#60a5fa');
 
-                updateStorageMeter();
-                setCloudMessage('⏳ Mengirim data dan memverifikasi penyimpanan Google Sheets...', '#60a5fa');
-
-                await sendPortfolioAndVerify(finalData);
-
-                setCloudMessage('✅ Data berhasil disimpan dan diverifikasi di Google Sheets.', '#10b981');
-                alert('✅ Berhasil! Data portofolio sudah tersimpan dan berhasil dibaca ulang dari Google Sheets. Sekarang halaman Public dapat mengambil data cloud yang sama.');
-            } catch (error) {
-                console.error('Penyimpanan cloud gagal atau belum terverifikasi:', error);
-                setCloudMessage('⚠️ Penyimpanan cloud belum terverifikasi. Periksa koneksi/deployment.', '#fbbf24');
-                alert('⚠️ Data belum dapat dipastikan tersimpan di Google Sheets. ' + error.message + '\n\nData mungkin masih tersimpan sebagai cadangan di browser ini. Jangan mengandalkan data lokal untuk pengunjung lain sebelum penyimpanan cloud berhasil.');
-            } finally {
-                btn.disabled = false;
-                btn.innerText = originalText;
-                setTimeout(function() {
-                    const status = document.getElementById('cloud-status');
-                    if (status) status.style.display = 'none';
-                }, 4500);
-            }
-        }
-
-        function processImageUpload(element, targetInputId, previewImgId) {
-            let file = element.files[0];
-            if (!file) return;
-
-            let reader = new FileReader();
-            reader.onload = function(e) {
-                let img = new Image();
-                img.onload = function() {
-                    let canvas = document.createElement('canvas');
-                    let MAX_WIDTH = 800;
-                    let scaleSize = MAX_WIDTH / img.width;
-                    if (scaleSize > 1) scaleSize = 1;
-
-                    canvas.width = img.width * scaleSize;
-                    canvas.height = img.height * scaleSize;
-
-                    let ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    let compressedDataUrl = canvas.toDataURL('image/jpeg', 0.65);
-                    document.getElementById(targetInputId).value = compressedDataUrl;
-
-                    if (previewImgId) {
-                        let prevEl = document.getElementById(previewImgId);
-                        if (prevEl) {
-                            prevEl.src = compressedDataUrl;
-                            prevEl.style.display = 'block';
-                        }
-                    }
-                    updateStorageMeter();
-                    alert('Sukses! Gambar "' + file.name + '" berhasil dikompresi.');
-                };
-                img.src = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        async function encodeFileAsURL(element, targetInputId) {
-            let file = element.files[0];
-            if (!file) return;
-            
-            if (file.type.startsWith('image/')) {
-                processImageUpload(element, targetInputId, null);
-                return;
-            }
-
-            if (file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf')) {
-                try {
-                    alert('Sedang mengompresi dokumen PDF...');
-                    let arrayBuffer = await file.arrayBuffer();
-                    const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
-                    const compressedPdfBytes = await pdfDoc.save({ useObjectStreams: true });
-                    
-                    let blob = new Blob([compressedPdfBytes], { type: 'application/pdf' });
-                    let reader = new FileReader();
-                    reader.onloadend = function() {
-                        document.getElementById(targetInputId).value = reader.result;
-                        updateStorageMeter();
-                        alert('Sukses! Dokumen PDF "' + file.name + '" berhasil dikompresi.');
-                    };
-                    reader.readAsDataURL(blob);
-                    return;
-                } catch (err) {}
-            }
-
-            let reader = new FileReader();
-            reader.onloadend = function() {
-                document.getElementById(targetInputId).value = reader.result;
-                updateStorageMeter();
-                alert('Sukses! Berkas "' + file.name + '" berhasil dimuat.');
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function updateStorageMeter() {
-            try {
-                let currentData = loadCurrentData();
-                let jsonString = JSON.stringify(currentData);
-                let bytesUsed = new Blob([jsonString]).size;
-                let kbUsed = (bytesUsed / 1024).toFixed(1);
-                let mbUsed = (bytesUsed / (1024 * 1024)).toFixed(2);
-
-                let maxKb = 5120;
-                let percentage = ((kbUsed / maxKb) * 100).toFixed(1);
-                if (percentage > 100) percentage = 100;
-
-                let fillBar = document.getElementById('storage-bar-fill');
-                let percentText = document.getElementById('storage-percentage');
-                let infoText = document.getElementById('storage-info-text');
-
-                fillBar.style.width = percentage + '%';
-                percentText.innerText = percentage + '% terpakai';
-                
-                if (kbUsed < 1024) {
-                    infoText.innerText = `Terpakai: ${kbUsed} KB dari ± 5 MB (5,120 KB)`;
-                } else {
-                    infoText.innerText = `Terpakai: ${mbUsed} MB dari ± 5 MB (5,120 KB)`;
-                }
-
-                if (percentage > 85) {
-                    fillBar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
-                } else {
-                    fillBar.style.background = 'linear-gradient(90deg, #3b82f6, #10b981)';
-                }
-            } catch(e) {}
-        }
-
-        function renderList(containerId, items, fields) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            items.forEach((item, idx) => {
-                let html = `<div class="item-card-admin" data-index="${idx}">`;
-                fields.forEach(f => {
-                    html += `<div class="input-group"><label>${f.toUpperCase()}</label><input type="text" class="field-${f}" value="${item[f] || ''}" oninput="updateStorageMeter()"></div>`;
-                });
-                html += `<button class="btn btn-red" onclick="removeItem('${containerId}', ${idx})">Hapus Item Ini</button></div>`;
-                container.innerHTML += html;
-            });
-        }
-
-        function renderExperiencesAdmin(experiences) {
-            const container = document.getElementById('exp-container');
-            container.innerHTML = '';
-            experiences.forEach((exp, idx) => {
-                container.innerHTML += `
-                    <div class="item-card-admin">
-                        <div class="input-group"><label>POSISI / JABATAN</label><input type="text" class="field-title" value="${exp.title || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-badge" value="${exp.badge || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${exp.company || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc" oninput="updateStorageMeter()">${exp.desc || ''}</textarea></div>
-                        <div class="input-group">
-                            <label>FOTO PERUSAHAAN / DOKUMENTASI KERJA</label>
-                            <input type="file" accept="image/*" onchange="processImageUpload(this, 'exp-img-${idx}', 'prev-exp-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="exp-img-${idx}" class="field-img" value="${exp.img || ''}" placeholder="Atau tempel URL foto..." oninput="updateStorageMeter()">
-                            <img id="prev-exp-${idx}" src="${exp.img || ''}" class="preview-thumb" style="display:${exp.img ? 'block' : 'none'};">
-                        </div>
-                        <div class="input-group">
-                            <label>BERKAS PENDUKUNG (PDF/DOC/DLL) ATAU LINK</label>
-                            <input type="file" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.zip,image/*" onchange="encodeFileAsURL(this, 'exp-file-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="exp-file-${idx}" class="field-file" value="${exp.file || ''}" placeholder="Upload berkas atau tempel link Google Drive/website..." oninput="updateStorageMeter()">
-                            <input type="text" class="field-file-name" value="${exp.fileName || ''}" placeholder="Nama berkas (contoh: Sertifikat Magang)" style="margin-top:6px" oninput="updateStorageMeter()">
-                            <small style="display:block;color:#94a3b8;margin-top:6px;line-height:1.5">Untuk dokumen besar, lebih aman unggah ke Google Drive lalu tempel tautan berbagi di atas. Pastikan akses tautan diatur agar dapat dilihat pengunjung.</small>
-                        </div>
-                        <button class="btn btn-red" onclick="removeExp(${idx})">Hapus Pengalaman Ini</button>
-                    </div>`;
-            });
-        }
-
-        function renderEducationAdmin(education) {
-            const container = document.getElementById('edu-container');
-            container.innerHTML = '';
-            education.forEach((edu, idx) => {
-                let hasImg = edu.img && edu.img.trim() !== "";
-                container.innerHTML += `
-                    <div class="item-card-admin">
-                        <div class="input-group"><label>NAMA SEKOLAH / KAMPUS</label><input type="text" class="field-title" value="${edu.title || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>PERIODE / TAHUN</label><input type="text" class="field-period" value="${edu.period || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>JENJANG</label><input type="text" class="field-badge" value="${edu.badge || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${edu.desc || ''}</textarea></div>
-                        <div class="input-group">
-                            <label>FOTO SEKOLAH (Upload Gambar atau Paste URL)</label>
-                            <input type="file" accept="image/*" onchange="processImageUpload(this, 'edu-img-${idx}', 'prev-edu-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="edu-img-${idx}" class="field-img" value="${edu.img || ''}" placeholder="URL foto..." oninput="updateStorageMeter()">
-                            <img id="prev-edu-${idx}" src="${hasImg ? edu.img : ''}" class="preview-thumb" style="display:${hasImg ? 'block' : 'none'};">
-                        </div>
-                        <button class="btn btn-red" onclick="removeEdu(${idx})">Hapus Riwayat Ini</button>
-                    </div>`;
-            });
-        }
-
-        function renderGalleryAdmin(gallery) {
-            const container = document.getElementById('gal-container');
-            container.innerHTML = '';
-            gallery.forEach((g, idx) => {
-                let hasImg = g.img && g.img.trim() !== "";
-                container.innerHTML += `
-                    <div class="item-card-admin">
-                        <div class="input-group"><label>KETERANGAN FOTO</label><input type="text" class="field-caption" value="${g.caption || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group">
-                            <label>FOTO GALERI (Upload Gambar atau Link URL Cloud/Google Drive)</label>
-                            <input type="file" accept="image/*" onchange="processImageUpload(this, 'gal-img-${idx}', 'prev-gal-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="gal-img-${idx}" class="field-img" value="${g.img || ''}" placeholder="Atau paste link gambar/Google Drive di sini..." oninput="updateStorageMeter()">
-                            <img id="prev-gal-${idx}" src="${hasImg ? g.img : ''}" class="preview-thumb" style="display:${hasImg ? 'block' : 'none'};">
-                        </div>
-                        <button class="btn btn-red" onclick="removeGal(${idx})">Hapus Foto Ini</button>
-                    </div>`;
-            });
-        }
-
-        function renderProjectsAdmin(projects) {
-            const container = document.getElementById('proj-container');
-            container.innerHTML = '';
-            projects.forEach((p, idx) => {
-                container.innerHTML += `
-                    <div class="item-card-admin">
-                        <div class="input-group"><label>KATEGORI</label><input type="text" class="field-category" value="${p.category || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>JUDUL PROJECT</label><input type="text" class="field-title" value="${p.title || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${p.desc || ''}</textarea></div>
-                        <div class="input-group">
-                            <label>BERKAS ATAU LINK URL</label>
-                            <input type="file" accept="*/*" onchange="encodeFileAsURL(this, 'proj-link-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="proj-link-${idx}" class="field-link" value="${p.link || ''}" placeholder="URL..." oninput="updateStorageMeter()">
-                        </div>
-                        <button class="btn btn-red" onclick="removeProj(${idx})">Hapus Project Ini</button>
-                    </div>`;
-            });
-        }
-
-        function renderCertsAdmin(certs) {
-            const container = document.getElementById('cert-container');
-            container.innerHTML = '';
-            certs.forEach((c, idx) => {
-                container.innerHTML += `
-                    <div class="item-card-admin">
-                        <div class="input-group"><label>PENERBIT / LEMBAGA</label><input type="text" class="field-issuer" value="${c.issuer || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>NAMA SERTIFIKAT</label><input type="text" class="field-title" value="${c.title || ''}" oninput="updateStorageMeter()"></div>
-                        <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${c.desc || ''}</textarea></div>
-                        <div class="input-group">
-                            <label>BERKAS BUKTI ATAU LINK URL</label>
-                            <input type="file" accept="*/*" onchange="encodeFileAsURL(this, 'cert-link-${idx}')" style="margin-bottom:6px;">
-                            <input type="text" id="cert-link-${idx}" class="field-link" value="${c.link || ''}" placeholder="URL..." oninput="updateStorageMeter()">
-                        </div>
-                        <button class="btn btn-red" onclick="removeCert(${idx})">Hapus Sertifikat Ini</button>
-                    </div>`;
-            });
-        }
-
-        function getDataFromDOM(containerId, fields) {
-            const container = document.getElementById(containerId);
-            const cards = container.querySelectorAll('.item-card-admin');
-            let list = [];
-            cards.forEach(card => {
-                let obj = {};
-                fields.forEach(f => { obj[f] = card.querySelector(`.field-${f}`).value; });
-                list.push(obj);
-            });
-            return list;
-        }
-
-        function getExperiencesFromDOM() {
-            let cards = document.querySelectorAll('#exp-container .item-card-admin');
-            let list = [];
-            cards.forEach(card => {
-                list.push({
-                    title: card.querySelector('.field-title').value,
-                    badge: card.querySelector('.field-badge').value,
-                    company: card.querySelector('.field-company').value,
-                    desc: card.querySelector('.field-desc').value,
-                    img: card.querySelector('.field-img').value,
-                    file: card.querySelector('.field-file').value,
-                    fileName: card.querySelector('.field-file-name').value
-                });
-            });
-            return list;
-        }
-
-        function getEducationFromDOM() {
-            let cards = document.querySelectorAll('#edu-container .item-card-admin');
-            let list = [];
-            cards.forEach((card, idx) => {
-                list.push({
-                    title: card.querySelector('.field-title').value,
-                    period: card.querySelector('.field-period').value,
-                    badge: card.querySelector('.field-badge').value,
-                    desc: card.querySelector('.field-desc').value,
-                    img: card.querySelector(`#edu-img-${idx}`).value
-                });
-            });
-            return list;
-        }
-
-        function getGalleryFromDOM() {
-            let cards = document.querySelectorAll('#gal-container .item-card-admin');
-            let list = [];
-            cards.forEach((card, idx) => {
-                list.push({
-                    caption: card.querySelector('.field-caption').value,
-                    img: card.querySelector(`#gal-img-${idx}`).value
-                });
-            });
-            return list;
-        }
-
-        function getProjectsFromDOM() {
-            let cards = document.querySelectorAll('#proj-container .item-card-admin');
-            let list = [];
-            cards.forEach((card, idx) => {
-                list.push({
-                    category: card.querySelector('.field-category').value,
-                    title: card.querySelector('.field-title').value,
-                    desc: card.querySelector('.field-desc').value,
-                    link: card.querySelector(`#proj-link-${idx}`).value
-                });
-            });
-            return list;
-        }
-
-        function getCertsFromDOM() {
-            let cards = document.querySelectorAll('#cert-container .item-card-admin');
-            let list = [];
-            cards.forEach((card, idx) => {
-                list.push({
-                    issuer: card.querySelector('.field-issuer').value,
-                    title: card.querySelector('.field-title').value,
-                    desc: card.querySelector('.field-desc').value,
-                    link: card.querySelector(`#cert-link-${idx}`).value
-                });
-            });
-            return list;
-        }
-
-        function addEdu() { let d = loadCurrentData(); d.education.push({title:"", period:"", badge:"", desc:"", img:""}); saveTemp(d); renderEducationAdmin(d.education); updateStorageMeter(); }
-        function addSoft() { let d = loadCurrentData(); d.softSkills.push({title:"", desc:""}); saveTemp(d); renderList('soft-container', d.softSkills, ['title', 'desc']); updateStorageMeter(); }
-        function addHard() { let d = loadCurrentData(); d.hardSkills.push({title:"", desc:""}); saveTemp(d); renderList('hard-container', d.hardSkills, ['title', 'desc']); updateStorageMeter(); }
-        function addExp() { let d = loadCurrentData(); d.experiences.push({title:"", period:"", badge:"", company:"", desc:"", img:"", file:"", fileName:"", responsibilities:[], tools:[], attachments:[]}); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
-        function addProj() { let d = loadCurrentData(); d.projects.push({category:"", title:"", desc:"", link:""}); saveTemp(d); renderProjectsAdmin(d.projects); updateStorageMeter(); }
-        function addCert() { let d = loadCurrentData(); d.certificates.push({issuer:"", title:"", desc:"", link:""}); saveTemp(d); renderCertsAdmin(d.certificates); updateStorageMeter(); }
-        function addGal() { let d = loadCurrentData(); d.gallery.push({caption:"", img:""}); saveTemp(d); renderGalleryAdmin(d.gallery); updateStorageMeter(); }
-
-        function removeItem(containerId, idx) {
-            let d = loadCurrentData();
-            if(containerId==='soft-container') { d.softSkills.splice(idx,1); saveTemp(d); renderList('soft-container', d.softSkills, ['title', 'desc']); }
-            if(containerId==='hard-container') { d.hardSkills.splice(idx,1); saveTemp(d); renderList('hard-container', d.hardSkills, ['title', 'desc']); }
-            updateStorageMeter();
-        }
-        function removeEdu(idx) { let d = loadCurrentData(); d.education.splice(idx, 1); saveTemp(d); renderEducationAdmin(d.education); updateStorageMeter(); }
-        function removeExp(idx) { let d = loadCurrentData(); d.experiences.splice(idx, 1); saveTemp(d); renderExperiencesAdmin(d.experiences); updateStorageMeter(); }
-        function removeProj(idx) { let d = loadCurrentData(); d.projects.splice(idx, 1); saveTemp(d); renderProjectsAdmin(d.projects); updateStorageMeter(); }
-        function removeCert(idx) { let d = loadCurrentData(); d.certificates.splice(idx, 1); saveTemp(d); renderCertsAdmin(d.certificates); updateStorageMeter(); }
-        function removeGal(idx) { let d = loadCurrentData(); d.gallery.splice(idx, 1); saveTemp(d); renderGalleryAdmin(d.gallery); updateStorageMeter(); }
-
-        function loadCurrentData() {
-            return {
-                profile: { 
-                    name: document.getElementById('p-name') ? document.getElementById('p-name').value : "", 
-                    desc: document.getElementById('p-desc') ? document.getElementById('p-desc').value : "", 
-                    photo: document.getElementById('p-photo') ? document.getElementById('p-photo').value : "", 
-                    customLinks: window.getCustomLinksFromDOM ? window.getCustomLinksFromDOM() : [],
-                    cvFile: document.getElementById('p-cv-file') ? document.getElementById('p-cv-file').value : ""
-                },
-                education: getEducationFromDOM(),
-                softSkills: getDataFromDOM('soft-container', ['title', 'desc']),
-                hardSkills: getDataFromDOM('hard-container', ['title', 'desc']),
-                experiences: getExperiencesFromDOM(),
-                projects: getProjectsFromDOM(),
-                certificates: getCertsFromDOM(),
-                gallery: getGalleryFromDOM()
-            };
-        }
-
-        function saveTemp(data) {
+        try {
+            data = await readPortfolioFromCloud();
+            cloudLoaded = true;
             try {
                 localStorage.setItem('portfolio_data', JSON.stringify(data));
-            } catch (e) {
-                alert('Peringatan: Memori penyimpanan browser penuh!');
-            }
+            } catch (storageError) {}
+            setCloudMessage('✅ Data portofolio berhasil dimuat dari Google Sheets.', '#10b981');
+        } catch (cloudError) {
+            try {
+                const saved = localStorage.getItem('portfolio_data');
+                if (saved) data = normalizePortfolio(JSON.parse(saved));
+            } catch (localError) {}
+            setCloudMessage('⚠️ Google Sheets belum dapat diakses. Menampilkan data cadangan browser. ' + cloudError.message, '#fbbf24');
         }
-    </script>
 
-<!-- FULL UPGRADE LAYER: backward-compatible editor extensions -->
-<style>
-.upgrade-note{font-size:.78rem;color:#93c5fd;line-height:1.5;margin-top:6px}.field-level,.field-featured,.field-best,.field-latest{width:100%;padding:10px;background:#0f172a;color:#fff;border:1px solid #475569;border-radius:8px}.upgrade-actions{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.upgrade-actions button{border:0;border-radius:9px;padding:10px 14px;background:#334155;color:#fff;font-weight:700;cursor:pointer}.upgrade-actions button.primary{background:#2563eb}.upgrade-actions button.good{background:#059669}.item-card-admin textarea{min-height:76px;background:rgba(15,23,42,.96);color:#f8fafc;border-color:rgba(147,197,253,.24)}.field-attachments{min-height:125px!important;background:#0b1220!important;color:#dbeafe!important;border-color:rgba(96,165,250,.38)!important}.field-level,.field-featured,.field-best,.field-latest{color-scheme:dark}.item-card-admin{background:rgba(15,23,42,.78);border-color:rgba(147,197,253,.18)}.section-box{background:rgba(30,41,59,.56);border-color:rgba(147,197,253,.16)}
-</style>
-<script>
-(function(){
- const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
- const val=(card,sel)=>card.querySelector(sel)?.value||'';
- const parseAttachments=raw=>(raw||'').split(/\r?\n/).map(x=>x.trim()).filter(Boolean).map(line=>{let i=line.indexOf('|');return i<0?{name:'Lampiran',url:line}:{name:line.slice(0,i).trim()||'Lampiran',url:line.slice(i+1).trim()}}).filter(x=>x.url);
- const formatAttachments=arr=>(Array.isArray(arr)?arr:[]).map(x=>(x.name||'Lampiran')+' | '+(x.url||x.link||'')).filter(x=>!x.endsWith('| ')).join('\n');
- window.__portfolioEsc=esc;
- window.__portfolioAttachmentText=formatAttachments;
- window.__portfolioParseAttachments=parseAttachments;
+        document.getElementById('p-name').value = data.profile.name || '';
+        document.getElementById('p-desc').value = data.profile.desc || '';
+        document.getElementById('p-photo').value = data.profile.photo || '';
+        window.syncPreviewImage('p-photo', 'prev-p-photo');
+        window.renderCustomLinks(data.profile.customLinks || []);
+        document.getElementById('p-cv-file').value = data.profile.cvFile || '';
 
- const normalizeContactLink=x=>({label:String(x?.label||x?.name||x?.title||'Tautan').trim(),url:String(x?.url||x?.href||'').trim(),icon:String(x?.icon||'🔗').trim()});
- window.renderCustomLinks=function(items){const box=document.getElementById('custom-links-admin');if(!box)return;box.innerHTML='';(Array.isArray(items)?items:[]).map(normalizeContactLink).forEach((x,i)=>box.insertAdjacentHTML('beforeend',`
-  <div class="item-card-admin custom-link-row" data-index="${i}">
-   <div class="input-group"><label>Nama tombol / aplikasi</label><input class="custom-link-label" type="text" value="${esc(x.label)}" placeholder="Contoh: Instagram, Telegram, Website" oninput="updateStorageMeter()"></div>
-   <div class="input-group"><label>URL / alamat tujuan</label><input class="custom-link-url" type="text" value="${esc(x.url)}" placeholder="https://... / mailto:... / tel:..." oninput="updateStorageMeter()"></div>
-   <div class="input-group"><label>Ikon / Emoji (opsional)</label><input class="custom-link-icon" type="text" value="${esc(x.icon)}" placeholder="🔗" oninput="updateStorageMeter()"></div>
-   <button type="button" class="btn btn-red" onclick="removeCustomLink(${i})">Hapus Tombol</button>
-  </div>`));};
- window.addCustomLink=function(){const items=window.getCustomLinksFromDOM();items.push({label:'',url:'',icon:'🔗'});window.renderCustomLinks(items);updateStorageMeter();};
- window.removeCustomLink=function(i){const items=window.getCustomLinksFromDOM();items.splice(i,1);window.renderCustomLinks(items);updateStorageMeter();};
- window.getCustomLinksFromDOM=function(){return [...document.querySelectorAll('#custom-links-admin .custom-link-row')].map(c=>({label:val(c,'.custom-link-label').trim(),url:val(c,'.custom-link-url').trim(),icon:val(c,'.custom-link-icon').trim()||'🔗'}));};
- window.renderList=function(containerId,items,fields){
-   const c=document.getElementById(containerId); if(!c)return; c.innerHTML='';
-   (items||[]).forEach((it,i)=>{let html='<div class="item-card-admin" data-index="'+i+'">';
-     fields.forEach(f=>{html+=`<div class="input-group"><label>${esc(f==='title'?'NAMA KETERAMPILAN':'DESKRIPSI')}</label>${f==='desc'?`<textarea class="field-desc">${esc(it[f]||'')}</textarea>`:`<input type="text" class="field-${f}" value="${esc(it[f]||'')}">`}</div>`});
-     if(containerId==='hard-container'||containerId==='soft-container') html+=`<div class="input-group"><label>LEVEL KEMAMPUAN (opsional)</label><select class="field-level"><option ${it.level==='Beginner'?'selected':''}>Beginner</option><option ${it.level==='Intermediate'?'selected':''}>Intermediate</option><option ${it.level==='Advanced'?'selected':''}>Advanced</option><option ${it.level==='Expert'?'selected':''}>Expert</option></select></div>`;
-     html+=`<button class="btn btn-red" onclick="removeItem('${containerId}',${i})">Hapus Item Ini</button></div>`;c.insertAdjacentHTML('beforeend',html);
-   });
- };
- window.renderExperiencesAdmin=function(items){const c=document.getElementById('exp-container');if(!c)return;c.innerHTML='';(items||[]).forEach((e,i)=>c.insertAdjacentHTML('beforeend',`
- <div class="item-card-admin"><div class="input-group"><label>POSISI / JABATAN</label><input class="field-title" value="${esc(e.title)}"></div>
- <div class="input-group"><label>PERIODE KERJA</label><input class="field-period" value="${esc(e.period||e.badge||'')}" placeholder="Contoh: Januari 2024 – Juni 2024" oninput="updateStorageMeter()"></div><div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input class="field-company" value="${esc(e.company)}"></div>
- <div class="input-group"><label>DESKRIPSI PEKERJAAN</label><textarea class="field-desc">${esc(e.desc)}</textarea></div>
- <div class="input-group"><label>TANGGUNG JAWAB (satu per baris)</label><textarea class="field-responsibilities" placeholder="Contoh: Melakukan inspeksi kualitas">${esc((e.responsibilities||[]).join('\n'))}</textarea></div>
- <div class="input-group"><label>TOOLS YANG DIGUNAKAN (pisahkan koma)</label><input class="field-tools" value="${esc(Array.isArray(e.tools)?e.tools.join(', '):(e.tools||''))}"></div>
- <div class="input-group"><label>FOTO PERUSAHAAN / DOKUMENTASI</label><input type="file" accept="image/*" onchange="processImageUpload(this,'exp-img-${i}','prev-exp-${i}')"><input id="exp-img-${i}" class="field-img" value="${esc(e.img)}" placeholder="URL foto"><img id="prev-exp-${i}" class="preview-thumb" src="${esc(e.img)}" style="display:${e.img?'block':'none'}"></div>
- <div class="input-group exp-attachment-manager"><label>LAMPIRAN PENGALAMAN KERJA</label><input type="file" multiple onchange="addMultiAttachments(this,'exp-attachments-${i}');setTimeout(()=>refreshExperienceAttachmentControls(${i}),80)"><textarea id="exp-attachments-${i}" class="field-attachments" oninput="refreshExperienceAttachmentControls(${i})" placeholder="Sertifikat Magang | https://...">${esc(formatAttachments(e.attachments||((e.file)?[{name:e.fileName||'Berkas Pendukung',url:e.file}]:[])))}</textarea><div id="exp-attachment-controls-${i}" class="attachment-admin-list"></div><div class="upgrade-note">Tambahkan banyak file sekaligus atau URL Google Drive. Setiap lampiran dapat dihapus satu per satu melalui tombol di bawah. File lokal dibatasi 1,5 MB per file; file lebih besar sebaiknya menggunakan URL Drive.</div></div>
- <button class="btn btn-red" onclick="removeExp(${i})">Hapus Pengalaman Ini</button></div>`));(items||[]).forEach((e,i)=>window.refreshExperienceAttachmentControls(i));};
- window.renderProjectsAdmin=function(items){const c=document.getElementById('proj-container');if(!c)return;c.innerHTML='';(items||[]).forEach((p,i)=>c.insertAdjacentHTML('beforeend',`
- <div class="item-card-admin"><div class="input-group"><label>KATEGORI</label><input class="field-category" value="${esc(p.category)}"></div><div class="input-group"><label>NAMA PROYEK</label><input class="field-title" value="${esc(p.title)}"></div>
- <div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc">${esc(p.desc)}</textarea></div><div class="input-group"><label>GAMBAR / SCREENSHOT PROYEK</label><input type="file" accept="image/*" onchange="processImageUpload(this,'proj-img-${i}','prev-proj-${i}')"><input id="proj-img-${i}" class="field-img" value="${esc(p.img||'')}" placeholder="URL gambar proyek"><img id="prev-proj-${i}" class="preview-thumb" src="${esc(p.img||'')}" style="display:${p.img?'block':'none'}"></div><div class="input-group"><label>TUJUAN & MANFAAT</label><textarea class="field-objective">${esc(p.objective||'')}</textarea></div>
- <div class="input-group"><label>TOOLS / TEKNOLOGI</label><input class="field-tools" value="${esc(Array.isArray(p.tools)?p.tools.join(', '):(p.tools||''))}"></div><div class="input-group"><label>HASIL PROYEK</label><textarea class="field-result">${esc(p.result||'')}</textarea></div>
- <div class="input-group project-attachment-manager"><label>LAMPIRAN PROYEK (bisa banyak file atau URL)</label><input type="file" multiple onchange="addMultiAttachments(this,'proj-attachments-${i}');setTimeout(()=>refreshProjectAttachmentControls(${i}),80)"><textarea id="proj-attachments-${i}" class="field-attachments" oninput="refreshProjectAttachmentControls(${i})" placeholder="Laporan Proyek | https://...&#10;Dokumentasi | https://...">${esc(formatAttachments(p.attachments||((p.link)?[{name:'Lihat Proyek',url:p.link}]:[])))}</textarea><div id="proj-attachment-controls-${i}" class="attachment-admin-list"></div><div class="upgrade-note">Setiap lampiran dapat dihapus satu per satu. File lokal dibatasi 1,5 MB per file; untuk file lebih besar, unggah ke Google Drive lalu tempel URL.</div><input class="field-link" value="${esc(p.link||'')}" placeholder="Tautan utama lama (opsional, untuk kompatibilitas data lama)"></div>
- <div class="input-group"><label>TONJOLKAN PROYEK</label><label><input type="checkbox" class="field-featured" ${p.featured?'checked':''}> Featured Project</label><label><input type="checkbox" class="field-best" ${p.best?'checked':''}> Best Project</label><label><input type="checkbox" class="field-latest" ${p.latest?'checked':''}> Latest Project</label></div>
- <button class="btn btn-red" onclick="removeProj(${i})">Hapus Project Ini</button></div>`));(items||[]).forEach((p,i)=>window.refreshProjectAttachmentControls(i));};
- window.renderCertsAdmin=function(items){const c=document.getElementById('cert-container');if(!c)return;c.innerHTML='';(items||[]).forEach((x,i)=>c.insertAdjacentHTML('beforeend',`
- <div class="item-card-admin"><div class="input-group"><label>PENERBIT / LEMBAGA</label><input class="field-issuer" value="${esc(x.issuer)}"></div><div class="input-group"><label>NAMA SERTIFIKAT</label><input class="field-title" value="${esc(x.title)}"></div><div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc">${esc(x.desc)}</textarea></div>
- <div class="input-group"><label>LAMPIRAN (satu per baris: Nama | URL)</label><input type="file" multiple onchange="addMultiAttachments(this,'cert-attachments-${i}')"><textarea id="cert-attachments-${i}" class="field-attachments">${esc(formatAttachments(x.attachments||((x.link)?[{name:'Sertifikat',url:x.link}]:[])))}</textarea><input class="field-link" value="${esc(x.link||'')}" placeholder="Tautan utama lama (opsional)"></div><button class="btn btn-red" onclick="removeCert(${i})">Hapus Sertifikat Ini</button></div>`));};
- window.refreshProjectAttachmentControls=function(i){const box=document.getElementById('proj-attachments-'+i),host=document.getElementById('proj-attachment-controls-'+i);if(!box||!host)return;const rows=box.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);host.innerHTML=rows.map((line,n)=>{const cut=line.indexOf('|'),name=cut<0?'Lampiran':(line.slice(0,cut).trim()||'Lampiran'),url=cut<0?line:line.slice(cut+1).trim();return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url)?'File terlampir':'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeProjectAttachment(${i},${n})">Hapus</button></div>`;}).join('');};
- window.removeProjectAttachment=function(i,n){const box=document.getElementById('proj-attachments-'+i);if(!box)return;const rows=box.value.split(/\r?\n/).filter(x=>x.trim());rows.splice(n,1);box.value=rows.join('\n');refreshProjectAttachmentControls(i);updateStorageMeter();};
- window.refreshExperienceAttachmentControls=function(i){const box=document.getElementById('exp-attachments-'+i),host=document.getElementById('exp-attachment-controls-'+i);if(!box||!host)return;const rows=box.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);host.innerHTML=rows.map((line,n)=>{const cut=line.indexOf('|'),name=cut<0?'Lampiran':(line.slice(0,cut).trim()||'Lampiran'),url=cut<0?line:line.slice(cut+1).trim();return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url)?'File terlampir':'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeExperienceAttachment(${i},${n})">Hapus</button></div>`;}).join('');};
- window.removeExperienceAttachment=function(i,n){const box=document.getElementById('exp-attachments-'+i);if(!box)return;const rows=box.value.split(/\r?\n/).filter(x=>x.trim());rows.splice(n,1);box.value=rows.join('\n');refreshExperienceAttachmentControls(i);updateStorageMeter();};
- window.addMultiAttachments=async function(input,targetId){const box=document.getElementById(targetId);if(!box||!input.files?.length)return;const lines=box.value.split(/\r?\n/).filter(Boolean);for(const file of input.files){if(file.size>1500000){alert('File '+file.name+' lebih dari 1,5 MB. Unggah ke Google Drive lalu tempel URL-nya.');continue;}const data=await new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)});lines.push(file.name+' | '+data);}box.value=lines.join('\n');input.value='';updateStorageMeter();};
- window.getDataFromDOM=function(containerId,fields){return [...document.querySelectorAll('#'+containerId+' .item-card-admin')].map(card=>{let o={};fields.forEach(f=>o[f]=val(card,'.field-'+f));if(containerId==='hard-container'||containerId==='soft-container')o.level=val(card,'.field-level')||'';return o;});};
- window.getExperiencesFromDOM=function(){return [...document.querySelectorAll('#exp-container .item-card-admin')].map((c)=>({title:val(c,'.field-title'),period:val(c,'.field-period'),badge:val(c,'.field-period'),company:val(c,'.field-company'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),file:val(c,'.field-file'),fileName:val(c,'.field-file-name'),responsibilities:val(c,'.field-responsibilities').split(/\r?\n/).map(x=>x.trim()).filter(Boolean),tools:val(c,'.field-tools').split(',').map(x=>x.trim()).filter(Boolean),attachments:parseAttachments(val(c,'.field-attachments'))}));};
- window.getProjectsFromDOM=function(){return [...document.querySelectorAll('#proj-container .item-card-admin')].map(c=>({category:val(c,'.field-category'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),objective:val(c,'.field-objective'),tools:val(c,'.field-tools').split(',').map(x=>x.trim()).filter(Boolean),result:val(c,'.field-result'),link:val(c,'.field-link'),attachments:parseAttachments(val(c,'.field-attachments')),featured:!!c.querySelector('.field-featured')?.checked,best:!!c.querySelector('.field-best')?.checked,latest:!!c.querySelector('.field-latest')?.checked}));};
- window.getCertsFromDOM=function(){return [...document.querySelectorAll('#cert-container .item-card-admin')].map(c=>({issuer:val(c,'.field-issuer'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),link:val(c,'.field-link'),attachments:parseAttachments(val(c,'.field-attachments'))}));};
- window.loadCurrentData=function(){const get=id=>document.getElementById(id)?.value||'';return {profile:{name:get('p-name'),desc:get('p-desc'),photo:get('p-photo'),cvFile:get('p-cv-file'),customLinks:window.getCustomLinksFromDOM()},education:window.getEducationFromDOM(),softSkills:window.getDataFromDOM('soft-container',['title','desc']),hardSkills:window.getDataFromDOM('hard-container',['title','desc']),experiences:window.getExperiencesFromDOM(),projects:window.getProjectsFromDOM(),certificates:window.getCertsFromDOM(),gallery:window.getGalleryFromDOM()};};
- window.previewPortfolioDraft=function(){const d=loadCurrentData();const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuka preview.');return;}const cards=(d.projects||[]).map(p=>`<article><small>${esc(p.category)}</small><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p><p><b>Tujuan:</b> ${esc(p.objective)}</p><p><b>Tools:</b> ${esc((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${esc(p.result)}</p></article>`).join('');w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Preview Portofolio</title><style>body{font:16px Arial;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.1),rgba(30,58,138,.35) 30%,#090d16 70%,#030508);color:#e2e8f0;margin:0;padding:30px;min-height:100vh}main{max-width:850px;margin:auto;background:rgba(15,23,42,.94);border:1px solid rgba(147,197,253,.24);padding:35px;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.5)}h1,h2{color:#93c5fd}article{padding:16px;background:rgba(30,41,59,.72);border:1px solid rgba(147,197,253,.2);border-radius:12px;margin:14px 0}p{line-height:1.6;white-space:pre-line;color:#cbd5e1}small{color:#93c5fd}</style></head><body><main><h1>${esc(d.profile.name)}</h1><p>${esc(d.profile.desc)}</p><h2>Pengalaman</h2>${(d.experiences||[]).map(e=>`<article><h3>${esc(e.title)} — ${esc(e.company)}</h3><p>${esc(e.desc)}</p><p>${esc((e.responsibilities||[]).join(' • '))}</p></article>`).join('')}<h2>Proyek</h2>${cards}<h2>Pendidikan</h2>${(d.education||[]).map(e=>`<article><h3>${esc(e.title)}</h3><p>${esc(e.period)} · ${esc(e.desc)}</p></article>`).join('')}</main></body></html>`);w.document.close();};
- window.generatePortfolioBook=function(){const d=loadCurrentData();const escp=esc;const section=(title,body)=>`<section><h2>${title}</h2>${body||'<p>Belum ada data.</p>'}</section>`;const html=`<!doctype html><html><head><meta charset="utf-8"><title>Digital Portfolio Book - ${escp(d.profile.name)}</title><style>@page{size:A4 portrait;margin:17mm 16mm 19mm}*{box-sizing:border-box}body{font:11pt 'Arial',sans-serif;color:#172033;line-height:1.55}header{min-height:245mm;display:flex;flex-direction:column;justify-content:center;border-bottom:7px solid #2563eb;page-break-after:always}header img{width:38mm;height:48mm;object-fit:cover;border-radius:8px;margin-bottom:18px}header h1{font-size:34pt;color:#12336b;margin:0}header p{font-size:15pt;color:#52627a}h2{font-size:19pt;color:#12336b;border-bottom:2px solid #dbeafe;padding-bottom:7px;margin:0 0 14px}section{page-break-inside:auto;margin-bottom:22px;orphans:3;widows:3}section h2{break-after:avoid-page}article{break-inside:avoid-page}img{max-width:100%;height:auto}a{color:#1d4ed8;overflow-wrap:anywhere}article{page-break-inside:avoid;border:1px solid #d9e2ef;border-radius:8px;padding:12px;margin:10px 0}h3{margin:0 0 5px;color:#1d4ed8}p{white-space:pre-line;margin:5px 0}.muted{color:#64748b;font-size:9pt}.pagebreak{page-break-before:always}.tag{display:inline-block;background:#eaf2ff;color:#1d4ed8;padding:3px 8px;border-radius:20px;margin:2px;font-size:9pt}@media screen{body{max-width:850px;margin:30px auto;padding:25px;background:#fff;box-shadow:0 5px 35px #ccd5e2}.print{position:fixed;right:20px;top:20px;background:#2563eb;color:#fff;padding:12px 18px;border:0;border-radius:8px;cursor:pointer}}@media print{.print{display:none}}</style></head><body><button class="print" onclick="window.print()">Cetak / Simpan PDF</button><header>${d.profile.photo?`<img src="${escp(d.profile.photo)}" style="width:38mm;height:48mm;object-fit:cover;border-radius:8px;margin-bottom:18px">`:''}<p>DIGITAL PORTFOLIO BOOK</p><h1>${escp(d.profile.name||'Portofolio Profesional')}</h1><p>${escp(d.profile.headline||'Professional Portfolio')}</p><p class="muted">${(d.profile.customLinks||[]).map(x=>escp((x.icon||'')+' '+(x.label||'')+' '+(x.url||''))).join(' · ')}</p></header>${section('Profil',`<p>${escp(d.profile.desc)}</p>`)}${section('Pendidikan',(d.education||[]).map(e=>`<article><h3>${escp(e.title)}</h3><p class="muted">${escp(e.period)} · ${escp(e.badge)}</p><p>${escp(e.desc)}</p></article>`).join(''))}${section('Pengalaman Kerja',(d.experiences||[]).map(e=>`<article><h3>${escp(e.title)} — ${escp(e.company)}</h3><p class="muted">${escp(e.period||e.badge||'')}</p><p>${escp(e.desc)}</p><p>${escp((e.responsibilities||[]).map(x=>'• '+x).join('\n'))}</p><p><b>Tools:</b> ${escp((e.tools||[]).join(', '))}</p>${(e.attachments||[]).length?`<p><b>Lampiran:</b> ${(e.attachments||[]).map(x=>`<a href="${escp(x.url)}">${escp(x.name||'Dokumen')}</a>`).join(' · ')}</p>`:''}</article>`).join(''))}${section('Keterampilan',[...(d.softSkills||[]).map(x=>({...x,type:'Soft'})),...(d.hardSkills||[]).map(x=>({...x,type:'Hard'}))].map(x=>`<article><h3>${escp(x.title)} <span class="muted">${escp(x.type)} · ${escp(x.level||'')}</span></h3><p>${escp(x.desc)}</p></article>`).join(''))}${section('Proyek',(d.projects||[]).map(p=>`<article><h3>${escp(p.title)}</h3><p class="muted">${escp(p.category)} ${(p.featured?' · Featured':'')} ${(p.best?' · Best':'')} ${(p.latest?' · Latest':'')}</p><p>${escp(p.desc)}</p><p><b>Tujuan:</b> ${escp(p.objective)}</p><p><b>Tools:</b> ${escp((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${escp(p.result)}</p></article>`).join(''))}${section('Sertifikat',(d.certificates||[]).map(c=>`<article><h3>${escp(c.title)}</h3><p class="muted">${escp(c.issuer)}</p><p>${escp(c.desc)}</p></article>`).join(''))}<p class="muted">Dokumen dibuat dari data Admin Portofolio Merki Aryanto. Lampiran lengkap tetap tersedia melalui website.</p></body></html>`;const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuat Digital Portfolio Book.');return;}w.document.open();w.document.write(html);w.document.close();};
- const oldOnload=window.onload;window.onload=async function(ev){if(typeof oldOnload==='function')await oldOnload.call(this,ev);const bar=document.querySelector('.floating-bar');if(bar&&!document.getElementById('btn-preview-draft')){bar.insertAdjacentHTML('afterbegin','<button id="btn-preview-draft" class="btn-view" type="button" onclick="previewPortfolioDraft()">Preview Draft</button><button class="btn-view" type="button" onclick="generatePortfolioBook()">Portfolio Book PDF</button>');}};
- const oldSave=window.saveAllData;window.saveAllData=async function(){return oldSave.apply(this,arguments);};
-})();
-</script>
+        window.renderEducationAdmin(data.education);
+        window.renderList('soft-container', data.softSkills, ['title', 'desc']);
+        window.renderList('hard-container', data.hardSkills, ['title', 'desc']);
+        window.renderExperiencesAdmin(data.experiences);
+        window.renderProjectsAdmin(data.projects);
+        window.renderCertsAdmin(data.certificates);
+        window.renderGalleryAdmin(data.gallery);
 
-<script id="portfolio-final-admin-completion">
-(function(){
- 'use strict';
- const esc=window.__portfolioEsc||((v)=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])));
- const parse=window.__portfolioParseAttachments||(()=>[]);
- const fmt=window.__portfolioAttachmentText||(()=> '');
- const val=(node,sel)=>node.querySelector(sel)?.value||'';
- window.renderEducationAdmin=function(items){const c=document.getElementById('edu-container');if(!c)return;c.innerHTML='';(items||[]).forEach((e,i)=>c.insertAdjacentHTML('beforeend',`
-  <div class="item-card-admin"><div class="input-group"><label>NAMA SEKOLAH / KAMPUS</label><input class="field-title" value="${esc(e.title)}" oninput="updateStorageMeter()"></div>
-  <div class="input-group"><label>PERIODE / TAHUN</label><input class="field-period" value="${esc(e.period)}" placeholder="Contoh: 2022 – Sekarang" oninput="updateStorageMeter()"></div>
-  <div class="input-group"><label>JENJANG</label><input class="field-badge" value="${esc(e.badge)}" placeholder="Contoh: S1 Teknik Industri" oninput="updateStorageMeter()"></div>
-  <div class="input-group"><label>DESKRIPSI / KEGIATAN / PRESTASI</label><textarea class="field-desc" oninput="updateStorageMeter()">${esc(e.desc)}</textarea></div>
-  <div class="input-group"><label>FOTO SEKOLAH / KAMPUS</label><input type="file" accept="image/*" onchange="processImageUpload(this,'edu-img-${i}','prev-edu-${i}')"><input id="edu-img-${i}" class="field-img" value="${esc(e.img)}" placeholder="URL foto (opsional)" oninput="updateStorageMeter()"><img id="prev-edu-${i}" class="preview-thumb" src="${esc(e.img)}" style="display:${e.img?'block':'none'}"></div>
-  <div class="input-group edu-attachment-manager"><label>LAMPIRAN PENDIDIKAN (ijazah, transkrip, sertifikat, dokumentasi)</label><input type="file" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,image/*" onchange="addMultiAttachments(this,'edu-attachments-${i}');setTimeout(()=>refreshEducationAttachmentControls(${i}),80)"><textarea id="edu-attachments-${i}" class="field-attachments" oninput="refreshEducationAttachmentControls(${i});updateStorageMeter()" placeholder="Nama Dokumen | URL Google Drive">${esc(fmt(e.attachments||[]))}</textarea><div id="edu-attachment-controls-${i}" class="attachment-admin-list"></div><div class="upgrade-note">Bisa menambahkan beberapa dokumen atau URL. Hapus lampiran satu per satu. File lokal maksimal 1,5 MB; dokumen besar gunakan URL Google Drive.</div></div>
-  <button class="btn btn-red" onclick="removeEdu(${i})">Hapus Riwayat Ini</button></div>`));(items||[]).forEach((e,i)=>window.refreshEducationAttachmentControls(i));};
- window.refreshEducationAttachmentControls=function(i){const box=document.getElementById('edu-attachments-'+i),host=document.getElementById('edu-attachment-controls-'+i);if(!box||!host)return;const rows=box.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);host.innerHTML=rows.map((line,n)=>{const cut=line.indexOf('|'),name=cut<0?'Lampiran':(line.slice(0,cut).trim()||'Lampiran'),url=cut<0?line:line.slice(cut+1).trim();return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url)?'File terlampir':'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeEducationAttachment(${i},${n})">Hapus</button></div>`;}).join('');};
- window.removeEducationAttachment=function(i,n){const box=document.getElementById('edu-attachments-'+i);if(!box)return;const rows=box.value.split(/\r?\n/).filter(x=>x.trim());rows.splice(n,1);box.value=rows.join('\n');window.refreshEducationAttachmentControls(i);updateStorageMeter();};
- window.getEducationFromDOM=function(){return [...document.querySelectorAll('#edu-container .item-card-admin')].map((c)=>({title:val(c,'.field-title'),period:val(c,'.field-period'),badge:val(c,'.field-badge'),desc:val(c,'.field-desc'),img:val(c,'.field-img'),attachments:parse(val(c,'.field-attachments'))}));};
- window.renderCertsAdmin=function(items){const c=document.getElementById('cert-container');if(!c)return;c.innerHTML='';(items||[]).forEach((x,i)=>c.insertAdjacentHTML('beforeend',`
-  <div class="item-card-admin"><div class="input-group"><label>PENERBIT / LEMBAGA</label><input class="field-issuer" value="${esc(x.issuer)}" oninput="updateStorageMeter()"></div><div class="input-group"><label>NAMA SERTIFIKAT</label><input class="field-title" value="${esc(x.title)}" oninput="updateStorageMeter()"></div><div class="input-group"><label>DESKRIPSI</label><textarea class="field-desc" oninput="updateStorageMeter()">${esc(x.desc)}</textarea></div>
-  <div class="input-group cert-attachment-manager"><label>FILE SERTIFIKAT / DOKUMEN BUKTI</label><input type="file" multiple accept=".pdf,.doc,.docx,image/*" onchange="addMultiAttachments(this,'cert-attachments-${i}');setTimeout(()=>refreshCertificateAttachmentControls(${i}),80)"><textarea id="cert-attachments-${i}" class="field-attachments" oninput="refreshCertificateAttachmentControls(${i});updateStorageMeter()" placeholder="Nama Sertifikat | URL">${esc(fmt(x.attachments||((x.link)?[{name:'Sertifikat',url:x.link}]:[])))}</textarea><div id="cert-attachment-controls-${i}" class="attachment-admin-list"></div><div class="upgrade-note">Lampiran bisa lebih dari satu. Hapus masing-masing dokumen secara terpisah.</div><input class="field-link" value="${esc(x.link||'')}" placeholder="Tautan utama lama (opsional)" oninput="updateStorageMeter()"></div><button class="btn btn-red" onclick="removeCert(${i})">Hapus Sertifikat Ini</button></div>`));(items||[]).forEach((x,i)=>window.refreshCertificateAttachmentControls(i));};
- window.refreshCertificateAttachmentControls=function(i){const box=document.getElementById('cert-attachments-'+i),host=document.getElementById('cert-attachment-controls-'+i);if(!box||!host)return;const rows=box.value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean);host.innerHTML=rows.map((line,n)=>{const cut=line.indexOf('|'),name=cut<0?'Lampiran':(line.slice(0,cut).trim()||'Lampiran'),url=cut<0?line:line.slice(cut+1).trim();return `<div class="attachment-admin-row"><span class="attachment-admin-name">📎 ${esc(name)}</span><span class="attachment-admin-kind">${/^data:/i.test(url)?'File terlampir':'URL / Drive'}</span><button type="button" class="btn btn-red attachment-remove-btn" onclick="removeCertificateAttachment(${i},${n})">Hapus</button></div>`;}).join('');};
- window.removeCertificateAttachment=function(i,n){const box=document.getElementById('cert-attachments-'+i);if(!box)return;const rows=box.value.split(/\r?\n/).filter(x=>x.trim());rows.splice(n,1);box.value=rows.join('\n');window.refreshCertificateAttachmentControls(i);updateStorageMeter();};
- window.getCertsFromDOM=function(){return [...document.querySelectorAll('#cert-container .item-card-admin')].map(c=>({issuer:val(c,'.field-issuer'),title:val(c,'.field-title'),desc:val(c,'.field-desc'),link:val(c,'.field-link'),attachments:parse(val(c,'.field-attachments'))}));};
- window.renderList=function(containerId,items,fields){const c=document.getElementById(containerId);if(!c)return;c.innerHTML='';(items||[]).forEach((it,i)=>{let html='<div class="item-card-admin" data-index="'+i+'">';fields.forEach(f=>{html+=`<div class="input-group"><label>${f==='title'?'NAMA KETERAMPILAN':'DESKRIPSI'}</label>${f==='desc'?`<textarea class="field-desc" oninput="updateStorageMeter()">${esc(it[f]||'')}</textarea>`:`<input type="text" class="field-${f}" value="${esc(it[f]||'')}" oninput="updateStorageMeter()">`}</div>`;});html+=`<div class="input-group"><label>LEVEL KEMAMPUAN</label><select class="field-level" onchange="updateStorageMeter()"><option value="">Tidak ditentukan</option>${['Beginner','Intermediate','Advanced','Expert'].map(x=>`<option value="${x}" ${it.level===x?'selected':''}>${x}</option>`).join('')}</select></div><button class="btn btn-red" onclick="removeItem('${containerId}',${i})">Hapus Item Ini</button></div>`;c.insertAdjacentHTML('beforeend',html);});};
- window.generatePortfolioBook=function(){const d=window.loadCurrentData();const E=esc;const para=x=>E(x||'').replace(/\n/g,'<br>');const attach=(a,legacy,label)=>{let rows=Array.isArray(a)?a.slice():[];if(!rows.length&&legacy)rows=[{name:label||'Dokumen',url:legacy}];return rows.filter(x=>x&&x.url).map(x=>`<a href="${E(x.url)}" target="_blank">${E(x.name||'Lampiran')}</a>`).join(' · ');};const card=(title,sub,body)=>`<article><h3>${E(title||'')}</h3>${sub?`<div class="muted">${E(sub)}</div>`:''}${body||''}</article>`;const section=(title,body)=>`<section><h2>${E(title)}</h2>${body||'<p class="muted">Belum ada data.</p>'}</section>`;
- const edu=(d.education||[]).map(x=>card(x.title,[x.badge,x.period].filter(Boolean).join(' · '),`<p>${para(x.desc)}</p>${x.img?`<img class="edu-img" src="${E(x.img)}">`:''}<p class="attachments">${attach(x.attachments,'','Lampiran Pendidikan')}</p>`)).join('');
- const exp=(d.experiences||[]).map(x=>card(x.title,x.company+' · '+(x.period||x.badge||''),`<p>${para(x.desc)}</p>${(x.responsibilities||[]).length?`<ul>${x.responsibilities.map(y=>`<li>${para(y)}</li>`).join('')}</ul>`:''}<p><b>Tools:</b> ${E((x.tools||[]).join(', '))}</p><p class="attachments">${attach(x.attachments,x.file,x.fileName)}</p>`)).join('');
- const skills=[...(d.softSkills||[]).map(x=>({...x,kind:'Soft Skill'})),...(d.hardSkills||[]).map(x=>({...x,kind:'Hard Skill'}))].map(x=>card(x.title,x.kind+(x.level?' · '+x.level:''),`<p>${para(x.desc)}</p>`)).join('');
- const projects=(d.projects||[]).map(x=>card(x.title,[x.category,x.featured?'Featured':null,x.best?'Best Project':null,x.latest?'Latest':null].filter(Boolean).join(' · '),`${x.img?`<img class="project-img" src="${E(x.img)}">`:''}<p>${para(x.desc)}</p>${x.objective?`<p><b>Tujuan & Manfaat:</b><br>${para(x.objective)}</p>`:''}${x.tools?.length?`<p><b>Tools:</b> ${E(x.tools.join(', '))}</p>`:''}${x.result?`<p><b>Hasil:</b><br>${para(x.result)}</p>`:''}<p class="attachments">${attach(x.attachments,x.link,'Lihat Proyek')}</p>`)).join('');
- const cert=(d.certificates||[]).map(x=>card(x.title,x.issuer,`<p>${para(x.desc)}</p><p class="attachments">${attach(x.attachments,x.link,'Sertifikat')}</p>`)).join('');
- const contacts=(d.profile.customLinks||[]).map(x=>`<a href="${E(x.url||'#')}">${E((x.icon||'')+' '+(x.label||'Kontak'))}</a>`).join(' · ');
- const html=`<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Digital Portfolio Book - ${E(d.profile.name)}</title><style>@page{size:A4 portrait;margin:17mm 16mm 20mm}*{box-sizing:border-box}body{font:10.5pt/1.58 Arial,sans-serif;color:#18243a;margin:0}header{min-height:255mm;display:flex;flex-direction:column;justify-content:center;border-bottom:7px solid #2563eb;page-break-after:always}header img{width:42mm;height:52mm;object-fit:cover;border-radius:8px;margin-bottom:15mm}header h1{font-size:32pt;line-height:1.12;color:#12336b;margin:5mm 0}header .kicker{font-size:10pt;letter-spacing:2px;color:#2563eb;font-weight:bold}header .bio{font-size:14pt;color:#52627a;max-width:160mm}h2{font-size:18pt;color:#12336b;border-bottom:2px solid #dbeafe;padding-bottom:6px;margin:0 0 12px;break-after:avoid}h3{font-size:12pt;color:#1d4ed8;margin:0 0 4px}section{margin:0 0 20px;break-inside:auto}article{border:1px solid #d9e2ef;border-radius:8px;padding:11px 13px;margin:9px 0;break-inside:avoid-page}p{margin:5px 0;overflow-wrap:anywhere}.muted{font-size:9pt;color:#64748b}.attachments{font-size:9pt;margin-top:8px}.attachments a,header a{color:#1d4ed8;margin-right:5px}.edu-img,.project-img{display:block;max-width:100%;max-height:65mm;object-fit:contain;margin:8px 0;border-radius:5px}ul{margin:5px 0;padding-left:19px}li{margin:3px 0}.footer{position:fixed;bottom:-13mm;left:0;right:0;border-top:1px solid #dbe3ef;padding-top:4px;font-size:8pt;color:#64748b;display:flex;justify-content:space-between}.footer .page:after{content:counter(page)}@media screen{body{max-width:850px;margin:25px auto;padding:25px;background:#fff;box-shadow:0 5px 35px #ccd5e2}.printbar{position:sticky;top:0;background:#12336b;padding:10px;text-align:right;z-index:2}.printbar button{background:#2563eb;color:#fff;border:0;border-radius:8px;padding:11px 16px;font-weight:bold;cursor:pointer}}@media print{.printbar{display:none}}</style></head><body><div class="printbar"><button onclick="window.print()">Cetak / Simpan sebagai PDF</button></div><header>${d.profile.photo?`<img src="${E(d.profile.photo)}">`:''}<div class="kicker">DIGITAL PORTFOLIO BOOK</div><h1>${E(d.profile.name||'Portofolio Profesional')}</h1><p class="bio">${para(d.profile.desc)}</p><p>${contacts}</p><p class="muted">Diperbarui ${new Date().toLocaleDateString('id-ID')}</p></header>${section('Profil Profesional',`<p>${para(d.profile.desc)}</p>`)}${section('Pendidikan',edu)}${section('Pengalaman Kerja',exp)}${section('Keterampilan',skills)}${section('Proyek',projects)}${section('Sertifikat',cert)}<div class="footer"><span>${E(d.profile.name||'Portofolio Profesional')} · Digital Portfolio Book</span><span>Halaman <b class="page"></b></span></div></body></html>`;const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuat Portfolio Book.');return;}w.document.open();w.document.write(html);w.document.close();};
- window.previewPortfolioDraft=function(){window.generatePortfolioBook();};
+        window.updateStorageMeter();
+
+        setTimeout(function() {
+            const status = document.getElementById('cloud-status');
+            if (status) status.style.display = 'none';
+        }, cloudLoaded ? 900 : 3500);
+    };
 })();
 </script>
 
