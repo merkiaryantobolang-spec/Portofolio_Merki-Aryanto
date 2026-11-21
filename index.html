@@ -981,11 +981,35 @@
    modal.style.display='flex';document.body.style.overflow='hidden';
  };
  const oldClose=window.closeModal;window.closeModal=function(){const m=document.getElementById('media-modal'),c=document.getElementById('modal-viewer-container');if(c)c.innerHTML='';if(m)m.style.display='none';document.body.style.overflow='';};
- function safeContactHref(value){
-   const raw=String(value||'').trim();if(!raw)return '';
-   if(/^(https?:\/\/|mailto:|tel:|sms:|tg:|whatsapp:)/i.test(raw))return raw;
-   // A bare email is made actionable; other bare strings are not treated as executable URLs.
+ function safeContactHref(value,label){
+   const raw=String(value||'').trim();
+   const name=String(label||'').trim().toLowerCase();
+   if(!raw)return '';
+   if(/^mailto:/i.test(raw)||/^tel:/i.test(raw)||/^sms:/i.test(raw)||/^tg:/i.test(raw)||/^https?:\/\//i.test(raw))return raw;
+   if(/^whatsapp:/i.test(raw)){
+     const number=raw.replace(/^whatsapp:\/\//i,'').replace(/\D/g,'');
+     return number ? 'https://wa.me/'+(number.startsWith('0')?'62'+number.slice(1):number.startsWith('8')?'62'+number:number) : '';
+   }
+   // Email tanpa skema otomatis menjadi mailto.
    if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw))return 'mailto:'+raw;
+   // Nomor WA yang dimasukkan langsung dari Admin (08..., 8..., atau 62...).
+   if(/^(wa|whatsapp|kontak whatsapp)$/.test(name) || /^[+\d()\s.-]+$/.test(raw)){
+     const digits=raw.replace(/\D/g,'');
+     if(digits.length>=8 && digits.length<=15){
+       const intl=digits.startsWith('0')?'62'+digits.slice(1):digits.startsWith('8')?'62'+digits:digits;
+       return 'https://wa.me/'+intl;
+     }
+   }
+   // Username polos boleh digunakan untuk platform yang disebut pada label.
+   const handle=raw.replace(/^@/,'').replace(/^\//,'').trim();
+   if(handle && !/\s/.test(handle)){
+     if(/instagram|ig/.test(name))return 'https://www.instagram.com/'+encodeURIComponent(handle)+'/';
+     if(/telegram|^tg$/.test(name))return 'https://t.me/'+encodeURIComponent(handle);
+     if(/linkedin/.test(name))return 'https://www.linkedin.com/in/'+encodeURIComponent(handle)+'/';
+     if(/github/.test(name))return 'https://github.com/'+encodeURIComponent(handle);
+   }
+   // URL domain tanpa https://.
+   if(/^(www\.)?[a-z0-9.-]+\.[a-z]{2,}(\/.*)?$/i.test(raw))return 'https://'+raw;
    return '';
  }
  const oldRender=window.renderAllPortfolio;
@@ -996,13 +1020,14 @@
      contactBox.replaceChildren();
      (Array.isArray(data.profile.customLinks)?data.profile.customLinks:[]).forEach(x=>{
        const label=String(x.label||x.name||x.title||'Kontak').trim();
-       const href=safeContactHref(x.url||x.href||'');
+       const href=safeContactHref(x.url||x.href||x.value||'',label);
        if(!label||!href)return;
        const a=document.createElement('a');a.className='contact-btn';a.dataset.dynamicContact='1';a.href=href;
        a.textContent=(x.icon?String(x.icon)+' ':'')+label;
        a.target=/^(https?:)/i.test(href)?'_blank':'_self';a.rel='noopener noreferrer';contactBox.appendChild(a);
      });
      contactBox.style.display=contactBox.children.length?'flex':'none';
+     contactBox.setAttribute('aria-live','polite');
    }
    document.getElementById('pub-hard-container').innerHTML=data.hardSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4>${s.level?`<div class="skill-level">${esc(s.level)}</div><div class="skill-level-track"><span style="width:${({Beginner:25,Intermediate:55,Advanced:80,Expert:100}[s.level]||55)}%"></span></div>`:''}<div>${expandableText(s.desc,`Hard Skill ${s.title}`)}</div></div>`).join('');
    document.getElementById('pub-soft-container').innerHTML=data.softSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4><div>${expandableText(s.desc,`Soft Skill ${s.title}`)}</div></div>`).join('');
