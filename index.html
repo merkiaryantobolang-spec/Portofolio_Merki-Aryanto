@@ -91,6 +91,9 @@
 
         .section-description { font-size: 1rem; line-height: 1.7; color: #e2e8f0; margin-bottom: 24px; text-align: center; }
         .contact-badges { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        .contact-badges .contact-btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; }
+        .custom-link-row { background:rgba(15,23,42,.78); border:1px solid rgba(96,165,250,.22); border-radius:10px; padding:14px; margin:10px 0; }
+
         .contact-btn { padding: 10px 18px; font-size: 0.9rem; font-weight: 600; color: #ffffff; text-decoration: none; background: rgba(30, 58, 138, 0.5); border: 1px solid rgba(147, 197, 253, 0.4); border-radius: 30px; }
 
         /* Carousel Sekolah */
@@ -164,26 +167,36 @@
         .modal-body iframe, .modal-body img, .modal-body video { width: 100%; height: 100%; object-fit: contain; border: none; background: #1e293b; border-radius: 10px; }
 
 
-        /* Deskripsi ringkas dan detail tetap berada di dalam kartu dengan tinggi stabil. */
-        .expandable-text { width:100%; min-width:0; text-align:left; }
-        .expandable-content { height:6.5em; overflow:hidden; color:#cbd5e1; line-height:1.62; white-space:pre-wrap; overflow-wrap:anywhere; text-align:left; }
-        .expandable-content.is-expanded { overflow-y:auto; overscroll-behavior:contain; padding-right:7px; scrollbar-width:thin; scrollbar-color:rgba(147,197,253,.55) rgba(15,23,42,.35); }
-        .read-more-btn { display:inline-flex; align-items:center; justify-content:center; margin-top:8px; min-height:34px; padding:6px 12px; border:1px solid rgba(147,197,253,.4); border-radius:20px; background:rgba(37,99,235,.2); color:#bfdbfe; font-weight:650; font-size:.82rem; cursor:pointer; }
-        .read-more-btn:hover, .read-more-btn:focus-visible { background:rgba(37,99,235,.42); outline:2px solid rgba(147,197,253,.35); outline-offset:2px; }
-        .card-description { color:#cbd5e1; font-size:.9rem; line-height:1.6; text-align:left; }
-        .section-title, .section-description, .showcase-sub { text-align:left; }
-        .school-info p { text-align:left; }
-        @media(max-width:700px) { .expandable-content { height:6.5em; font-size:.9rem; line-height:1.62; } }
+        .expandable-preview { display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:4; line-clamp:4; overflow:hidden; }
+        .read-more-btn { display:inline-flex; margin-top:8px; padding:6px 12px; border:1px solid rgba(147,197,253,.4); border-radius:20px; background:rgba(37,99,235,.2); color:#bfdbfe; font-weight:650; font-size:.82rem; cursor:pointer; }
+        .description-modal { display:none; position:fixed; inset:0; z-index:1200; padding:16px; background:rgba(2,6,23,.82); backdrop-filter:blur(8px); align-items:center; justify-content:center; }
+        .description-modal.show { display:flex; }
+        .description-modal-box { width:min(680px,100%); max-height:min(78vh,760px); display:flex; flex-direction:column; overflow:hidden; border:1px solid rgba(147,197,253,.35); border-radius:18px; background:#0f172a; box-shadow:0 24px 70px rgba(0,0,0,.6); }
+        .description-modal-head { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 18px; border-bottom:1px solid rgba(255,255,255,.12); }
+        .description-modal-head h3 { color:#dbeafe; font-size:1.05rem; }
+        .description-modal-head button { width:36px; height:36px; border:0; border-radius:10px; background:rgba(239,68,68,.18); color:#fff; font-size:1.1rem; cursor:pointer; }
+        .description-modal-body { padding:20px; overflow-y:auto; overscroll-behavior:contain; color:#e2e8f0; line-height:1.75; white-space:normal; overflow-wrap:anywhere; }
+        body.modal-open { overflow:hidden; }
+        .card-description { color:#cbd5e1; font-size:.9rem; line-height:1.6; }
+        @media(max-width:700px) { .description-modal { padding:10px; } .description-modal-box { max-height:78dvh; border-radius:15px; } .description-modal-body { padding:16px; } }
 
         /* Kartu pengalaman kerja mandiri: tidak memakai carousel pendidikan */
         .exp-card-modern { display:grid; grid-template-columns:minmax(220px, 34%) minmax(0,1fr); gap:22px; align-items:start; }
         .exp-photo-button { display:block; width:100%; height:220px; padding:0; border:1px solid rgba(147,197,253,.35); border-radius:12px; overflow:hidden; background:#0f172a; cursor:zoom-in; }
         .exp-photo { display:block; width:100%; height:100%; object-fit:cover; }
         .exp-content { min-width:0; }
-        .exp-card-no-photo .exp-content { grid-column:1 / -1; }
         .exp-description { color:#dbeafe; font-size:.94rem; line-height:1.7; white-space:pre-line; overflow-wrap:anywhere; }
-        .exp-file-link { margin-top:10px; }
-        .exp-attachments-public { display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+        .exp-file-link { margin-top:16px; }
+        .cv-document-card { padding:22px; background:rgba(30,41,59,.68); border-color:rgba(147,197,253,.28); }
+        .cv-document-heading { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:16px; text-align:left; }
+        .cv-document-icon { width:52px; height:52px; flex:0 0 52px; display:grid; place-items:center; border-radius:14px; background:rgba(37,99,235,.2); border:1px solid rgba(147,197,253,.3); font-size:1.8rem; }
+        .cv-document-heading h4 { color:#f8fafc; font-size:1.12rem; margin-bottom:4px; }
+        .cv-document-heading p { color:#93c5fd; font-size:.84rem; }
+        .cv-preview-shell { width:100%; height:min(82vh,1100px); min-height:620px; overflow:hidden; border:1px solid rgba(147,197,253,.35); border-radius:12px; background:#0b1220; box-shadow:0 12px 32px rgba(0,0,0,.32); }
+        .cv-pdf-frame { display:block; width:100%; height:100%; min-height:620px; border:0; background:#0b1220; overflow:auto; }
+        .cv-document-actions { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:10px; margin-top:15px; }
+        .cv-document-actions .project-link { cursor:pointer; }
+        .cv-scroll-hint,.cv-empty-note { color:#94a3b8; font-size:.8rem; line-height:1.55; text-align:center; margin-top:12px; }
         @media (max-width: 700px) {
             .content-wrapper { padding:76px 12px 30px; }
             .page-section, .profile-sheet, .education-sheet { padding:20px 15px; border-radius:16px; width:100%; }
@@ -199,6 +212,11 @@
             .exp-photo-button { height:190px; }
             .exp-header h3 { font-size:1.05rem; }
             .exp-description { font-size:.9rem; line-height:1.65; }
+            .cv-document-card { padding:14px; }
+            .cv-preview-shell { height:76dvh; min-height:500px; }
+            .cv-document-heading { justify-content:flex-start; }
+            .cv-document-actions { flex-direction:column; align-items:stretch; }
+            .cv-document-actions .project-link { width:100%; justify-content:center; }
             .school-img-box { height:190px; }
             .school-info { padding:16px; }
             .profile-photo-frame { width:135px; height:190px; }
@@ -213,6 +231,12 @@
 
     <canvas id="network-canvas"></canvas>
 
+    <div id="description-modal" class="description-modal" aria-hidden="true" onclick="if(event.target===this) closeDescriptionModal()">
+        <div class="description-modal-box" role="dialog" aria-modal="true" aria-labelledby="description-modal-title">
+            <div class="description-modal-head"><h3 id="description-modal-title">Deskripsi Lengkap</h3><button type="button" aria-label="Tutup" onclick="closeDescriptionModal()">✕</button></div>
+            <div id="description-modal-body" class="description-modal-body"></div>
+        </div>
+    </div>
 
     <div id="media-modal">
         <div class="modal-content-box">
@@ -254,7 +278,7 @@
 
     <div class="content-wrapper" id="main-wrapper">
         <div id="start-screen">
-            <button class="btn-start" id="btn-start" onclick="startPortfolio()" disabled>MEMUAT...</button>
+            <button class="btn-start" id="btn-start" onclick="startPortfolio()">START</button>
         </div>
 
         <div id="home-screen" style="display: none;">
@@ -269,11 +293,7 @@
 
                 <h2 class="section-title" id="pub-name"></h2>
                 <p class="section-description" id="pub-desc"></p>
-                <div class="contact-badges">
-                    <a id="pub-email-btn" href="#" class="contact-btn">Email Saya</a>
-                    <a id="pub-wa-btn" href="#" target="_blank" class="contact-btn">WhatsApp</a>
-                    <a id="pub-linkedin-btn" href="#" target="_blank" class="contact-btn">LinkedIn</a>
-                </div>
+                <div class="contact-badges" aria-label="Kontak dan media sosial"></div>
             </div>
 
             <div class="education-sheet" style="display: flex;">
@@ -355,12 +375,12 @@
                 const timeoutId = setTimeout(() => {
                     cleanup();
                     reject(new Error('Waktu akses Google Apps Script habis.'));
-                }, 20000);
+                }, 10000);
 
                 window[callbackName] = function(result) {
                     cleanup();
                     if (result && (result.profile || result.status === 'empty')) {
-                        resolve(result);
+                        resolve(result.status === 'empty' ? normalizePublicPortfolio(defaultData) : normalizePublicPortfolio(result));
                     } else {
                         reject(new Error((result && result.message) || 'Data dari Google Sheets tidak dikenali.'));
                     }
@@ -380,7 +400,7 @@
         }
 
         const defaultData = {
-            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", cvFile: "" },
+            profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
             education: [],
             softSkills: [],
             hardSkills: [],
@@ -389,6 +409,69 @@
             certificates: [],
             gallery: []
         };
+
+        function normalizePublicPortfolio(input) {
+            const source = input && typeof input === 'object' ? input : {};
+            const profile = { ...defaultData.profile, ...(source.profile || {}) };
+            let savedLinks = (Array.isArray(profile.customLinks) && profile.customLinks.length) ? profile.customLinks
+                : (Array.isArray(profile.socialLinks) && profile.socialLinks.length ? profile.socialLinks
+                : (Array.isArray(source.customLinks) ? source.customLinks : (Array.isArray(profile.customLinks) ? profile.customLinks : [])));
+            if (!savedLinks.length) {
+                savedLinks = [
+                    {label:'WhatsApp',url:profile.wa ? (/^https?:/i.test(profile.wa) ? profile.wa : 'https://wa.me/'+String(profile.wa).replace(/\D/g,'')) : '',icon:'💬'},
+                    {label:'Email',url:profile.email ? (/^mailto:/i.test(profile.email) ? profile.email : 'mailto:'+profile.email) : '',icon:'✉️'},
+                    {label:'LinkedIn',url:profile.linkedin||'',icon:'in'},
+                    {label:'GitHub',url:profile.github||'',icon:'⌘'}
+                ].filter(x=>x.url);
+            }
+            profile.customLinks = savedLinks;
+            return {
+                ...source,
+                profile,
+                education: Array.isArray(source.education) ? source.education : [],
+                softSkills: Array.isArray(source.softSkills) ? source.softSkills : [],
+                hardSkills: Array.isArray(source.hardSkills) ? source.hardSkills : [],
+                experiences: Array.isArray(source.experiences) ? source.experiences : [],
+                projects: Array.isArray(source.projects) ? source.projects : [],
+                certificates: Array.isArray(source.certificates) ? source.certificates : [],
+                gallery: Array.isArray(source.gallery) ? source.gallery : []
+            };
+        }
+
+        // Helper CV didefinisikan di script utama agar tersedia sebelum render awal/cache.
+        // URL CV yang diberikan pemilik menjadi fallback jika kolom cvFile di Sheets kosong.
+        const DEFAULT_CV_URL = "https://drive.google.com/file/d/1cxKIu-Y84bMZedKeqmcZdX-rEbiE14tk/view?usp=drive_link";
+        function escapeHtmlEarly(value) {
+            return String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"}[ch]));
+        }
+        function extractDriveIdEarly(rawUrl) {
+            const raw = String(rawUrl || "").trim();
+            if (!raw) return "";
+            try {
+                const u = new URL(raw);
+                if (/^(drive|docs)\.google\.com$/i.test(u.hostname) || u.hostname.endsWith(".drive.google.com") || u.hostname.endsWith(".docs.google.com")) {
+                    const match = u.pathname.match(/\/(?:file|document|spreadsheets|presentation)\/d\/([a-zA-Z0-9_-]+)/);
+                    return (match && match[1]) || u.searchParams.get("id") || "";
+                }
+            } catch (e) {}
+            const match = raw.match(/(?:\/d\/|[?&]id=)([a-zA-Z0-9_-]+)/);
+            return match ? match[1] : "";
+        }
+        function getPdfEmbedUrl(rawUrl) {
+            const raw = String(rawUrl || "").trim();
+            if (!raw) return "";
+            if (/^data:application\/pdf/i.test(raw)) return raw;
+            const id = extractDriveIdEarly(raw);
+            return id ? `https://drive.google.com/file/d/${encodeURIComponent(id)}/preview` : raw;
+        }
+        function getPdfDownloadUrl(rawUrl) {
+            const raw = String(rawUrl || "").trim();
+            if (!raw) return "#";
+            if (/^data:application\/pdf/i.test(raw)) return raw;
+            const id = extractDriveIdEarly(raw);
+            // Endpoint download Drive yang mengirim berkas asli, bukan thumbnail/preview.
+            return id ? `https://drive.usercontent.google.com/download?id=${encodeURIComponent(id)}&export=download&confirm=t` : raw;
+        }
 
         function convertCloudImageUrl(url) {
             if (!url) return "";
@@ -453,36 +536,32 @@
             modal.style.display = 'none';
         }
 
-        function escapeDescriptionText(value) {
-            return String(value == null ? '' : value)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-
         function expandableText(value, label) {
-            const content = String(value || '');
-            const plain = content.replace(/\s+/g, ' ').trim();
-            const safeContent = escapeDescriptionText(content);
-            if (plain.length <= 190) {
-                return `<div class="expandable-text"><div class="expandable-content is-short">${safeContent}</div></div>`;
-            }
-            return `<div class="expandable-text">
-                <div class="expandable-content" tabindex="0" aria-label="${escapeDescriptionText(label || 'Deskripsi')}" >${safeContent}</div>
-                <button type="button" class="read-more-btn" aria-expanded="false" onclick="toggleDescription(this)">Lihat Lainnya</button>
-            </div>`;
+            const content = value || '';
+            const plain = content.replace(/<[^>]*>/g, ' ').replace(/&nbsp;/g, ' ').trim();
+            if (plain.length <= 190) return `<div class="expandable-text">${content}</div>`;
+            return `<div class="expandable-text"><div class="expandable-preview">${content}</div><button type="button" class="read-more-btn" data-label="${encodeURIComponent(label || 'Deskripsi Lengkap')}" data-fulltext="${encodeURIComponent(content)}" onclick="openDescriptionModal(this)">Lihat Lainnya</button></div>`;
         }
 
-        function toggleDescription(button) {
-            const content = button.parentElement.querySelector('.expandable-content');
-            if (!content) return;
-            const expanded = content.classList.toggle('is-expanded');
-            button.textContent = expanded ? 'Tutup Detail' : 'Lihat Lainnya';
-            button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-            if (expanded) content.focus({ preventScroll: true });
+        function openDescriptionModal(button) {
+            const modal = document.getElementById('description-modal');
+            document.getElementById('description-modal-title').textContent = decodeURIComponent(button.dataset.label || 'Deskripsi Lengkap');
+            document.getElementById('description-modal-body').innerHTML = decodeURIComponent(button.dataset.fulltext || '');
+            modal.classList.add('show');
+            document.body.classList.add('modal-open');
+            history.pushState({descriptionModal:true}, '');
         }
+
+        function closeDescriptionModal(fromHistory=false) {
+            const modal = document.getElementById('description-modal');
+            if (!modal || !modal.classList.contains('show')) return;
+            modal.classList.remove('show');
+            document.body.classList.remove('modal-open');
+            if (!fromHistory && history.state && history.state.descriptionModal) history.back();
+        }
+
+        window.addEventListener('popstate', () => closeDescriptionModal(true));
+        document.addEventListener('keydown', event => { if (event.key === 'Escape') closeDescriptionModal(); });
 
         function renderAllPortfolio(data) {
             document.getElementById('crash-name').innerText = data.profile.name || "Merki Aryanto";
@@ -511,7 +590,7 @@
                 let imgSrc = (edu.img && edu.img.trim() !== "") ? convertCloudImageUrl(edu.img) : `https://placehold.co/700x300/0f172a/60a5fa?text=${encodeURIComponent(edu.title || 'Sekolah')}`;
                 track.innerHTML += `
                     <div class="school-card">
-                        <div class="school-img-box"><img src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${edu.title}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
+                        <div class="school-img-box"><img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${edu.title}')" onerror="this.src='https://placehold.co/700x300/0f172a/60a5fa?text=Foto'"><span class="school-level-badge">${edu.badge || ''}</span></div>
                         <div class="school-info"><h4>${edu.title}</h4><span class="school-period">${edu.period}</span><div class="school-description">${expandableText(edu.desc, `Deskripsi ${edu.title || 'Pendidikan'}`)}</div></div>
                     </div>`;
                 dots.innerHTML += `<span class="dot ${idx===0?'active':''}" onclick="goToSchool(${idx})"></span>`;
@@ -519,16 +598,27 @@
 
             let cvContainer = document.getElementById('pub-cv-container');
             if(cvContainer) {
-                let cvFileLink = data.profile.cvFile ? data.profile.cvFile : "#";
-                let hasFile = data.profile.cvFile && data.profile.cvFile.trim() !== "";
+                let cvFileLink = (data.profile.cvFile && String(data.profile.cvFile).trim()) ? String(data.profile.cvFile).trim() : DEFAULT_CV_URL;
+                let hasFile = Boolean(cvFileLink && cvFileLink !== "#");
                 let btn = getSmartButton(cvFileLink);
                 
+                const cvEmbedUrl = hasFile ? getPdfEmbedUrl(cvFileLink) : '';
                 cvContainer.innerHTML = `
-                    <div class="project-card" style="display: flex; flex-direction: column; align-items: center; text-align: center; padding: 40px 20px;">
-                        <div style="font-size: 3rem; margin-bottom: 12px;">📄</div>
-                        <h4 style="color:#fff; margin-bottom:8px; font-size:1.2rem;">Curriculum Vitae - Merki Aryanto</h4>
-                        <p style="color:#cbd5e1; font-size:0.9rem; margin-bottom:20px;">Klik tombol di bawah untuk melihat langsung dokumen PDF secara penuh atau mengunduhnya.</p>
-                        ${hasFile ? `<button onclick="openFileSafely('${cvFileLink}', 'Curriculum Vitae Resmi')" class="project-link">${btn.text}</button>` : `<p style="color:#94a3b8; font-size:0.88rem;"><em>File CV resmi belum di-upload melalui panel admin.</em></p>`}
+                    <div class="project-card cv-document-card">
+                        <div class="cv-document-heading">
+                            <div class="cv-document-icon">📄</div>
+                            <div><h4>Curriculum Vitae - Merki Aryanto</h4><p>Curriculum Vitae Resmi</p></div>
+                        </div>
+                        ${hasFile ? `
+                            <div class="cv-preview-shell" aria-label="Pratinjau Curriculum Vitae">
+                                <iframe class="cv-pdf-frame" src="${escapeHtmlEarly(cvEmbedUrl)}" title="Curriculum Vitae Resmi - Merki Aryanto" loading="eager" allow="autoplay; fullscreen" scrolling="yes" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                            <div class="cv-document-actions">
+                                <button type="button" onclick="openPdfDocument('${encodeURIComponent(cvFileLink)}','Curriculum Vitae Resmi')" class="project-link">🔎 Buka Tampilan Besar</button>
+                                <a class="project-link cv-download-link" href="${esc(getPdfDownloadUrl(cvFileLink))}" target="_blank" rel="noopener noreferrer">⬇ Unduh CV PDF Lengkap</a>
+                            </div>
+                            <p class="cv-scroll-hint">Geser/scroll pada area dokumen untuk membaca seluruh halaman CV. Jika pratinjau tidak muncul, pastikan izin Google Drive diatur ke <b>Siapa saja yang memiliki link — Pelihat</b>.</p>
+                        ` : `<p class="cv-empty-note"><em>File CV resmi belum di-upload melalui panel admin.</em></p>`}
                     </div>`;
             }
 
@@ -536,13 +626,13 @@
             document.getElementById('pub-hard-container').innerHTML = (data.hardSkills || []).map(h => `<div class="skill-detail-card"><h4>${h.title}</h4><div>${expandableText(h.desc, `Hard Skill: ${h.title || ''}`)}</div></div>`).join('');
 
             document.getElementById('pub-exp-container').innerHTML = (data.experiences || []).map((e, idx) => `
-                <article class="exp-card exp-card-modern ${e.img ? '' : 'exp-card-no-photo'}">
-                    ${e.img ? `<button class="exp-photo-button" type="button" onclick="openFileSafely('${convertCloudImageUrl(e.img)}', 'Dokumentasi ${e.company || 'Pengalaman Kerja'}')"><img class="exp-photo" src="${convertCloudImageUrl(e.img)}" alt="Dokumentasi ${e.company || 'Pengalaman Kerja'}" onerror="this.parentElement.style.display='none'"></button>` : ''}
+                <article class="exp-card exp-card-modern">
+                    ${e.img ? `<button class="exp-photo-button" type="button" onclick="openFileSafely('${convertCloudImageUrl(e.img)}', 'Dokumentasi ${e.company || 'Pengalaman Kerja'}')"><img class="exp-photo" loading="lazy" decoding="async" src="${convertCloudImageUrl(e.img)}" alt="Dokumentasi ${e.company || 'Pengalaman Kerja'}" onerror="this.parentElement.style.display='none'"></button>` : ''}
                     <div class="exp-content">
                         <div class="exp-header"><h3>${e.title || ''}</h3>${e.badge ? `<span class="exp-badge">${e.badge}</span>` : ''}</div>
                         <div class="exp-company">${e.company || ''}</div>
                         <div class="exp-description">${expandableText(e.desc, `Pengalaman: ${e.company || e.title || 'Kerja'}`)}</div>
-                        ${(Array.isArray(e.attachments) && e.attachments.length) ? `<div class="exp-attachments-public">${e.attachments.filter(a => a && a.url).map(a => `<button class="project-link exp-file-link" type="button" onclick="openFileSafely(decodeURIComponent('${encodeURIComponent(a.url)}'), decodeURIComponent('${encodeURIComponent(a.name || 'Berkas Pendukung')}'))">📎 ${a.name || 'Lihat Lampiran'} ↗</button>`).join('')}</div>` : (e.file ? `<button class="project-link exp-file-link" type="button" onclick="openFileSafely('${e.file}', '${(e.fileName || 'Berkas Pendukung').replace(/'/g, "\'")}')">📎 ${e.fileName || 'Lihat Berkas Pendukung'} ↗</button>` : '')}
+                        ${e.file ? `<button class="project-link exp-file-link" type="button" onclick="openFileSafely('${e.file}', '${(e.fileName || 'Berkas Pendukung').replace(/'/g, "\'")}')">📎 ${e.fileName || 'Lihat Berkas Pendukung'} ↗</button>` : ''}
                     </div>
                 </article>`).join('');
 
@@ -576,43 +666,65 @@
                 let imgSrc = (g.img && g.img.trim() !== "") ? convertCloudImageUrl(g.img) : "https://placehold.co/300x220/0f172a/60a5fa?text=Photo";
                 return `
                     <div class="gallery-item">
-                        <img src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${g.caption}')" onerror="this.src='https://placehold.co/300x220/0f172a/60a5fa?text=Photo'">
+                        <img loading="lazy" decoding="async" src="${imgSrc}" onclick="openFileSafely('${imgSrc}', '${g.caption}')" onerror="this.src='https://placehold.co/300x220/0f172a/60a5fa?text=Photo'">
                         <div class="gallery-caption">${g.caption}</div>
                     </div>`;
             }).join('');
         }
 
-        window.onload = async function() {
+        // Render awal tidak menunggu Google Apps Script. Ini mencegah halaman
+        // Public tertahan hingga 20 detik ketika koneksi Spreadsheet lambat.
+        function initializePortfolioPublic() {
             const startBtn = document.getElementById('btn-start');
-            let saved = null;
-            let data = defaultData;
+            let initialData = defaultData;
 
-            // Data cloud diprioritaskan. LocalStorage hanya menjadi cadangan
-            // jika jaringan atau Google Apps Script sedang tidak tersedia.
+            // Tampilkan cache lokal (jika ada) atau data kosong secepat mungkin.
             try {
-                saved = localStorage.getItem('portfolio_data');
-                if (saved) data = JSON.parse(saved);
+                const saved = localStorage.getItem('portfolio_data');
+                if (saved) initialData = normalizePublicPortfolio(JSON.parse(saved));
             } catch (localError) {
-                console.warn('Cadangan browser tidak dapat dibaca:', localError);
+                console.warn('Cache lokal tidak dapat dibaca:', localError);
             }
 
             try {
-                const cloudData = await readPortfolioFromCloudPublic();
-                if (cloudData && cloudData.profile) {
-                    data = cloudData;
-                    try { localStorage.setItem('portfolio_data', JSON.stringify(data)); }
-                    catch (storageError) { console.warn('Cache browser tidak dapat diperbarui:', storageError); }
-                } else if (cloudData && cloudData.status === 'empty') {
-                    data = defaultData;
-                }
-            } catch (cloudError) {
-                console.error('Gagal mengambil portofolio dari Google Sheets:', cloudError);
+                renderAllPortfolio(initialData);
+            } catch (renderError) {
+                console.error('Gagal menampilkan data awal portofolio:', renderError);
+                try { renderAllPortfolio(defaultData); } catch (_) {}
             }
 
-            renderAllPortfolio(data);
-            startBtn.disabled = false;
-            startBtn.innerText = "START";
-        };
+            // Tombol START langsung aktif. Pengambilan data cloud berjalan
+            // di belakang layar dan tidak mengunci tampilan/aksi pengunjung.
+            if (startBtn) {
+                startBtn.disabled = false;
+                startBtn.innerText = 'START';
+            }
+
+            readPortfolioFromCloudPublic().then(cloudData => {
+                if (cloudData && cloudData.profile) {
+                    cloudData = normalizePublicPortfolio(cloudData);
+                    try {
+                        localStorage.setItem('portfolio_data', JSON.stringify(cloudData));
+                    } catch (storageError) {
+                        console.warn('Cache browser tidak dapat diperbarui:', storageError);
+                    }
+                    // Sinkronkan konten setelah data cloud tersedia tanpa
+                    // menahan halaman awal atau tombol START.
+                    renderAllPortfolio(cloudData);
+                } else if (cloudData && cloudData.status === 'empty') {
+                    try { localStorage.removeItem('portfolio_data'); } catch (_) {}
+                    renderAllPortfolio(defaultData);
+                }
+            }).catch(cloudError => {
+                console.warn('Data cloud belum tersedia; halaman tetap memakai cache/default:', cloudError);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializePortfolioPublic, { once: true });
+        } else {
+            initializePortfolioPublic();
+        }
 
         function startPortfolio() {
             document.getElementById('start-screen').style.display = 'none';
@@ -770,5 +882,470 @@
 
       window.addEventListener("load", trackVisitor);
     </script>
+
+<!-- PORTFOLIO PUBLIC FULL UPGRADE LAYER -->
+<style>
+.expandable-text{white-space:pre-line;text-align:left;line-height:1.65;overflow-wrap:anywhere}.expandable-preview{max-height:6.6em;overflow:hidden;position:relative;white-space:pre-line}.expandable-preview:after{content:"";position:absolute;bottom:0;left:0;right:0;height:1.7em;background:linear-gradient(transparent,rgba(15,23,42,.92))}.expandable-text.is-expanded .expandable-preview{max-height:230px;overflow-y:auto;padding-right:7px}.expandable-text.is-expanded .expandable-preview:after{display:none}.read-more-btn{margin-top:8px;border:1px solid rgba(147,197,253,.4);border-radius:20px;background:rgba(37,99,235,.2);color:#bfdbfe;padding:7px 13px;cursor:pointer;font-weight:700}.attachment-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.attachment-link{display:inline-flex;align-items:center;padding:8px 12px;border-radius:9px;background:rgba(37,99,235,.18);border:1px solid rgba(147,197,253,.3);color:#bfdbfe;text-decoration:none;font-size:.85rem}.project-flags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}.project-flag{font-size:.68rem;background:#1e3a8a;color:#dbeafe;padding:4px 8px;border-radius:20px}.skill-level{font-size:.75rem;color:#93c5fd;margin:6px 0 10px}.skill-level-track{height:6px;background:#1e293b;border-radius:10px;overflow:hidden}.skill-level-track span{display:block;height:100%;background:linear-gradient(90deg,#2563eb,#34d399)}.work-meta{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.work-meta span{font-size:.78rem;color:#bfdbfe;background:rgba(30,64,175,.2);padding:5px 9px;border-radius:20px}.portfolio-search{width:100%;max-width:850px;padding:11px 14px;border-radius:10px;border:1px solid #475569;background:#0f172a;color:white;margin:0 0 16px}.portfolio-search:focus{outline:2px solid #60a5fa}.portfolio-book-hint{color:#94a3b8;font-size:.8rem;margin-top:8px}
+/* Tahap 2B — deskripsi dibuat lebih lapang, konsisten, dan nyaman dibaca */
+.page-section, .profile-sheet, .education-sheet { max-width: 980px; }
+.skill-cards-grid, .projects-grid, .certificates-grid { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+.exp-card, .skill-detail-card, .project-card, .cert-card { padding: 26px; }
+.expandable-text { font-size: .96rem; line-height: 1.82; letter-spacing: .005em; text-align: left; }
+.expandable-preview { max-height: 7.5em; padding-right: 2px; }
+.expandable-text.is-expanded .expandable-preview { max-height: 440px; overflow-y: auto; padding: 4px 14px 4px 0; scrollbar-gutter: stable; overscroll-behavior: contain; }
+.expandable-text.is-expanded .expandable-preview::-webkit-scrollbar { width: 7px; }
+.expandable-text.is-expanded .expandable-preview::-webkit-scrollbar-thumb { background: rgba(148,163,184,.55); border-radius: 10px; }
+.expandable-text.is-expanded .expandable-preview::-webkit-scrollbar-track { background: rgba(15,23,42,.35); border-radius: 10px; }
+.read-more-btn { min-height: 36px; padding: 8px 15px; transition: background .2s ease, border-color .2s ease; }
+.read-more-btn:hover { background: rgba(37,99,235,.34); border-color: rgba(147,197,253,.72); }
+.read-more-btn:focus-visible { outline: 2px solid #93c5fd; outline-offset: 3px; }
+.exp-description, .card-description, .school-description { min-width: 0; }
+@media(max-width:700px){
+  .page-section, .profile-sheet, .education-sheet { max-width: 100%; }
+  .skill-cards-grid, .projects-grid, .certificates-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .exp-card, .skill-detail-card, .project-card, .cert-card { padding: 19px; }
+  .expandable-text { font-size: .94rem; line-height: 1.78; }
+  .expandable-preview { max-height: 6.8em; }
+  .expandable-text.is-expanded .expandable-preview { max-height: 360px; padding: 3px 9px 3px 0; }
+  .attachment-link { min-height: 40px; }
+}
+</style>
+<script>
+(function(){
+ const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+ const safeUrl=u=>{u=String(u||'').trim();return /^(https?:\/\/|data:image\/|data:application\/pdf[,;]|data:video\/)/i.test(u)?u:'#'};
+ const rich=s=>esc(s).replace(/\r?\n/g,'<br>');
+ const atts=(arr,legacyUrl,legacyName)=>{let a=Array.isArray(arr)?arr.slice():[];if(!a.length&&legacyUrl)a=[{name:legacyName||'Lihat Dokumen',url:legacyUrl}];return a.filter(x=>x&&x.url).map(x=>`<button type="button" class="attachment-link" onclick="openPortfolioAttachment('${encodeURIComponent(safeUrl(x.url))}','${encodeURIComponent(x.name||'Lampiran')}')">📎 ${esc(x.name||'Lampiran')}</button>`).join('')};
+ window.openPortfolioAttachment=function(url,title){openFileSafely(decodeURIComponent(url),decodeURIComponent(title));};
+ window.expandableText=function(value,label){const content=rich(value||'');const plain=String(value||'').trim();if(plain.length<=190)return `<div class="expandable-text">${content}</div>`;const id='expand-'+Math.random().toString(36).slice(2);return `<div class="expandable-text" id="${id}"><div class="expandable-preview">${content}</div><button type="button" class="read-more-btn" onclick="toggleExpandable('${id}',this)">Lihat Lainnya</button></div>`;};
+ window.toggleExpandable=function(id,btn){const el=document.getElementById(id);if(!el)return;const open=el.classList.toggle('is-expanded');btn.textContent=open?'Tutup Detail':'Lihat Lainnya';};
+ window.openDescriptionModal=function(){/* Deskripsi kini dibuka di dalam kartu, tanpa modal. */};
+ window.closeDescriptionModal=function(){document.getElementById('description-modal')?.classList.remove('show');};
+ // Unified document viewer: PDF, image, and supported media use one in-site viewer.
+ window.getDriveFileId=function(rawUrl){
+   const raw=String(rawUrl||'').trim();
+   if(!raw)return '';
+   try{
+     const u=new URL(raw);
+     const host=u.hostname.toLowerCase();
+     if(host==='drive.google.com'||host.endsWith('.drive.google.com')||host==='docs.google.com'||host.endsWith('.docs.google.com')){
+       const pathMatch=u.pathname.match(/\/(?:file|document|spreadsheets|presentation)\/d\/([a-zA-Z0-9_-]+)/);
+       return pathMatch?.[1]||u.searchParams.get('id')||'';
+     }
+   }catch(e){}
+   const m=raw.match(/(?:\/d\/|[?&]id=)([a-zA-Z0-9_-]+)/);
+   return m?.[1]||'';
+ };
+ window.getPdfEmbedUrl=function(rawUrl){
+   const raw=String(rawUrl||'').trim();
+   if(!raw)return '';
+   if(/^data:application\/pdf/i.test(raw))return raw;
+   const id=window.getDriveFileId(raw);
+   if(id)return 'https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview';
+   return raw;
+ };
+ window.getPdfDownloadUrl=function(rawUrl){
+   const raw=String(rawUrl||'').trim();
+   if(!raw)return '#';
+   if(/^data:application\/pdf/i.test(raw))return raw;
+   const id=window.getDriveFileId(raw);
+   if(id)return 'https://drive.google.com/uc?export=download&id='+encodeURIComponent(id);
+   return raw;
+ };
+ window.openPdfDocument=function(encodedUrl,title){
+   const raw=decodeURIComponent(encodedUrl||'');
+   if(!raw){alert('File CV belum tersedia.');return;}
+   const modal=document.getElementById('media-modal');
+   const container=document.getElementById('modal-viewer-container');
+   if(!modal||!container){window.open(getPdfEmbedUrl(raw),'_blank','noopener,noreferrer');return;}
+   document.getElementById('modal-file-title').textContent=title||'Pratinjau PDF';
+   const dl=document.getElementById('modal-download-btn');dl.href=getPdfDownloadUrl(raw);dl.removeAttribute('download');dl.target='_blank';dl.rel='noopener noreferrer';dl.textContent='⬇ Unduh PDF Lengkap';dl.style.display='inline-flex';
+   const frame=getPdfEmbedUrl(raw);
+   container.innerHTML=`<iframe src="${esc(frame)}" title="${esc(title||'Pratinjau PDF')}" allow="autoplay; fullscreen" scrolling="yes" style="display:block;width:100%;height:100%;min-height:78vh;border:0;background:#0b1220;flex:1 1 auto"></iframe>`;
+   modal.style.display='flex';document.body.style.overflow='hidden';
+ };
+ window.openFileSafely=function(url,title){
+   if(!url||url==='#'){alert('Maaf, tautan atau berkas belum tersedia.');return;}
+   const raw=String(url).trim(),lower=raw.toLowerCase();
+   const isPdf=lower.startsWith('data:application/pdf')||/\.pdf(?:[?#]|$)/i.test(lower)||lower.includes('drive.google.com/')||lower.includes('docs.google.com/');
+   const isImage=lower.startsWith('data:image/')||/\.(png|jpe?g|gif|webp|svg)(?:[?#]|$)/i.test(lower)||lower.includes('googleusercontent.com');
+   if(isPdf){window.openPdfDocument(encodeURIComponent(raw),title||'Pratinjau PDF');return;}
+   const processed=isImage?convertCloudImageUrl(raw):raw;
+   const modal=document.getElementById('media-modal'),container=document.getElementById('modal-viewer-container');
+   if(!modal||!container){window.open(processed,'_blank','noopener,noreferrer');return;}
+   document.getElementById('modal-file-title').textContent=title||'Pratinjau Dokumen';
+   const dl=document.getElementById('modal-download-btn');dl.href=raw;dl.download=(title||'dokumen').replace(/[^a-z0-9-_]+/gi,'_');dl.style.display='inline-flex';
+   if(isImage)container.innerHTML=`<img src="${esc(processed)}" alt="${esc(title)}" style="max-width:100%;max-height:100%;object-fit:contain">`;
+   else if(lower.startsWith('data:video/'))container.innerHTML=`<video src="${esc(raw)}" controls style="width:100%;height:100%;background:#000"></video>`;
+   else {window.open(raw,'_blank','noopener,noreferrer');return;}
+   modal.style.display='flex';document.body.style.overflow='hidden';
+ };
+ const oldClose=window.closeModal;window.closeModal=function(){const m=document.getElementById('media-modal'),c=document.getElementById('modal-viewer-container');if(c)c.innerHTML='';if(m)m.style.display='none';document.body.style.overflow='';};
+ function safeContactHref(value){
+   const raw=String(value||'').trim();if(!raw)return '';
+   if(/^(https?:\/\/|mailto:|tel:|sms:|tg:|whatsapp:)/i.test(raw))return raw;
+   // A bare email is made actionable; other bare strings are not treated as executable URLs.
+   if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(raw))return 'mailto:'+raw;
+   return '';
+ }
+ const oldRender=window.renderAllPortfolio;
+ window.renderAllPortfolio=function(data){data=normalizePublicPortfolio(data);
+   oldRender.call(this,data);
+   const contactBox=document.querySelector('.contact-badges');
+   if(contactBox){
+     contactBox.replaceChildren();
+     (Array.isArray(data.profile.customLinks)?data.profile.customLinks:[]).forEach(x=>{
+       const label=String(x.label||x.name||x.title||'Kontak').trim();
+       const href=safeContactHref(x.url||x.href||'');
+       if(!label||!href)return;
+       const a=document.createElement('a');a.className='contact-btn';a.dataset.dynamicContact='1';a.href=href;
+       a.textContent=(x.icon?String(x.icon)+' ':'')+label;
+       a.target=/^(https?:)/i.test(href)?'_blank':'_self';a.rel='noopener noreferrer';contactBox.appendChild(a);
+     });
+     contactBox.style.display=contactBox.children.length?'flex':'none';
+   }
+   document.getElementById('pub-hard-container').innerHTML=data.hardSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4>${s.level?`<div class="skill-level">${esc(s.level)}</div><div class="skill-level-track"><span style="width:${({Beginner:25,Intermediate:55,Advanced:80,Expert:100}[s.level]||55)}%"></span></div>`:''}<div>${expandableText(s.desc,`Hard Skill ${s.title}`)}</div></div>`).join('');
+   document.getElementById('pub-soft-container').innerHTML=data.softSkills.map(s=>`<div class="skill-detail-card"><h4>${esc(s.title)}</h4><div>${expandableText(s.desc,`Soft Skill ${s.title}`)}</div></div>`).join('');
+   document.getElementById('pub-exp-container').innerHTML=data.experiences.map(e=>`<article class="exp-card exp-card-modern">${e.img?`<button class="exp-photo-button" type="button" onclick="openFileSafely('${safeUrl(convertCloudImageUrl(e.img))}','Dokumentasi ${esc(e.company)}')"><img class="exp-photo" src="${safeUrl(convertCloudImageUrl(e.img))}" alt="Dokumentasi ${esc(e.company)}"></button>`:''}<div class="exp-content"><div class="exp-header"><h3>${esc(e.title)}</h3>${(e.period||e.badge)?`<span class="exp-badge">${esc(e.period||e.badge)}</span>`:''}</div><div class="exp-company">${esc(e.company)}</div><div class="exp-description">${expandableText(e.desc,`Pengalaman ${e.company}`)}</div>${e.responsibilities?.length?`<h4 style="margin-top:12px">Tanggung Jawab</h4><ul>${e.responsibilities.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:''}${e.tools?.length?`<div class="work-meta">${e.tools.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}<div class="attachment-list">${atts(e.attachments,e.file,e.fileName)}</div></div></article>`).join('');
+   document.getElementById('pub-proj-container').innerHTML=data.projects.map(p=>`<div class="project-card">${p.img?`<img src="${safeUrl(convertCloudImageUrl(p.img))}" alt="Screenshot ${esc(p.title)}" style="width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:14px;cursor:zoom-in" onclick="openPortfolioAttachment('${encodeURIComponent(safeUrl(convertCloudImageUrl(p.img)))}','${encodeURIComponent('Screenshot '+(p.title||'Proyek'))}')">`:''}<div class="project-flags">${p.featured?'<span class="project-flag">⭐ Featured</span>':''}${p.best?'<span class="project-flag">🏆 Best Project</span>':''}${p.latest?'<span class="project-flag">🆕 Latest</span>':''}</div><div style="font-size:.75rem;color:#60a5fa;font-weight:700;text-transform:uppercase">${esc(p.category)}</div><h4 style="color:#fff;margin:7px 0">${esc(p.title)}</h4><div class="card-description">${expandableText(p.desc,`Proyek ${p.title}`)}</div>${p.objective?`<div style="margin-top:10px;color:#cbd5e1"><b>Tujuan & Manfaat:</b> ${expandableText(p.objective,'Tujuan Proyek')}</div>`:''}${p.tools?.length?`<div class="work-meta">${p.tools.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:''}${p.result?`<div style="margin-top:10px;color:#cbd5e1"><b>Hasil:</b> ${expandableText(p.result,'Hasil Proyek')}</div>`:''}<div class="attachment-list">${atts(p.attachments,p.link,'Lihat Proyek')}</div></div>`).join('');
+   document.getElementById('pub-cert-container').innerHTML=data.certificates.map(c=>`<div class="cert-card"><div style="font-size:.75rem;color:#60a5fa;font-weight:700;text-transform:uppercase">${esc(c.issuer)}</div><h4 style="color:#fff;margin:7px 0">${esc(c.title)}</h4><div class="card-description">${expandableText(c.desc,`Sertifikat ${c.title}`)}</div><div class="attachment-list">${atts(c.attachments,c.link,'Lihat Sertifikat')}</div></div>`).join('');
+   addPortfolioSearch();
+ };
+ function addPortfolioSearch(){['pub-proj-container','pub-cert-container'].forEach(id=>{const el=document.getElementById(id);if(!el||document.getElementById(id+'-search'))return;const input=document.createElement('input');input.id=id+'-search';input.className='portfolio-search';input.placeholder=id.includes('proj')?'Cari proyek...':'Cari sertifikat...';el.parentNode.insertBefore(input,el);input.addEventListener('input',()=>{const q=input.value.toLowerCase();el.querySelectorAll(':scope > *').forEach(card=>card.style.display=card.innerText.toLowerCase().includes(q)?'':'none');});});}
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closeDescriptionModal();}});
+})();
+</script>
+
+
+<style id="portfolio-final-responsive-fixes">
+@media(max-width:700px){#media-modal{padding:0;align-items:stretch}.modal-content-box{width:100vw;max-width:none;height:100dvh;max-height:100dvh;border-radius:0;border-left:0;border-right:0}.modal-header{padding:10px 12px;gap:8px;flex-wrap:wrap}.modal-title{font-size:.92rem;min-width:0;overflow-wrap:anywhere}.modal-actions{gap:6px;flex-wrap:wrap}.modal-btn{padding:7px 9px;font-size:.78rem}.modal-close{flex:0 0 34px;width:34px;height:34px}.cv-pdf-frame{height:72dvh;min-height:72dvh}}
+#modal-viewer-container{min-height:0;overflow:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+</style>
+<script id="portfolio-final-viewer-guards">
+(function(){
+ let viewerOpen=false;
+ const originalOpen=window.openPdfDocument;
+ window.openPdfDocument=function(url,title){originalOpen.call(this,url,title);viewerOpen=document.getElementById('media-modal')?.style.display==='flex';};
+ const originalClose=window.closeModal;
+ window.closeModal=function(){originalClose.call(this);viewerOpen=false;};
+ window.addEventListener('popstate',function(){if(viewerOpen){window.closeModal();}});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&viewerOpen){window.closeModal();}});
+})();
+</script>
+
+
+<!-- PENYESUAIAN UKURAN PROFIL DAN KELUASAN KARTU -->
+<style>
+/* Area konten dan kartu dibuat lebih lebar agar keterangan tidak terasa sempit. */
+.content-wrapper { padding-left: 24px; padding-right: 24px; }
+.page-section, .profile-sheet, .education-sheet { max-width: 1180px; width: 100%; padding: 34px; }
+#home-screen { width: 100%; }
+.skill-cards-grid, .projects-grid, .certificates-grid, .gallery-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap: 22px;
+}
+.exp-card, .skill-detail-card, .project-card, .cert-card { padding: 30px; }
+.school-info { padding: 28px; }
+.expandable-text { font-size: 1rem; line-height: 1.85; }
+.expandable-preview { max-height: 8.5em; }
+.expandable-text.is-expanded .expandable-preview { max-height: 560px; }
+.exp-card-modern { grid-template-columns: minmax(190px, 29%) minmax(0,1fr); gap: 28px; }
+.exp-photo-button { height: 240px; }
+/* Foto profil diperkecil, tetapi tetap mempertahankan rasio potret 2:3. */
+.profile-photo-frame { width: 125px; height: 188px; padding: 10px; }
+@media (max-width: 900px) {
+  .page-section, .profile-sheet, .education-sheet { max-width: 100%; padding: 26px; }
+  .skill-cards-grid, .projects-grid, .certificates-grid, .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 16px; }
+  .exp-card-modern { grid-template-columns: minmax(170px, 32%) minmax(0,1fr); gap: 18px; }
+  .exp-card, .skill-detail-card, .project-card, .cert-card { padding: 22px; }
+}
+@media (max-width: 700px) {
+  .content-wrapper { padding-left: 10px; padding-right: 10px; }
+  .page-section, .profile-sheet, .education-sheet { max-width: 100%; padding: 18px 14px; }
+  .skill-cards-grid, .projects-grid, .certificates-grid, .gallery-grid { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .exp-card, .skill-detail-card, .project-card, .cert-card { padding: 19px; }
+  .exp-card-modern { grid-template-columns: minmax(0,1fr); gap: 14px; }
+  .exp-photo-button { height: 180px; }
+  .profile-photo-frame { width: 105px; height: 158px; margin-bottom: 14px; }
+  .expandable-text { font-size: .96rem; line-height: 1.8; }
+  .expandable-preview { max-height: 7.5em; }
+  .expandable-text.is-expanded .expandable-preview { max-height: 440px; }
+  .school-info { padding: 17px; }
+}
+</style>
+
+<!-- PENYESUAIAN TINGGI KARTU: LEBIH PANJANG KE BAWAH -->
+<style id="portfolio-vertical-card-height">
+/* Tinggi minimum ditambah agar setiap bagian terasa lega secara vertikal. */
+.profile-sheet { min-height: 700px; }
+.education-sheet { min-height: 560px; }
+.exp-card-modern { min-height: 390px; align-content: start; }
+.skill-detail-card, .project-card, .cert-card { min-height: 360px; display: flex; flex-direction: column; align-items: stretch; }
+.school-info { min-height: 300px; }
+.expandable-preview { max-height: 10.5em; }
+.expandable-text.is-expanded .expandable-preview { max-height: 680px; }
+.exp-content { min-height: 330px; }
+.project-card .attachment-list, .cert-card .attachment-list, .exp-content .attachment-list { margin-top: auto; padding-top: 18px; }
+@media (max-width: 900px) {
+  .profile-sheet { min-height: 640px; }
+  .education-sheet { min-height: 520px; }
+  .exp-card-modern { min-height: 360px; }
+  .skill-detail-card, .project-card, .cert-card { min-height: 340px; }
+  .expandable-text.is-expanded .expandable-preview { max-height: 620px; }
+}
+@media (max-width: 700px) {
+  .profile-sheet { min-height: 590px; }
+  .education-sheet { min-height: 480px; }
+  .exp-card-modern { min-height: 0; }
+  .exp-content { min-height: 0; }
+  .skill-detail-card, .project-card, .cert-card { min-height: 320px; padding-bottom: 24px; }
+  .school-info { min-height: 260px; }
+  .expandable-preview { max-height: 9em; }
+  .expandable-text.is-expanded .expandable-preview { max-height: 520px; }
+}
+</style>
+
+
+<!-- PENYESUAIAN KHUSUS AREA KETERANGAN PROFIL: DITAMBAH SEDIKIT TANPA MENUTUP KONTAK -->
+<style id="profile-description-space-refinement">
+/* Ruang Tentang Saya dibuat sedikit lebih tinggi; tombol kontak tetap berada di bawahnya. */
+#pub-desc {
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  margin: 0 0 20px;
+}
+#pub-desc .expandable-text {
+  width: 100%;
+  text-align: left;
+  line-height: 1.82;
+}
+#pub-desc .expandable-preview {
+  max-height: 21.1em; /* tambahan ruang setara sekitar 5 baris teks */
+}
+#pub-desc .expandable-text.is-expanded .expandable-preview {
+  max-height: 720px;
+}
+.profile-sheet .contact-badges {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  margin-top: 2px;
+}
+@media (max-width: 700px) {
+  #pub-desc .expandable-preview { max-height: 19.1em; }
+  #pub-desc .expandable-text.is-expanded .expandable-preview { max-height: 560px; }
+  #pub-desc { margin-bottom: 16px; }
+}
+</style>
+
+
+
+<!-- PENYEMPURNAAN AREA KETERANGAN SELURUH BAGIAN NON-PROFIL -->
+<style id="all-section-description-refinement">
+/* Keterangan pendidikan, keahlian, pengalaman, proyek, dan sertifikat diberi ruang baca yang lebih layak. */
+.school-description, .skill-detail-card, .exp-description, .card-description {
+  min-width: 0;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+.school-description .expandable-text,
+.skill-detail-card .expandable-text,
+.exp-description .expandable-text,
+.card-description .expandable-text {
+  width: 100%;
+  font-size: .98rem;
+  line-height: 1.82;
+  letter-spacing: .003em;
+  text-align: left;
+}
+.school-description .expandable-preview,
+.skill-detail-card .expandable-preview,
+.exp-description .expandable-preview,
+.card-description .expandable-preview {
+  max-height: 11.5em; /* sekitar 7-8 baris sebelum perluas */
+}
+.school-description .expandable-text.is-expanded .expandable-preview,
+.skill-detail-card .expandable-text.is-expanded .expandable-preview,
+.exp-description .expandable-text.is-expanded .expandable-preview,
+.card-description .expandable-text.is-expanded .expandable-preview {
+  max-height: 680px;
+  overflow-y: auto;
+  padding: 4px 12px 4px 0;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+.school-info { min-height: 340px; }
+.exp-card-modern { min-height: 410px; }
+.skill-detail-card, .project-card, .cert-card { min-height: 380px; }
+@media (max-width: 900px) {
+  .school-info { min-height: 320px; }
+  .exp-card-modern { min-height: 380px; }
+  .skill-detail-card, .project-card, .cert-card { min-height: 360px; }
+}
+@media (max-width: 700px) {
+  .school-info { min-height: 280px; }
+  .exp-card-modern { min-height: 0; }
+  .skill-detail-card, .project-card, .cert-card { min-height: 330px; }
+  .school-description .expandable-text,
+  .skill-detail-card .expandable-text,
+  .exp-description .expandable-text,
+  .card-description .expandable-text { font-size: .95rem; line-height: 1.78; }
+  .school-description .expandable-preview,
+  .skill-detail-card .expandable-preview,
+  .exp-description .expandable-preview,
+  .card-description .expandable-preview { max-height: 10em; }
+  .school-description .expandable-text.is-expanded .expandable-preview,
+  .skill-detail-card .expandable-text.is-expanded .expandable-preview,
+  .exp-description .expandable-text.is-expanded .expandable-preview,
+  .card-description .expandable-text.is-expanded .expandable-preview { max-height: 560px; }
+}
+</style>
+
+
+<style id="portfolio-stage3-experience-refinement">
+/* Tahap 3: pengalaman kerja lebih terstruktur dan nyaman dibaca. */
+.exp-card-modern { min-height: 420px; padding: 30px; align-items: stretch; }
+.exp-photo-button { min-height: 250px; height: 100%; max-height: 360px; position: sticky; top: 18px; }
+.exp-content { display:flex; flex-direction:column; gap:10px; min-height: 350px; }
+.exp-description { font-size: .98rem; line-height: 1.82; }
+.exp-content h4 { color:#bfdbfe; font-size:.94rem; margin:10px 0 2px; }
+.exp-content ul { margin:0 0 4px 20px; padding:0; color:#dbeafe; line-height:1.75; }
+.exp-content li { padding-left:3px; margin:3px 0; }
+.exp-content .work-meta { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.exp-content .attachment-list { display:flex; flex-wrap:wrap; gap:9px; margin-top:auto; padding-top:16px; }
+.exp-content .attachment-link { max-width:100%; white-space:normal; overflow-wrap:anywhere; }
+@media(max-width:900px){.exp-card-modern{min-height:390px;padding:24px}.exp-photo-button{min-height:220px;max-height:300px}.exp-content{min-height:320px}}
+@media(max-width:700px){.exp-card-modern{min-height:0;padding:19px}.exp-photo-button{position:static;height:210px;min-height:210px;max-height:210px}.exp-content{min-height:0;gap:9px}.exp-description{font-size:.95rem;line-height:1.78}.exp-content .attachment-list{margin-top:10px;padding-top:12px}}
+</style>
+
+<!-- TAHAP 5: Unified PDF Viewer final override -->
+<style id="portfolio-stage5-pdf-viewer">
+#media-modal{z-index:3000;padding:12px;align-items:stretch;justify-content:center}
+#media-modal .modal-content-box{width:min(1500px,100%);height:calc(100dvh - 24px);max-height:none;min-height:0;border-radius:14px}
+#media-modal .modal-header{flex:0 0 auto;min-height:58px;padding:10px 16px;gap:12px}
+#media-modal .modal-body{flex:1 1 auto;min-height:0;height:auto;padding:0;display:block;overflow:hidden}
+#modal-viewer-container{width:100%;height:100%;min-height:0;overflow:auto;background:#080d18;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+#modal-viewer-container .portfolio-pdf-frame{display:block;width:100%;height:100%;min-height:0;border:0;background:#111827}
+.cv-preview-shell{height:min(82dvh,1100px);min-height:560px;overflow:hidden}
+.cv-pdf-frame{display:block;width:100%;height:100%;min-height:560px;border:0}
+@media(max-width:700px){
+ #media-modal{padding:0}
+ #media-modal .modal-content-box{width:100vw;height:100dvh;max-height:100dvh;border:0;border-radius:0}
+ #media-modal .modal-header{min-height:54px;padding:8px 10px;gap:8px}
+ #media-modal .modal-title{font-size:.86rem;line-height:1.25;flex:1;min-width:0}
+ #media-modal .modal-actions{gap:6px;flex:0 0 auto}
+ #media-modal .modal-btn{font-size:.76rem;padding:7px 9px;white-space:nowrap}
+ #media-modal .modal-close{width:34px;height:34px;flex:0 0 34px}
+ #modal-viewer-container{height:100%;min-height:0}
+ .cv-preview-shell{height:76dvh;min-height:420px}
+ .cv-pdf-frame{height:100%;min-height:420px}
+}
+</style>
+<script id="portfolio-stage5-unified-pdf-viewer">
+(function(){
+ 'use strict';
+ const modal=document.getElementById('media-modal');
+ const container=document.getElementById('modal-viewer-container');
+ const titleNode=document.getElementById('modal-file-title');
+ const downloadNode=document.getElementById('modal-download-btn');
+ let viewerHistoryEntry=false;
+ function driveId(raw){
+   try{const u=new URL(raw);if(/(^|\.)drive\.google\.com$|(^|\.)docs\.google\.com$/i.test(u.hostname)){const m=u.pathname.match(/\/(?:file|document|presentation)\/d\/([\w-]+)/);return m?.[1]||u.searchParams.get('id')||'';}}catch(e){}
+   return String(raw||'').match(/(?:\/d\/|[?&]id=)([\w-]+)/)?.[1]||'';
+ }
+ function embedUrl(raw){const id=driveId(raw);if(/^data:application\/pdf/i.test(raw))return raw;return id?'https://drive.google.com/file/d/'+encodeURIComponent(id)+'/preview':raw;}
+ function downloadUrl(raw){const id=driveId(raw);if(/^data:application\/pdf/i.test(raw))return raw;return id?'https://drive.usercontent.google.com/download?id='+encodeURIComponent(id)+'&export=download&confirm=t':raw;}
+ function hideViewer(fromPop){
+   if(container)container.replaceChildren();
+   if(modal)modal.style.display='none';
+   document.body.style.overflow='';
+   if(viewerHistoryEntry&&!fromPop){viewerHistoryEntry=false;if(history.state&&history.state.portfolioPdfViewer)history.back();}
+   else viewerHistoryEntry=false;
+ }
+ window.openPdfDocument=function(encodedUrl,docTitle){
+   let raw='';try{raw=decodeURIComponent(encodedUrl||'');}catch(e){raw=String(encodedUrl||'');}
+   if(!raw){alert('File PDF belum tersedia.');return;}
+   if(!modal||!container){window.open(embedUrl(raw),'_blank','noopener,noreferrer');return;}
+   titleNode.textContent=docTitle||'Pratinjau PDF';
+   downloadNode.href=downloadUrl(raw);downloadNode.removeAttribute('download');downloadNode.target='_blank';downloadNode.rel='noopener noreferrer';downloadNode.textContent='⬇ Unduh PDF Lengkap';downloadNode.style.display='inline-flex';
+   const frame=document.createElement('iframe');frame.className='portfolio-pdf-frame';frame.title=docTitle||'Pratinjau PDF';frame.src=embedUrl(raw);frame.setAttribute('allow','autoplay; fullscreen');frame.setAttribute('scrolling','yes');frame.setAttribute('loading','eager');
+   container.replaceChildren(frame);
+   modal.style.display='flex';document.body.style.overflow='hidden';
+   if(!viewerHistoryEntry){history.pushState({portfolioPdfViewer:true},'','#pdf-viewer');viewerHistoryEntry=true;}
+ };
+ const priorClose=window.closeModal;
+ window.closeModal=function(){hideViewer(false);};
+ window.addEventListener('popstate',function(){if(modal&&modal.style.display==='flex'){hideViewer(true);}});
+ document.addEventListener('keydown',function(e){if(e.key==='Escape'&&modal&&modal.style.display==='flex'){e.stopPropagation();window.closeModal();}});
+ if(modal){modal.addEventListener('click',function(e){if(e.target===modal)window.closeModal();});}
+ // Rebind all existing PDF entry points to this single viewer implementation.
+ window.getPdfEmbedUrl=embedUrl;window.getPdfDownloadUrl=downloadUrl;
+})();
+</script>
+
+<style id="portfolio-final-responsive-polish">
+/* Final responsive and accessibility pass: preserves the existing desktop layout and education carousel. */
+:where(a,button,input,textarea,select,[tabindex]):focus-visible{outline:3px solid #93c5fd!important;outline-offset:3px}
+.school-info{min-width:0;overflow-wrap:anywhere}.school-info .education-attachments{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.education-attachments .attachment-link{max-width:100%;white-space:normal;text-align:left}
+.skill-level{display:inline-flex;align-items:center;margin:7px 0;padding:4px 9px;border-radius:20px;background:rgba(59,130,246,.16);border:1px solid rgba(96,165,250,.28);font-size:.76rem;color:#bfdbfe}
+.skill-level-track{height:5px;border-radius:9px;background:rgba(148,163,184,.2);overflow:hidden;margin:3px 0 10px}.skill-level-track span{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,#3b82f6,#10b981)}
+@media(max-width:700px){.school-info{padding:16px!important}.school-card{min-width:0}.education-attachments{gap:6px}.attachment-link{min-height:40px;padding:9px 11px}.exp-card-modern,.project-card,.cert-card,.skill-detail-card{min-width:0;overflow-wrap:anywhere}.cv-document-actions{display:flex;flex-wrap:wrap;gap:8px}.cv-document-actions>*{flex:1 1 180px;text-align:center}.project-flags{display:flex;flex-wrap:wrap;gap:6px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+<script id="portfolio-final-public-completion">
+(function(){'use strict';const esc=window.__portfolioEsc||((v)=>String(v??''));const old=window.renderAllPortfolio;if(typeof old!=='function')return;
+ window.renderAllPortfolio=function(data){old.call(this,data);data=data||{};
+  // Add optional education attachments without changing the horizontal school carousel.
+  const cards=document.querySelectorAll('#pub-school-track .school-card');(data.education||[]).forEach((edu,i)=>{const host=cards[i]?.querySelector('.school-info');if(!host)return;let rows=Array.isArray(edu.attachments)?edu.attachments.slice():[];if(!rows.length)return;const box=document.createElement('div');box.className='education-attachments';rows.filter(x=>x&&x.url).forEach(x=>{const b=document.createElement('button');b.type='button';b.className='attachment-link';b.textContent='📎 '+(x.name||'Dokumen Pendidikan');b.addEventListener('click',()=>window.openPortfolioAttachment(encodeURIComponent(String(x.url)),encodeURIComponent(String(x.name||'Dokumen Pendidikan'))));box.appendChild(b);});if(box.children.length)host.appendChild(box);});
+  // Show level for Soft Skills too, matching the Hard Skills presentation.
+  const soft=document.getElementById('pub-soft-container');if(soft)(data.softSkills||[]).forEach((s,i)=>{const card=soft.children[i];if(!card||!s.level)return;const badge=document.createElement('div');badge.className='skill-level';badge.textContent=s.level;const track=document.createElement('div');track.className='skill-level-track';const fill=document.createElement('span');fill.style.width=({Beginner:'25%',Intermediate:'55%',Advanced:'80%',Expert:'100%'}[s.level]||'55%');track.appendChild(fill);const title=card.querySelector('h4');if(title){title.insertAdjacentElement('afterend',track);title.insertAdjacentElement('afterend',badge);}});
+ };
+})();
+</script>
+
+
+
+<!-- FINAL REFINEMENT: DESKRIPSI 9-10 BARIS SEBELUM DIPERLUAS -->
+<style id="final-description-9-10-lines">
+/* FIX: hapus clamp lama 4 baris agar tinggi berdasarkan 10 baris benar-benar berlaku. */
+.expandable-preview {
+  display: block !important;
+  -webkit-box-orient: initial !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  overflow: hidden;
+  max-height: 18.2em; /* sekitar 10 baris pada line-height 1.82 */
+}
+/* Profil/Tentang Saya: 10 baris awal; kontak tetap berada setelah deskripsi. */
+#pub-desc .expandable-preview { max-height: 18.2em; }
+/* Saat dibuka, isi lebih panjang bisa digulir di dalam area deskripsi. */
+.expandable-text.is-expanded .expandable-preview,
+#pub-desc .expandable-text.is-expanded .expandable-preview,
+.school-description .expandable-text.is-expanded .expandable-preview,
+.skill-detail-card .expandable-text.is-expanded .expandable-preview,
+.exp-description .expandable-text.is-expanded .expandable-preview,
+.card-description .expandable-text.is-expanded .expandable-preview {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  line-clamp: unset !important;
+  max-height: 680px;
+  overflow-y: auto;
+  padding: 4px 12px 4px 0;
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
+}
+@media (max-width: 700px) {
+  .expandable-preview { max-height: 17.8em; /* sekitar 10 baris di HP */ }
+  #pub-desc .expandable-preview { max-height: 17.8em; }
+  .expandable-text.is-expanded .expandable-preview,
+  #pub-desc .expandable-text.is-expanded .expandable-preview,
+  .school-description .expandable-text.is-expanded .expandable-preview,
+  .skill-detail-card .expandable-text.is-expanded .expandable-preview,
+  .exp-description .expandable-text.is-expanded .expandable-preview,
+  .card-description .expandable-text.is-expanded .expandable-preview { max-height: 560px; }
+}
+</style>
+
 </body>
 </html>
