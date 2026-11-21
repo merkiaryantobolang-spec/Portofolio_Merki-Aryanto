@@ -77,7 +77,7 @@
 <div class="storage-box" style="border-left: 4px solid #10b981; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; max-width: 850px; width: 100%;">
     <div>
         <div style="font-size: 0.95rem; font-weight: 700; color: #10b981; margin-bottom: 4px;">🕵️‍♂️ Fitur Pelacak Rekruter & Cloud Sync Aktif</div>
-        <div style="font-size: 0.82rem; color: #94a3b8;">Setiap rekruter yang membuka web publikmu tercatat otomatis & editanmu tersimpan online.</div>
+        <div style="font-size: 0.82rem; color: #94a3b8;">Data portofolio tersimpan di DataPortofolio; catatan kunjungan tersimpan di VisitorLog. Perubahan diverifikasi ulang dari cloud.</div>
     </div>
     <a href="https://docs.google.com/spreadsheets/d/1mbTCck_Q4fRpzeK62qB6vLa4NLkmsQdtZvjOAgOXvo8/edit?usp=sharing" target="_blank" class="btn btn-blue" style="background: #0f9d58; text-decoration: none;">📊 Buka Sheets Rekruter</a>
 </div>
@@ -292,6 +292,7 @@
                 const frameName = 'gasPostFrame_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
                 const iframe = document.createElement('iframe');
                 iframe.name = frameName;
+                iframe.title = 'Proses penyimpanan data';
                 iframe.style.display = 'none';
                 iframe.setAttribute('aria-hidden', 'true');
 
@@ -308,51 +309,54 @@
                 input.name = 'payload';
                 input.value = JSON.stringify(payload);
                 form.appendChild(input);
-
+                let settled = false;
+                const finish = (error) => {
+                    if (settled) return;
+                    settled = true;
+                    clearTimeout(timer);
+                    iframe.removeEventListener('load', onLoad);
+                    iframe.removeEventListener('error', onError);
+                    setTimeout(() => { form.remove(); iframe.remove(); }, 250);
+                    if (error) reject(error); else resolve(true);
+                };
+                const onLoad = () => finish();
+                const onError = () => finish(new Error('POST ke Google Apps Script gagal dimuat.'));
+                const timer = setTimeout(() => finish(new Error('Waktu pengiriman ke Google Apps Script habis.')), 30000);
+                // Abaikan load awal iframe; pasang listener setelah frame siap.
+                iframe.addEventListener('load', function ready() {
+                    iframe.removeEventListener('load', ready);
+                    if (settled) return;
+                    iframe.addEventListener('load', onLoad, { once: true });
+                    iframe.addEventListener('error', onError, { once: true });
+                    try { form.submit(); } catch (error) { finish(error); }
+                }, { once: true });
                 document.body.appendChild(iframe);
                 document.body.appendChild(form);
-
-                try {
-                    form.submit();
-                    // Jangan buru-buru menghapus iframe; Apps Script mungkin perlu waktu memproses data.
-                    setTimeout(() => {
-                        if (form.parentNode) form.parentNode.removeChild(form);
-                        if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-                    }, 45000);
-                    setTimeout(resolve, 900);
-                } catch (error) {
-                    if (form.parentNode) form.parentNode.removeChild(form);
-                    if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
-                    reject(error);
-                }
             });
         }
 
+        function stableJson(value) {
+            if (Array.isArray(value)) return '[' + value.map(stableJson).join(',') + ']';
+            if (value && typeof value === 'object') {
+                return '{' + Object.keys(value).sort().map(key => JSON.stringify(key) + ':' + stableJson(value[key])).join(',') + '}';
+            }
+            return JSON.stringify(value);
+        }
+
         async function sendPortfolioAndVerify(data) {
-            await postPayloadWithoutCors({
-                action: 'savePortfolio',
-                data: data
-            });
-
-            const expected = JSON.stringify(normalizePortfolio(data));
+            const normalized = normalizePortfolio(data);
+            await postPayloadWithoutCors({ action: 'savePortfolio', data: normalized });
+            const expected = stableJson(normalizePortfolio(normalized));
             let lastError = null;
-
-            for (let attempt = 0; attempt < 18; attempt++) {
-                await delay(attempt === 0 ? 500 : 900);
+            for (let attempt = 0; attempt < 20; attempt++) {
+                await delay(attempt === 0 ? 400 : 800);
                 try {
                     const savedData = await readPortfolioFromCloud();
-                    if (JSON.stringify(savedData) === expected) {
-                        return true;
-                    }
-                } catch (error) {
-                    lastError = error;
-                }
+                    if (stableJson(normalizePortfolio(savedData)) === expected) return true;
+                    lastError = new Error('Data yang dibaca ulang belum sama dengan data yang dikirim.');
+                } catch (error) { lastError = error; }
             }
-
-            if (lastError) {
-                throw new Error('Data sudah dikirim, tetapi belum dapat diverifikasi dari Google Sheets. ' + lastError.message);
-            }
-            throw new Error('Data cloud belum sama dengan data yang dikirim. Periksa deployment dan tab DataPortofolio.');
+            throw new Error('Penyimpanan belum terverifikasi dari Google Sheets. ' + (lastError?.message || 'Periksa deployment Apps Script.'));
         }
 
         window.onload = async function() {
@@ -904,7 +908,7 @@
 </style>
 </head><body><button class="print" onclick="window.print()">Cetak / Simpan PDF</button><header>${d.profile.photo?`<img src="${escp(d.profile.photo)}" style="width:38mm;height:48mm;object-fit:cover;border-radius:8px;margin-bottom:18px">`:''}<p>DIGITAL PORTFOLIO BOOK</p><h1>${escp(d.profile.name||'Portofolio Profesional')}</h1><p>${escp(d.profile.headline||'Professional Portfolio')}</p><p class="muted">${(d.profile.customLinks||[]).map(x=>escp((x.icon||'')+' '+(x.label||'')+' '+(x.url||''))).join(' · ')}</p></header>${section('Profil',`<p>${escp(d.profile.desc)}</p>`)}${section('Pendidikan',(d.education||[]).map(e=>`<article><h3>${escp(e.title)}</h3><p class="muted">${escp(e.period)} · ${escp(e.badge)}</p><p>${escp(e.desc)}</p></article>`).join(''))}${section('Pengalaman Kerja',(d.experiences||[]).map(e=>`<article><h3>${escp(e.title)} — ${escp(e.company)}</h3><p class="muted">${escp(e.period||e.badge||'')}</p><p>${escp(e.desc)}</p><p>${escp((e.responsibilities||[]).map(x=>'• '+x).join('\n'))}</p><p><b>Tools:</b> ${escp((e.tools||[]).join(', '))}</p>${(e.attachments||[]).length?`<p><b>Lampiran:</b> ${(e.attachments||[]).map(x=>`<a href="${escp(x.url)}">${escp(x.name||'Dokumen')}</a>`).join(' · ')}</p>`:''}</article>`).join(''))}${section('Keterampilan',[...(d.softSkills||[]).map(x=>({...x,type:'Soft'})),...(d.hardSkills||[]).map(x=>({...x,type:'Hard'}))].map(x=>`<article><h3>${escp(x.title)} <span class="muted">${escp(x.type)} · ${escp(x.level||'')}</span></h3><p>${escp(x.desc)}</p></article>`).join(''))}${section('Proyek',(d.projects||[]).map(p=>`<article><h3>${escp(p.title)}</h3><p class="muted">${escp(p.category)} ${(p.featured?' · Featured':'')} ${(p.best?' · Best':'')} ${(p.latest?' · Latest':'')}</p><p>${escp(p.desc)}</p><p><b>Tujuan:</b> ${escp(p.objective)}</p><p><b>Tools:</b> ${escp((p.tools||[]).join(', '))}</p><p><b>Hasil:</b> ${escp(p.result)}</p></article>`).join(''))}${section('Sertifikat',(d.certificates||[]).map(c=>`<article><h3>${escp(c.title)}</h3><p class="muted">${escp(c.issuer)}</p><p>${escp(c.desc)}</p></article>`).join(''))}<p class="muted">Dokumen dibuat dari data Admin Portofolio Merki Aryanto. Lampiran lengkap tetap tersedia melalui website.</p></body></html>`;const w=window.open('','_blank');if(!w){alert('Izinkan pop-up browser untuk membuat Digital Portfolio Book.');return;}w.document.open();w.document.write(html);w.document.close();};
  const oldOnload=window.onload;window.onload=async function(ev){if(typeof oldOnload==='function')await oldOnload.call(this,ev);const bar=document.querySelector('.floating-bar');if(bar&&!document.getElementById('btn-preview-draft')){bar.insertAdjacentHTML('afterbegin','<button id="btn-preview-draft" class="btn-view" type="button" onclick="previewPortfolioDraft()">Preview Draft</button><button class="btn-view" type="button" onclick="generatePortfolioBook()">Portfolio Book PDF</button>');}};
- const oldSave=window.saveAllData;window.saveAllData=async function(){try{const d=loadCurrentData();const history=JSON.parse(localStorage.getItem('portfolio_history')||'[]');history.unshift({savedAt:new Date().toISOString(),data:d});localStorage.setItem('portfolio_history',JSON.stringify(history.slice(0,10)));}catch(e){console.warn('Riwayat lokal tidak tersimpan',e)}return oldSave.apply(this,arguments);};
+ const oldSave=window.saveAllData;window.saveAllData=async function(){return oldSave.apply(this,arguments);};
 })();
 </script>
 
