@@ -92,7 +92,7 @@
 
         <div class="storage-box">
             <div class="storage-header">
-                <span>📊 Ukuran Data Portofolio (perkiraan cache browser)</span>
+                <span>📊 Kapasitas Penyimpanan Data (LocalStorage & Cloud)</span>
                 <span id="storage-percentage">0%</span>
             </div>
             <div class="storage-bar-bg">
@@ -174,7 +174,7 @@
     </div>
 
     <div class="floating-bar">
-        <a href="index.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
+        <a href="public.html" target="_blank" class="btn-view">Lihat Publik &rarr;</a>
         <button class="btn-save" id="btn-save-main" onclick="saveAllData()">Simpan & Perbarui</button>
     </div>
 
@@ -284,31 +284,55 @@
             });
         }
 
-        // Kirim POST sebagai simple request (tanpa preflight CORS).
-        // Respons POST bersifat opaque; keberhasilan penyimpanan tetap dipastikan
-        // dengan membaca ulang data melalui JSONP pada sendPortfolioAndVerify().
-        async function postPayloadWithoutCors(payload) {
-            const body = new URLSearchParams();
-            body.set('payload', JSON.stringify(payload));
-            let timeoutId;
-            const timeout = new Promise((_, reject) => {
-                timeoutId = setTimeout(() => {
-                    // Jangan abort request yang mungkin masih diproses Google.
-                    reject(new Error('Permintaan POST melewati 90 detik. Sistem akan tetap mencoba memeriksa apakah data sudah tersimpan.'));
-                }, 90000);
+        // Mengirim data melalui form HTML tersembunyi ke Apps Script.
+        // Cara ini tidak membaca respons POST sehingga tidak terkena CORS.
+        // Data kemudian diverifikasi dengan JSONP melalui readPortfolioFromCloud().
+        function postPayloadWithoutCors(payload) {
+            return new Promise((resolve, reject) => {
+                const frameName = 'gasPostFrame_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+                const iframe = document.createElement('iframe');
+                iframe.name = frameName;
+                iframe.title = 'Proses penyimpanan data';
+                iframe.style.display = 'none';
+                iframe.setAttribute('aria-hidden', 'true');
+
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = SCRIPT_URL;
+                form.target = frameName;
+                form.enctype = 'application/x-www-form-urlencoded';
+                form.acceptCharset = 'UTF-8';
+                form.style.display = 'none';
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'payload';
+                input.value = JSON.stringify(payload);
+                form.appendChild(input);
+                let settled = false;
+                const finish = (error) => {
+                    if (settled) return;
+                    settled = true;
+                    clearTimeout(timer);
+                    iframe.removeEventListener('load', onLoad);
+                    iframe.removeEventListener('error', onError);
+                    setTimeout(() => { form.remove(); iframe.remove(); }, 250);
+                    if (error) reject(error); else resolve(true);
+                };
+                const onLoad = () => finish();
+                const onError = () => finish(new Error('POST ke Google Apps Script gagal dimuat.'));
+                const timer = setTimeout(() => finish(new Error('Waktu pengiriman ke Google Apps Script habis.')), 30000);
+                // Abaikan load awal iframe; pasang listener setelah frame siap.
+                iframe.addEventListener('load', function ready() {
+                    iframe.removeEventListener('load', ready);
+                    if (settled) return;
+                    iframe.addEventListener('load', onLoad, { once: true });
+                    iframe.addEventListener('error', onError, { once: true });
+                    try { form.submit(); } catch (error) { finish(error); }
+                }, { once: true });
+                document.body.appendChild(iframe);
+                document.body.appendChild(form);
             });
-            const request = fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                redirect: 'follow',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-                body: body.toString()
-            }).then(() => true);
-            try {
-                return await Promise.race([request, timeout]);
-            } finally {
-                clearTimeout(timeoutId);
-            }
         }
 
         function stableJson(value) {
@@ -321,34 +345,18 @@
 
         async function sendPortfolioAndVerify(data) {
             const normalized = normalizePortfolio(data);
+            await postPayloadWithoutCors({ action: 'savePortfolio', data: normalized });
             const expected = stableJson(normalizePortfolio(normalized));
-            let postError = null;
-
-            // POST boleh memerlukan waktu lebih lama dari respons browser.
-            // Jika menunggu POST timeout, pemeriksaan cloud tetap dijalankan karena
-            // Apps Script mungkin sudah menerima dan sedang menyimpan payload.
-            try {
-                await postPayloadWithoutCors({ action: 'savePortfolio', data: normalized });
-            } catch (error) {
-                postError = error;
-                console.warn('POST belum memberi konfirmasi; lanjut memeriksa hasil simpan di cloud:', error);
-            }
-
-            let lastError = postError;
-            const maxAttempts = 12;
-            for (let attempt = 0; attempt < maxAttempts; attempt++) {
-                await delay(attempt === 0 ? 700 : 1200);
+            let lastError = null;
+            for (let attempt = 0; attempt < 20; attempt++) {
+                await delay(attempt === 0 ? 400 : 800);
                 try {
                     const savedData = await readPortfolioFromCloud();
                     if (stableJson(normalizePortfolio(savedData)) === expected) return true;
-                    lastError = new Error('Data cloud terbaca, tetapi isinya belum sama dengan data yang dikirim.');
-                } catch (error) {
-                    lastError = error;
-                }
+                    lastError = new Error('Data yang dibaca ulang belum sama dengan data yang dikirim.');
+                } catch (error) { lastError = error; }
             }
-            throw new Error('Data belum berhasil diverifikasi di Google Sheets. ' +
-                (lastError?.message || 'Periksa koneksi dan deployment Apps Script.') +
-                ' Jika data memuat banyak file, gunakan tautan Google Drive untuk dokumen besar.');
+            throw new Error('Penyimpanan belum terverifikasi dari Google Sheets. ' + (lastError?.message || 'Periksa deployment Apps Script.'));
         }
 
         window.onload = async function() {
