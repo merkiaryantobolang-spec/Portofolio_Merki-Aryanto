@@ -194,8 +194,8 @@
     'use strict';
 
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw7TCNHMCeWz-iU-bkHKf1pKKc83XsHiZNic3T4kkz59BY_yd_EVOTcbySaVgcjIi0S/exec";
-    const CHUNK_SIZE = 40000; // Selaras dengan CHUNK_SIZE di Google Apps Script (40.000 karakter/baris)
-    const MAX_TOTAL_STORAGE_BYTES = 5 * 1024 * 1024; // Kapasitas total hingga ± 5 MB (multi-baris di kolom A)
+    const CHUNK_SIZE = 40000;
+    const MAX_TOTAL_STORAGE_BYTES = 5 * 1024 * 1024;
 
     const emptyData = {
         profile: { name: "", desc: "", photo: "", wa: "", email: "", linkedin: "", github: "", cvFile: "", customLinks: [] },
@@ -214,7 +214,6 @@
 
     const val = (node, sel) => node.querySelector(sel)?.value || '';
 
-    // Konversi otomatis tautan Google Drive view/share menjadi direct image URL saat ditampilkan di preview
     function resolveDisplayUrl(url) {
         const raw = String(url || '').trim();
         if (!raw) return '';
@@ -225,16 +224,12 @@
         return raw;
     }
 
-    // Normalisasi otomatis input kontak (nomor HP/WA, email, domain tanpa https://) agar selalu valid di Public & Cloud
     function normalizeContactUrl(label, rawUrl) {
         const lbl = String(label || '').trim().toLowerCase();
         let u = String(rawUrl || '').trim();
         if (!u) return '';
-
-        // Jika sudah punya skema valid
         if (/^(https?:\/\/|mailto:|tel:)/i.test(u)) return u;
 
-        // Deteksi nomor telepon / WhatsApp (misal: 082142412131, 6282142412131, +62 821-4241-2131)
         const digitsOnly = u.replace(/[\s\-().+]/g, '');
         if (/^\d{8,15}$/.test(digitsOnly)) {
             let intl = digitsOnly;
@@ -245,12 +240,10 @@
             return 'https://wa.me/' + intl;
         }
 
-        // Deteksi alamat email (misal: merkiaryanto.bolang@gmail.com)
         if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(u)) {
             return 'mailto:' + u;
         }
 
-        // Deteksi username Instagram / Telegram dengan @
         if (u.startsWith('@')) {
             const handle = u.slice(1);
             if (lbl.includes('tele')) return 'https://t.me/' + handle;
@@ -258,7 +251,6 @@
             return 'https://instagram.com/' + handle;
         }
 
-        // Jika domain tanpa protokol (misal: linkedin.com/in/merkiaryanto atau github.com/merki)
         return 'https://' + u.replace(/^\/+/, '');
     }
 
@@ -328,7 +320,6 @@
             savedLinks = legacy;
         }
 
-        // Sinkronkan kembali field legacy (wa, email, linkedin, github) agar halaman Public versi lama maupun baru tetap membacanya!
         let waVal = '', emailVal = '', linkedinVal = '', githubVal = '';
         savedLinks.forEach(item => {
             const l = item.label.toLowerCase();
@@ -808,14 +799,35 @@
     };
 
     // --- PENGALAMAN ---
+    window.moveExp = function(idx, delta) {
+        const d = window.loadCurrentData();
+        const targetIdx = idx + delta;
+        if (targetIdx < 0 || targetIdx >= d.experiences.length) return;
+        const temp = d.experiences[idx];
+        d.experiences[idx] = d.experiences[targetIdx];
+        d.experiences[targetIdx] = temp;
+        saveTemp(d);
+        window.renderExperiencesAdmin(d.experiences);
+        window.updateStorageMeter();
+    };
+
     window.renderExperiencesAdmin = function(items) {
         const c = document.getElementById('exp-container');
         if (!c) return;
         c.innerHTML = '';
         (items || []).forEach((e, i) => {
             const dispImg = resolveDisplayUrl(e.img);
+            const isFirst = i === 0;
+            const isLast = i === items.length - 1;
             c.insertAdjacentHTML('beforeend', `
                 <div class="item-card-admin">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+                        <span style="font-size:0.82rem; font-weight:700; color:#93c5fd;">Urutan #${i + 1}${isFirst ? ' (Tampil Paling Atas)' : ''}</span>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button type="button" class="btn btn-blue" onclick="moveExp(${i}, -1)" ${isFirst ? 'disabled style="opacity:0.45;cursor:not-allowed;"' : ''}>↑ Naikkan</button>
+                            <button type="button" class="btn btn-blue" onclick="moveExp(${i}, 1)" ${isLast ? 'disabled style="opacity:0.45;cursor:not-allowed;"' : ''}>↓ Turunkan</button>
+                        </div>
+                    </div>
                     <div class="input-group"><label>POSISI / JABATAN</label><input type="text" class="field-title" value="${esc(e.title)}" oninput="updateStorageMeter()"></div>
                     <div class="input-group"><label>PERIODE KERJA</label><input type="text" class="field-period" value="${esc(e.period || e.badge || '')}" placeholder="Contoh: Juli 2025 – Agustus 2025" oninput="updateStorageMeter()"></div>
                     <div class="input-group"><label>PERUSAHAAN / INSTANSI</label><input type="text" class="field-company" value="${esc(e.company)}" oninput="updateStorageMeter()"></div>
